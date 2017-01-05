@@ -75,13 +75,13 @@ Materials will be uploaded the night before class
 
 ## Grading
 
-* **Homework 1**: Due Tuesday 1/10 by class
+* **Homework 1**: Due Tuesday by class
 
-* **Homework 2**: Due Thursday 1/12 by class
+* **Homework 2**: Due Thursday by class
 
-* **Homework 3**: Due Friday 1/13 by class
+* **Homework 3**: Due Friday by class
 
-* **Project**: Due Friday 1/27 by 5pm
+* **Project**: Due Friday after end of class by 5pm
 
 ## What is R?
 
