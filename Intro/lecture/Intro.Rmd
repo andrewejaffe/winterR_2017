@@ -22,7 +22,7 @@ opts_chunk$set(comment = "")
 
 **Andrew Jaffe**
 
-Investigator, Lieber Institute for Brain Development
+Lead Investigator, Lieber Institute for Brain Development
 
 Assistant Professor, Department of Mental Health, JHSPH
 
@@ -48,7 +48,7 @@ Why R?
 
 ## Course Website
 
-http://www.aejaffe.com/summerR_2016/
+http://www.aejaffe.com/winterR_2017/
 
 Materials will be uploaded the night before class
 
@@ -75,13 +75,13 @@ Materials will be uploaded the night before class
 
 ## Grading
 
-* **Homework 1**: Due Tuesday 6/14 by 5pm  
+* **Homework 1**: Due Tuesday 1/10 by class
 
-* **Homework 2**: Due Thursday 6/15 by class
+* **Homework 2**: Due Thursday 1/12 by class
 
-* **Homework 3**: Due Friday 6/16 by class
+* **Homework 3**: Due Friday 1/13 by class
 
-* **Project**: Due Friday 7/1 by 5pm
+* **Project**: Due Friday 1/27 by 5pm
 
 ## What is R?
 
@@ -122,15 +122,6 @@ Materials will be uploaded the night before class
 ## Installing R
 
 Install the latest version from: [http://cran.r-project.org/](http://cran.r-project.org/ )
-
-<!-- If you have an older version of R, you may not need to update.  If you do want to update, re-install and run
-
-<b>
-```{r, eval=FALSE}
-update.packages(ask=FALSE)
-```
-</b>
---> 
 
 ## R Studio
 
@@ -174,4 +165,4 @@ update.packages(ask=FALSE)
 * R reference card: http://cran.r-project.org/doc/contrib/Short-refcard.pdf
 * Undergrad Guide to R: https://sites.google.com/site/undergraduateguidetor/
 * Quick R: http://statmethods.net/
-
+* Data Camp: https://www.datacamp.com/ 
