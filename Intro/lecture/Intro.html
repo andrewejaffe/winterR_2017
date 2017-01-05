@@ -86,7 +86,7 @@
 
 <body style="opacity: 0">
 
-<slides>
+<slides class="layout-widescreen">
 
   <slide class="title-slide segue nobackground">
         <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
@@ -127,11 +127,45 @@
 
 <p>Email: <a href='mailto:jmusche1@jhu.edu' title=''>jmusche1@jhu.edu</a></p>
 
+</article></slide><slide class=''><hgroup><h2>What is R?</h2></hgroup><article  id="what-is-r">
+
+<ul>
+<li><p>R is a language and environment for statistical computing and graphics</p></li>
+<li><p>R is the open source implementation of the S language, which was developed by Bell laboratories</p></li>
+<li><p>R is both open source and open development</p></li>
+</ul>
+
+<p>(source: <a href='http://www.r-project.org/' title=''>http://www.r-project.org/</a>)</p>
+
+</article></slide><slide class=''><hgroup><h2>Why R?</h2></hgroup><article  id="why-r">
+
+<ul>
+<li><p>Powerful and flexible</p></li>
+<li><p>Free (open source)</p></li>
+<li><p>Extensive add-on software (packages)</p></li>
+<li><p>Designed for statistical computing</p></li>
+<li><p>High level language</p></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Why not R?</h2></hgroup><article  id="why-not-r">
+
+<ul>
+<li><p>Fairly steep learning curve</p>
+
+<ul>
+<li><p>&quot;Programming&quot; oriented</p></li>
+<li><p>Minimal interface</p></li>
+</ul></li>
+<li><p>Little centralized support, relies on online community and package developers</p></li>
+<li><p>Annoying to update</p></li>
+<li><p>Slower, and more memory intensive, than the more traditional programming languages (C, Java, Perl, Python)</p></li>
+</ul>
+
 </article></slide><slide class=''><hgroup><h2>Introductions</h2></hgroup><article  id="introductions">
 
 <p>What do you hope to get out of the class?</p>
 
-<p>Why R?</p>
+<p>Why else to use R?</p>
 
 </article></slide><slide class=''><hgroup><h2>Course Website</h2></hgroup><article  id="course-website">
 
@@ -175,101 +209,14 @@
 <li><p><strong>Homework 1</strong>: Due Tuesday by class</p></li>
 <li><p><strong>Homework 2</strong>: Due Thursday by class</p></li>
 <li><p><strong>Homework 3</strong>: Due Friday by class</p></li>
-<li><p><strong>Project</strong>: Due Friday after end of class by 5pm</p></li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>What is R?</h2></hgroup><article  id="what-is-r">
-
-<ul>
-<li><p>R is a language and environment for statistical computing and graphics</p></li>
-<li><p>R is the open source implementation of the S language, which was developed by Bell laboratories</p></li>
-<li><p>R is both open source and open development</p></li>
-</ul>
-
-<p>(source: <a href='http://www.r-project.org/' title=''>http://www.r-project.org/</a>)</p>
-
-</article></slide><slide class=''><hgroup><h2>Why R?</h2></hgroup><article  id="why-r">
-
-<ul>
-<li><p>Powerful and flexible</p></li>
-<li><p>Free (open source)</p></li>
-<li><p>Extensive add-on software (packages)</p></li>
-<li><p>Designed for statistical computing</p></li>
-<li><p>High level language</p></li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>Why not R?</h2></hgroup><article  id="why-not-r">
-
-<ul>
-<li><p>Fairly steep learning curve</p>
-
-<ul>
-<li><p>&quot;Programming&quot; oriented</p></li>
-<li><p>Minimal interface</p></li>
-</ul></li>
-<li><p>Little centralized support, relies on online community and package developers</p></li>
-<li><p>Annoying to update</p></li>
-<li><p>Slower, and more memory intensive, than the more traditional programming languages (C, Java, Perl, Python)</p></li>
+<li><p><strong>Project</strong>: Due 2 weeks after class ends</p></li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Installing R</h2></hgroup><article  id="installing-r">
 
-<p>Install the latest version from: <a href='http://cran.r-project.org/' title=''>http://cran.r-project.org/</a></p>
-
-</article></slide><slide class=''><hgroup><h2>R Studio</h2></hgroup><article  id="r-studio">
-
-<p>(Makes R easier)</p>
-
 <ul>
-<li>Integrated Development Environment (IDE) for R
-
-<ul>
-<li>Syntax highlighting, code completion, and smart indentation</li>
-<li>Execute R code directly from the source editor</li>
-<li>Easily manage multiple working directories using projects</li>
-<li>Workspace browser and data viewer</li>
-<li>Plot history, zooming, and flexible image and PDF export</li>
-<li>Integrated R help and documentation</li>
-<li>Searchable command history</li>
-</ul></li>
-<li><a href='http://www.rstudio.com/' title=''>http://www.rstudio.com/</a></li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>Working with R</h2></hgroup><article  id="working-with-r">
-
-<ul>
-<li>The R Console &quot;interprets&quot; whatever you type
-
-<ul>
-<li>Calculator</li>
-<li>Creating variables</li>
-<li>Applying functions</li>
-</ul></li>
-<li>&quot;Analysis&quot; Script + Interactive Exploration
-
-<ul>
-<li>Static copy of what you did (reproducability)</li>
-<li>Try things out interactively, then add to your script</li>
-</ul></li>
-<li>R revolves around functions
-
-<ul>
-<li>Commands that take input, performs computations, and returns results</li>
-<li>Many come with R, but people write external functions you can download and use</li>
-</ul></li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>Useful R Studio Shortcuts</h2></hgroup><article  id="useful-r-studio-shortcuts">
-
-<ul>
-<li><code>Ctrl + Enter</code> (<code>Cmd + Enter</code> on OS X) in your script evaluates that line of code
-
-<ul>
-<li>It&#39;s like copying and pasting the code into the console for it to run.</li>
-</ul></li>
-<li><code>Ctrl+1</code> takes you to the script page</li>
-<li><code>Ctrl+2</code> takes you to the console</li>
-<li><a href='http://www.rstudio.com/ide/docs/using/keyboard_shortcuts' title=''>http://www.rstudio.com/ide/docs/using/keyboard_shortcuts</a></li>
+<li><p>Install the latest version from: <a href='http://cran.r-project.org/' title=''>http://cran.r-project.org/</a></p></li>
+<li><p><a href='https://www.rstudio.com/products/rstudio/download/' title=''>Install RStudio</a></p></li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Useful (+Free) Resources</h2></hgroup><article  id="useful-free-resources">

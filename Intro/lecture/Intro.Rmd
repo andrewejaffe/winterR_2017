@@ -4,6 +4,7 @@ author: "Introduction to R for Public Health Researchers"
 output:
   ioslides_presentation:
     css: ../../styles.css
+    widescreen: yes
   beamer_presentation: default
 --- 
 
@@ -40,48 +41,6 @@ PhD in Biostatistics, ScM in Biostatistics
 
 Email: jmusche1@jhu.edu
 
-## Introductions
-
-What do you hope to get out of the class?
-
-Why R?
-
-## Course Website
-
-http://www.aejaffe.com/winterR_2017/
-
-Materials will be uploaded the night before class
-
-## Learning Objectives
-
-- Reading data into R
-- Recoding and manipulating data
-- Writing R functions and using add-on packages
-- Making exploratory plots
-- Understanding basic programming syntax
-- Performing basic statistical tests
-
-## Course Format
-
-* 3 modules per class session, each approximately 1 hour
-    * "Interactive" Lecture with RStudio + slides
-    * Lab/Practical experience
-
-## Grading
-
-1. Attendance/Participation: 20%
-2. Nightly Homework: 3 x 15%
-3. Final "Project": 35% 
-
-## Grading
-
-* **Homework 1**: Due Tuesday by class
-
-* **Homework 2**: Due Thursday by class
-
-* **Homework 3**: Due Friday by class
-
-* **Project**: Due Friday after end of class by 5pm
 
 ## What is R?
 
@@ -119,43 +78,55 @@ Materials will be uploaded the night before class
 
 * Slower, and more memory intensive, than the more traditional programming languages (C, Java, Perl, Python)
 
+
+## Introductions
+
+What do you hope to get out of the class?
+
+Why else to use R?
+
+## Course Website
+
+http://www.aejaffe.com/winterR_2017/
+
+Materials will be uploaded the night before class
+
+## Learning Objectives
+
+- Reading data into R
+- Recoding and manipulating data
+- Writing R functions and using add-on packages
+- Making exploratory plots
+- Understanding basic programming syntax
+- Performing basic statistical tests
+
+## Course Format
+
+* 3 modules per class session, each approximately 1 hour
+    * "Interactive" Lecture with RStudio + slides
+    * Lab/Practical experience
+
+## Grading
+
+1. Attendance/Participation: 20%
+2. Nightly Homework: 3 x 15%
+3. Final "Project": 35% 
+
+## Grading
+
+* **Homework 1**: Due Tuesday by class
+
+* **Homework 2**: Due Thursday by class
+
+* **Homework 3**: Due Friday by class
+
+* **Project**: Due 2 weeks after class ends
+
 ## Installing R
 
-Install the latest version from: [http://cran.r-project.org/](http://cran.r-project.org/ )
+* Install the latest version from: [http://cran.r-project.org/](http://cran.r-project.org/ )
 
-## R Studio
-
-(Makes R easier)
-
-* Integrated Development Environment (IDE) for R
-    * Syntax highlighting, code completion, and smart indentation
-    * Execute R code directly from the source editor
-    * Easily manage multiple working directories using projects
-    * Workspace browser and data viewer
-    * Plot history, zooming, and flexible image and PDF export
-    * Integrated R help and documentation
-    * Searchable command history
-* [http://www.rstudio.com/](http://www.rstudio.com/)
-
-## Working with R
-* The R Console "interprets" whatever you type
-    * Calculator
-    * Creating variables
-    * Applying functions
-* "Analysis" Script + Interactive Exploration
-    * Static copy of what you did (reproducability)
-    * Try things out interactively, then add to your script
-* R revolves around functions
-    * Commands that take input, performs computations, and returns results
-    * Many come with R, but people write external functions you can download and use
-
-## Useful R Studio Shortcuts
-
-* `Ctrl + Enter` (`Cmd + Enter` on OS X) in your script evaluates that line of code
-    * It's like copying and pasting the code into the console for it to run.
-* `Ctrl+1` takes you to the script page
-* `Ctrl+2` takes you to the console
-* [http://www.rstudio.com/ide/docs/using/keyboard_shortcuts](http://www.rstudio.com/ide/docs/using/keyboard_shortcuts)
+* [Install RStudio](https://www.rstudio.com/products/rstudio/download/)
 
 ## Useful (+Free) Resources
 
