@@ -1,7 +1,6 @@
 ---
 title: "Manipulating Data in R"
-author: "John Muschelli"
-date: "June 16, 2016"
+author: "Introduction to R for Public Health Researchers"
 output:
   beamer_presentation: default
   ioslides_presentation:

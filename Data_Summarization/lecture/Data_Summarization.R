@@ -46,20 +46,8 @@ apply(avgs,2,mean,na.rm=TRUE) # column means
 apply(avgs,2,sd,na.rm=TRUE) # columns sds
 apply(avgs,2,max,na.rm=TRUE) # column maxs
 
-circ3 = circ2
-circ3$day2 = factor(circ3$day,
-                    levels = c("Sunday", 
-                               "Monday", "Tuesday", "Wednesday", 
-                               "Thursday", "Friday", "Saturday"))
-unique(circ3$day2)
 ## ----tapply1-------------------------------------------------------------
-<<<<<<< HEAD
-max_over_days = tapply(circ3$daily, circ3$day, max, na.rm=TRUE)
-max_over_days2 = tapply(circ3$daily, circ3$day2, max, na.rm=TRUE)
-
-=======
 tapply(circ2$daily, circ2$day, max, na.rm = TRUE)
->>>>>>> a94c86d724de91bc9442aaa054e48c5ad1bd0c89
 
 ## ----scatter1------------------------------------------------------------
 plot(mtcars$mpg, mtcars$disp)

@@ -1,3 +1,7 @@
+## ---- echo = FALSE, message=FALSE----------------------------------------
+library(dplyr)
+suppressPackageStartupMessages(library(dplyr))
+
 ## ----numChar-------------------------------------------------------------
 class(c("Andrew", "Jaffe"))
 class(c(1, 4, 7))
@@ -13,10 +17,24 @@ class(x)
 ## ----logical1------------------------------------------------------------
 x = c(TRUE, FALSE, TRUE, TRUE, FALSE)
 class(x)
+is.numeric(c("Andrew", "Jaffe"))
+is.character(c("Andrew", "Jaffe"))
 
 ## ----logical2------------------------------------------------------------
 z = c("TRUE", "FALSE", "TRUE", "FALSE")
 class(z)
+as.logical(z)
+
+## ----logical_z-----------------------------------------------------------
+sum(as.logical(z))
+
+## ----logical_coercion----------------------------------------------------
+is.numeric(c("Andrew", "Jaffe"))
+is.character(c("Andrew", "Jaffe"))
+
+## ----logical_coercion2---------------------------------------------------
+as.character(c(1, 4, 7))
+as.numeric(c("Andrew", "Jaffe"))
 
 ## ----factor1-------------------------------------------------------------
 x = factor(c("boy", "girl", "girl", "boy", "girl"))
@@ -31,17 +49,15 @@ levels(cc) = c("control","case")
 cc
 
 ## ----factor_cc_again-----------------------------------------------------
-factor(c("case","case","case","control",
-          "control","control"), 
-        levels =c("control","case") )
-factor(c("case","case","case","control",
-            "control","control"), 
-        levels =c("control","case"), ordered=TRUE)
+casecontrol = c("case","case","case","control",
+          "control","control")
+factor(casecontrol, levels = c("control","case") )
+factor(casecontrol, levels = c("control","case"), 
+       ordered=TRUE)
 
 ## ----factor3-------------------------------------------------------------
-x = factor(c("case","case","case","control",
-      "control","control"),
-        levels =c("control","case") )
+x = factor(casecontrol,
+        levels = c("control","case") )
 as.character(x)
 as.numeric(x)
 
@@ -57,11 +73,14 @@ bg = rep(c("boy","girl"),each=50)
 head(bg)
 bg2 = rep(c("boy","girl"),times=50)
 head(bg2)
-length(bg)==length(bg2)
+length(bg) == length(bg2)
 
 ## ------------------------------------------------------------------------
-circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", 
-            header=TRUE,as.is=TRUE)
+# paste/paste0 will be covered later
+circ = read.csv(
+  paste0("http://www.aejaffe.com/summerR_2016/data",
+         "/Charm_City_Circulator_Ridership.csv"), 
+            header = TRUE, as.is = TRUE)
 
 ## ----ifelse1-------------------------------------------------------------
 hi_rider = ifelse(circ$daily > 10000, "high", "low")
@@ -97,22 +116,22 @@ table(cx,useNA="ifany")
 
 ## ----date----------------------------------------------------------------
 head(sort(circ$date))
-circ$newDate <- as.Date(circ$date, "%m/%d/%Y") # creating a date for sorting
+# creating a date for sorting
+circ$newDate <- as.Date(circ$date, "%m/%d/%Y")
 head(circ$newDate)
 range(circ$newDate)
 
-## ------------------------------------------------------------------------
+## ---- message=FALSE------------------------------------------------------
 library(lubridate) # great for dates!
-suppressPackageStartupMessages(library(dplyr))
 circ = mutate(circ, newDate2 = mdy(date))
 head(circ$newDate2)
-range(circ$newDate2)
+range(circ$newDate2) # gives you the range of the data
 
 ## ------------------------------------------------------------------------
 theTime = Sys.time()
 theTime
 class(theTime)
-theTime + 5000
+theTime + as.period(20, unit = "minutes") # the future
 
 ## ----matrix--------------------------------------------------------------
 n = 1:9 
@@ -128,16 +147,6 @@ mat[, 1] # first columns
 ## ----subset4-------------------------------------------------------------
 class(mat[1, ])
 class(mat[, 1])
-
-## ------------------------------------------------------------------------
-library(matrixStats,quietly = TRUE)
-avgs = select(circ, ends_with("Average"))
-rowMins(as.matrix(avgs),na.rm=TRUE)[500:510]
-
-## ------------------------------------------------------------------------
-ar = array(1:27, c(3,3,3))
-ar[,,1]
-ar[,1,]
 
 ## ----makeList, comment="", prompt=TRUE-----------------------------------
 mylist <- list(letters=c("A", "b", "c"), 
@@ -162,15 +171,4 @@ mylist[1:2] # returns a list
 mylist$letters[1]
 mylist[[2]][1]
 mylist[[3]][1:2,1:2]
-
-## ----split1, comment="", prompt=TRUE-------------------------------------
-dayList = split(circ,circ$day)
-
-## ----lapply1, comment="", prompt=TRUE------------------------------------
-# head(dayList)
-lapply(dayList, head, n=2)
-
-## ----lapply2, comment="", prompt=TRUE------------------------------------
-# head(dayList)
-lapply(dayList, dim)
 

@@ -1,7 +1,6 @@
 ---
 title: "Homework 3 - Key"
-author: "Andrew Jaffe"
-date: "January 8, 2016"
+author: "Introduction to R for Public Health Researchers"
 output: html_document
 ---
 

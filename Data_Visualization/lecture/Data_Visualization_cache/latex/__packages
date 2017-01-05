@@ -1,0 +1,10 @@
+base
+rmarkdown
+knitr
+dplyr
+matrixStats
+lubridate
+stringr
+RColorBrewer
+ggplot2
+tidyr

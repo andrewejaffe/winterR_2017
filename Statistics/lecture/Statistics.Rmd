@@ -1,7 +1,6 @@
 ---
 title: "Statistics"
-author: "Andrew Jaffe"
-date: "June 17, 2016"
+author: "Introduction to R for Public Health Researchers"
 output:
   beamer_presentation: default
   ioslides_presentation:

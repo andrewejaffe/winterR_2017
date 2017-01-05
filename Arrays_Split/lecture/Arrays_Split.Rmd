@@ -1,7 +1,6 @@
 ---
 title: "Arrays and Useful R functions"
-author: "John Muschelli"
-date: "June 14, 2016"
+author: "Introduction to R for Public Health Researchers"
 output:
   ioslides_presentation: null
   css: ../../styles.css

@@ -1,7 +1,6 @@
 ---
 title: "Data Classes"
-author: "John Muschelli"
-date: "June 14, 2016"
+author: "Introduction to R for Public Health Researchers"
 output:
   ioslides_presentation:
     css: ../../styles.css

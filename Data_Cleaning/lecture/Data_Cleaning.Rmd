@@ -1,7 +1,6 @@
 ---
 title: "Data Cleaning"
-author: "Andrew Jaffe"
-date: "June 15, 2016"
+author: "Introduction to R for Public Health Researchers"
 output:
   ioslides_presentation:
     css: ../../styles.css

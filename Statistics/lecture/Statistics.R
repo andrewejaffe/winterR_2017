@@ -7,8 +7,6 @@ cor(circ$orangeAverage, circ$purpleAverage, use="complete.obs")
 ## ----cor2, comment="",prompt=TRUE----------------------------------------
 signif(cor(circ[,grep("Average",names(circ))], 
             use="complete.obs"),3)
-signif(cor(circ[,grep("Average",names(circ))], 
-           use="pair"),3)
 
 ## ----cor3, comment="",prompt=TRUE----------------------------------------
 signif(cor(circ[,3:4],circ[,5:6], use="complete.obs"),3)
@@ -48,10 +46,9 @@ tt2$estimate
 
 ## ----tt3, comment="",prompt=TRUE, fig.height=4,fig.width=4,cache=TRUE----
 boxplot(VehBCost~IsBadBuy, data=cars, 
-        xlab="Bad Buy",ylab="Value",
-        names = c("Good","Bad"))
-leg = paste("t=", signif(tt2$statistic,3), 
-    " (p=",signif(tt2$p.value,3),")",sep="")
+        xlab="Bad Buy",ylab="Value")
+leg = paste("t=", signif(tt$statistic,3), 
+    " (p=",signif(tt$p.value,3),")",sep="")
 legend("topleft", leg, cex=1.2, bty="n")
 
 ## ----regress1, comment="",prompt=TRUE------------------------------------
@@ -93,10 +90,7 @@ par(mfrow=c(2,2))
 plot(fit2, ask= FALSE)
 
 ## ----regress6, comment="",prompt=TRUE, fig.height=4,fig.width=8----------
-cars$TopThreeAmericanName[cars$TopThreeAmericanName == "NULL"] = NA
-cars$TopThreeAmericanName = factor(cars$TopThreeAmericanName)
-cars$TopThreeAmericanName = relevel(cars$TopThreeAmericanName, "OTHER")
-fit3 = lm(VehOdo ~ TopThreeAmericanName, data=cars)
+fit3 = lm(VehOdo ~ factor(TopThreeAmericanName), data=cars)
 summary(fit3)  
 
 ## ----regress7, comment="",prompt=TRUE, fig.height=4,fig.width=8----------

@@ -1,4 +1,4 @@
-## ----readin--------------------------------------------------------------
+## ----readin, message = FALSE---------------------------------------------
 # readin is just a "label" for this code chunk
 ## code chunk is just a "chunk" of code, where this code usually
 ## does just one thing, aka a module
@@ -6,24 +6,43 @@
 ### you can do all your reading in there
 ### let's say we loaded some packages
 library(stringr)
-library(plyr)
 library(dplyr)
-fname <- "../../data/Bike_Lanes.csv"
+library(tidyr)
+fname <- "http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv"
 bike = read.csv(fname, as.is = TRUE)
 
 ## ---- echo = FALSE-------------------------------------------------------
-no.missyear <- bike[ bike$dateInstalled != 0,]
+no.missyear <- bike %>% filter(dateInstalled != 0)
 plot(no.missyear$dateInstalled, no.missyear$length)
-no.missyear$dateInstalled = factor(no.missyear$dateInstalled)
-boxplot(no.missyear$length ~ no.missyear$dateInstalled, main="Boxplots of Bike Lenght by Year", xlab="Year", ylab="Bike Length")
+
+## ---- echo = TRUE--------------------------------------------------------
+no.missyear = no.missyear %>%  mutate(dateInstalled = factor(dateInstalled)) 
+library(ggplot2)
+gbox = no.missyear %>% ggplot(aes(x = dateInstalled, y = length)) + geom_boxplot()
+print(gbox)
 
 ## ------------------------------------------------------------------------
-no.missyear$log.length <- log10(no.missyear$length)
+no.missyear <- no.missyear %>% mutate(log.length = log10(length))
 ### see here that if you specify the data argument, you don't need to do the $ 
-boxplot(log.length ~ dateInstalled, data=no.missyear, main="Boxplots of Bike Lenght by Year", xlab="Year", ylab="Bike Length")
+boxplot(log.length ~ dateInstalled, data = no.missyear, 
+        main = "Boxplots of Bike Lenght by Year", 
+        xlab="Year", 
+        ylab="Bike Length")
+
+glogbox = no.missyear %>% ggplot(aes(x = dateInstalled, y = log.length)) + geom_boxplot() + 
+  ggtitle("Boxplots of Bike Lenght by Year") + 
+  xlab("Year") + 
+  ylab("Bike Length")
+print(glogbox)
 
 ## ------------------------------------------------------------------------
-boxplot(log.length ~ dateInstalled, data=no.missyear, main="Boxplots of Bike Lenght by Year", xlab="Year", ylab="Bike Length", col="red")
+boxplot(log.length ~ dateInstalled, 
+        data=no.missyear, 
+        main="Boxplots of Bike Lenght by Year",
+        xlab="Year", 
+        ylab="Bike Length", 
+        col="red")
+glogbox + geom_boxplot(fill = "red")
 
 ## ------------------------------------------------------------------------
 ### type is a character, but when R sees a "character" in a "formula", then it automatically converts it to factor
@@ -32,89 +51,159 @@ boxplot(log.length ~ dateInstalled, data=no.missyear, main="Boxplots of Bike Len
 boxplot(log.length ~ type, data=no.missyear, main="Boxplots of Bike Lenght by Year", xlab="Year", ylab="Bike Length")
 
 ## ------------------------------------------------------------------------
-### tapply takes in vector 1, then does a function by vector 2, and then you tell what 
-### that function is
-tapply(no.missyear$log.length, no.missyear$type, mean)
-
-## aggregate
-aggregate(x=no.missyear$log.length, by=list(no.missyear$type), FUN=mean)
-### now let's specify the data argument and use a "formula" - much easier to read and 
-## more "intuitive"
-aggregate(log.length ~ type, data=no.missyear, FUN=mean)
-
-## ddply is from the plyr package
-##takes in a data frame, (the first d refers to data.frame) 
-## splits it up by some variables (let's say type)
-## then we'll use summarise to summarize whatever we want
-## then returns a data.frame (the second d) - hence why it's ddply
-## if we wanted to do it on a "list" thne return data.frame, it'd be ldply
-ddply(no.missyear, .(type), plyr::summarise,
-      mean=mean(log.length)
-      )
-
-no.missyear %>% group_by(type) %>% 
-  dplyr::summarise(mean=mean(log.length))
+glogbox + facet_wrap(~ type)
 
 ## ------------------------------------------------------------------------
-### For going over 2 variables, we need to do it over a "list" of vectors
-tapply(no.missyear$log.length, 
-       list(no.missyear$type, no.missyear$dateInstalled), 
-       mean)
+glogbox + aes(colour = type)
 
-tapply(no.missyear$log.length, 
-       list(no.missyear$type, no.missyear$dateInstalled), 
-       mean, na.rm=TRUE)
+## ------------------------------------------------------------------------
+no.missyear %>% group_by(type) %>% 
+  dplyr::summarise(mean = mean(log.length))
 
-## aggregate - looks better
-aggregate(log.length ~ type + dateInstalled, data=no.missyear, FUN=mean)
-
-## ddply is from the plyr package
-ddply(no.missyear, .(type, dateInstalled), summarise,
-      mean=mean(log.length),
-      median=median(log.length),
-      Mode=mode(log.length),
-      Std.Dev=sd(log.length)
-      )
+## ------------------------------------------------------------------------
+no.missyear %>% group_by(type, dateInstalled) %>% 
+  dplyr::summarise(mean = mean(log.length),
+      median = median(log.length),
+      Std.Dev = sd(log.length))
 
 ## ------------------------------------------------------------------------
 ### type is a character, but when R sees a "character" in a "formula", then it automatically converts it to factor
 ### a formula is something that has a y ~ x, which says I want to plot y against x
 ### or if it were a model you would do y ~ x, which meant regress against y
-mod.type = lm(log.length ~ type, data=no.missyear)
-mod.yr = lm(log.length ~ factor(dateInstalled), data=no.missyear)
-mod.yrtype = lm(log.length ~ type + factor(dateInstalled), data=no.missyear)
+mod.type = lm(log.length ~ type, data = no.missyear)
+mod.yr = lm(log.length ~ factor(dateInstalled), data = no.missyear)
+mod.yrtype = lm(log.length ~ type + factor(dateInstalled), data = no.missyear)
 summary(mod.type)
 
 ## ------------------------------------------------------------------------
-### DON'T DO THIS.  YOU SHOULD ALWAYS DO library() statements in the FIRST code chunk.
-### this is just to show you the logic of a report/analysis.
-require(xtable)
-# smod <- summary(mod.yr)
-xtab <- xtable(mod.yr)
+smod = summary(mod.type)
+coef(smod)
+class(coef(smod))
 
-## ---- results='asis'-----------------------------------------------------
-print.xtable(xtab, type="html")
+## ------------------------------------------------------------------------
+library(broom)
+smod2 = tidy(mod.type)
+class(smod2)
+better = smod2 %>% mutate(term = str_replace(term, "^type", ""))
+better
+better %>% filter(term == "SIDEPATH")
+write.csv(better, file = "Best_Model_Coefficients.csv")
+
+## ------------------------------------------------------------------------
+library(xlsx)
+write.xlsx(better, file = "Best_Model_Coefficients.xlsx")
+
+## ------------------------------------------------------------------------
+my_lrtest = anova(mod.yrtype, mod.yr)
+print(my_lrtest)
+print(tidy(my_lrtest))
+
+## ------------------------------------------------------------------------
+my_lrtest = anova(mod.yrtype, mod.type)
+print(tidy(my_lrtest))
+
+## ------------------------------------------------------------------------
+# devtools::install_github('Rapporter/pander') # need this version!
+library(pander)
+pander(mod.yr)
+
+## ------------------------------------------------------------------------
+pander(summary(mod.yr))
+
+## ------------------------------------------------------------------------
+ptable = tidy(mod.yr)
+ptable$term = ptable$term %>% 
+  str_replace(fixed("factor(dateInstalled)"), "") %>%
+  str_replace(fixed("(Intercept)"), "Intercept")
+
+## ------------------------------------------------------------------------
+colnames(ptable) = c("Variable", "Beta", "SE", "tstatistic", "p.value")
+pander(ptable)
+
+## ------------------------------------------------------------------------
+cint = confint(mod.yr)
+print(cint)
+print(class(cint))
+
+## ------------------------------------------------------------------------
+cint = tidy(cint)
+colnames(cint) = c("Variable", "lower", "upper")
+cint$Variable = cint$Variable %>% 
+  str_replace(fixed("factor(dateInstalled)"), "") %>%
+  str_replace(fixed("(Intercept)"), "Intercept")
+ptable = left_join(ptable, cint, by = "Variable")
+ptable = ptable %>% mutate(lower = round(lower, 2),
+                           upper = round(lower, 2),
+                           Beta = round(Beta, 2),
+                           p.value = ifelse(p.value < 0.01, "< 0.01", 
+                                            round(p.value,2)))
+ptable = ptable %>% mutate(ci = paste0("(", lower, ", ", upper, ")"))
+ptable = dplyr::select(ptable, Beta, ci, p.value)
+pander(ptable)
+
+## ------------------------------------------------------------------------
+# pander(mod.yr, mod.yrtype) does not work
+# pander(list(mod.yr, mod.yrtype)) # will give 2 separate tables
+
+## ---- message = FALSE----------------------------------------------------
+library(memisc)
+mtab_all <- mtable("Model Year" = mod.yr,
+                   "Model Type" = mod.type,
+                   "Model Both" = mod.yrtype, 
+                   summary.stats = c("sigma","R-squared","F","p","N"))
+print(mtab_all)
+
+## ------------------------------------------------------------------------
+write.mtable(mtab_all, file = "my_tab.txt")
+
+## ------------------------------------------------------------------------
+pander(mtab_all)
+
+## ------------------------------------------------------------------------
+renamer = function(model) {
+  names(model$coefficients) = names(model$coefficients) %>% 
+  str_replace(fixed("factor(dateInstalled)"), "") %>%
+  str_replace(fixed("(Intercept)"), "Intercept")
+  names(model$contrasts) = names(model$contrasts) %>% 
+  str_replace(fixed("factor(dateInstalled)"), "") %>%
+  str_replace(fixed("(Intercept)"), "Intercept")
+  return(model)
+}
+mod.yr = renamer(mod.yr)
+mod.yrtype = renamer(mod.yrtype)
+mod.type = renamer(mod.type)
+
+mtab_all_better <- mtable("Model Year" = mod.yr,
+                   "Model Type" = mod.type,
+                   "Model Both" = mod.yrtype, 
+                   summary.stats = c("sigma","R-squared","F","p","N"))
+pander(mtab_all_better)
 
 ## ------------------------------------------------------------------------
 require(stargazer)
 
 ## ---- results='markup', comment=""---------------------------------------
-stargazer(mod.yr, mod.type, mod.yrtype, type="text")
+stargazer(mod.yr, mod.type, mod.yrtype, type = "text")
 
 ## ---- results='asis', comment=""-----------------------------------------
 stargazer(mod.yr, mod.type, mod.yrtype, type="html")
 
 ## ----computes------------------------------------------------------------
 ### let's get number of bike lanes installed by year
-n.lanes = ddply(no.missyear, .(dateInstalled), nrow)
-names(n.lanes) <- c("date", "nlanes")
-n2009 <- n.lanes$nlanes[ n.lanes$date == 2009]
-n2010 <- n.lanes$nlanes[ n.lanes$date == 2010]
+n.lanes = no.missyear %>% group_by(dateInstalled) %>% dplyr::summarize(n())
+class(n.lanes)
+print(n.lanes)
+n.lanes = as.data.frame(n.lanes)
+print(n.lanes)
+
+## ------------------------------------------------------------------------
+colnames(n.lanes) <- c("date", "nlanes")
+n2009 <- filter(n.lanes, date == 2009)
+n2010 <- filter(n.lanes, date == 2010)
 getwd()
 
 ## ------------------------------------------------------------------------
-fname <- "../../data/Charm_City_Circulator_Ridership.csv"
-# fname <- file.path(data.dir, "Charm_City_Circulator_Ridership.csv")
+fname <- "http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv"
 ## file.path takes a directory and makes a full name with a full file path
 charm = read.csv(fname, as.is=TRUE)
 

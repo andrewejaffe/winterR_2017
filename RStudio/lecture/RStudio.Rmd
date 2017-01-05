@@ -1,7 +1,6 @@
 ---
 title: "RStudio"
-author: "John Muschelli"
-date: "June 13, 2016"
+author: "Introduction to R for Public Health Researchers"
 output:
   ioslides_presentation:
     css: ../../styles.css

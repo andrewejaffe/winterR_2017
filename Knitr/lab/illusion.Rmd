@@ -1,7 +1,6 @@
 ---
 title: "Choose a title"
-author: "Your Name"
-date: "January 5, 2016"
+author: "Introduction to R for Public Health Researchers"
 output: word_document
 ---
 
