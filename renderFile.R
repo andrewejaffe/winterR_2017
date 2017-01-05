@@ -7,7 +7,9 @@ renderFile <- function(file) {
   knitr::purl(file, output = output)
   
   ## Make presentation
-  rmarkdown::render(file, output_format = c("html_document", "pdf_document", "word_document"))
+  rmarkdown::render(file, output_format = "all")
+                    # output_format = c("ioslides_presentation", 
+                                      # "beamer_presentation"))
   # on.exit({ 
   #   setwd(owd)
   # })

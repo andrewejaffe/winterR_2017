@@ -61,8 +61,26 @@ Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.html: Subsetting_Data_in_R/lec
 Intro/lecture/Intro.html: Intro/lecture/Intro.Rmd
 	Rscript -e "source('renderFile.R'); renderFile('Intro/lecture/Intro.Rmd')"	
 
+HW/homework3_key.html: HW/homework3_key.Rmd
+	Rscript -e "source('renderFile.R'); renderFile('HW/homework3_key.Rmd')"	
 
 index.html:
 	Rscript -e "source('render.R')"
 	Rscript -e "rmarkdown::render('index.Rmd')"
 
+clean:
+	rm -f Statistics/lecture/Statistics.html
+	rm -f Data_Visualization/lecture/Data_Visualization.html
+	rm -f Knitr/lecture/Knitr.html
+	rm -f Data_Summarization/lecture/Data_Summarization.html
+	rm -f RStudio/lecture/RStudio.html
+	rm -f Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.html
+	rm -f Data_Cleaning/lecture/Data_Cleaning.html
+	rm -f Data_IO/lecture/Data_IO.html
+	rm -f Data_Classes/lecture/Data_Classes.html
+	rm -f Simple_Knitr/lecture/Simple_Knitr.html
+	rm -f Basic_R/lecture/Basic_R.html
+	rm -f Functions/lecture/Functions.html
+	rm -f Arrays_Split/lecture/Arrays_Split.html
+	rm -f Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.html 
+	rm -f Intro/lecture/Intro.html
