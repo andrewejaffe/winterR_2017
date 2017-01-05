@@ -5,6 +5,7 @@ output:
   beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
+    widescreen: yes
 ---
 
 ```{r, echo = FALSE}
