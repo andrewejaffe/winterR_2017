@@ -12,6 +12,7 @@ output:
 library(knitr)
 opts_chunk$set(comment = "")
 library(dplyr)
+library(readr)
 ```
 
 ## Data Summarization
@@ -82,8 +83,8 @@ Please download the Charm City Circulator data:
 http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv
 
 ```{r}
-circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", 
-            header=TRUE,as.is=TRUE)
+circ = read_csv(
+  "http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv")
 ```
 
 ## Subsetting to specific columns
@@ -100,7 +101,7 @@ head(circ2, 4)
 
 ```{r colMeans}
 avgs = select(circ2, ends_with("Average"))
-colMeans(avgs,na.rm = TRUE)
+colMeans(avgs, na.rm = TRUE)
 circ2$daily = rowMeans(avgs,na.rm=TRUE)
 head(circ2$daily)
 ```
@@ -144,6 +145,7 @@ apply(avgs,2,max,na.rm=TRUE) # column maxs
 
 See more details here: http://nsaunders.wordpress.com/2010/08/20/a-brief-introduction-to-apply-in-r/
 
+
 ## `tapply()`
 
 From the help file: "Apply a function to each cell of a ragged array, that is to each (non-empty) group of values given by a unique combination of the levels of certain factors."
@@ -162,6 +164,15 @@ For example, we can estimate the highest average daily ridership for each day of
 tapply(circ2$daily, circ2$day, max, na.rm = TRUE)
 ```
     
+## Perform Operations By Groups: dplyr
+
+`group_by` allows you group the data in a more intuitive way than `tapply`
+
+We will use `group_by` to group the data by line, then use `summarize` (or `summarise`) to get the mean Average ridership:
+
+```{r}
+summarize(group_by(circ, day), max_avg = max(daily, na.rm = TRUE))
+```    
 
 ## Data Summarization/Visualization
 

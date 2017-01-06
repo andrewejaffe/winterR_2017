@@ -203,8 +203,27 @@ mean(x)</pre>
 
 <p><a href='http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv' title=''>http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv</a></p>
 
-<pre class = 'prettyprint lang-r'>circ = read.csv(&quot;http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv&quot;, 
-            header=TRUE,as.is=TRUE)</pre>
+<pre class = 'prettyprint lang-r'>circ = read_csv(
+  &quot;http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv&quot;)</pre>
+
+<pre >Parsed with column specification:
+cols(
+  day = col_character(),
+  date = col_character(),
+  orangeBoardings = col_integer(),
+  orangeAlightings = col_integer(),
+  orangeAverage = col_double(),
+  purpleBoardings = col_integer(),
+  purpleAlightings = col_integer(),
+  purpleAverage = col_double(),
+  greenBoardings = col_integer(),
+  greenAlightings = col_integer(),
+  greenAverage = col_double(),
+  bannerBoardings = col_integer(),
+  bannerAlightings = col_integer(),
+  bannerAverage = col_double(),
+  daily = col_double()
+)</pre>
 
 </article></slide><slide class=''><hgroup><h2>Subsetting to specific columns</h2></hgroup><article  id="subsetting-to-specific-columns">
 
@@ -214,21 +233,19 @@ mean(x)</pre>
 circ2 = select(circ, date, day, ends_with(&quot;Average&quot;))
 head(circ2, 4)</pre>
 
-<pre >        date       day orangeAverage purpleAverage greenAverage
+<pre ># A tibble: 4 × 6
+        date       day orangeAverage purpleAverage greenAverage
+       &lt;chr&gt;     &lt;chr&gt;         &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;
 1 01/11/2010    Monday         952.0            NA           NA
 2 01/12/2010   Tuesday         796.0            NA           NA
 3 01/13/2010 Wednesday        1211.5            NA           NA
 4 01/14/2010  Thursday        1213.5            NA           NA
-  bannerAverage
-1            NA
-2            NA
-3            NA
-4            NA</pre>
+# ... with 1 more variables: bannerAverage &lt;dbl&gt;</pre>
 
 </article></slide><slide class=''><hgroup><h2>column and row means</h2></hgroup><article  id="column-and-row-means">
 
 <pre class = 'prettyprint lang-r'>avgs = select(circ2, ends_with(&quot;Average&quot;))
-colMeans(avgs,na.rm = TRUE)</pre>
+colMeans(avgs, na.rm = TRUE)</pre>
 
 <pre >orangeAverage purpleAverage  greenAverage bannerAverage 
     3033.1611     4016.9345     1957.7814      827.2685 </pre>
@@ -319,6 +336,25 @@ head(circ2$daily)</pre>
 
 <pre >   Friday    Monday  Saturday    Sunday  Thursday   Tuesday Wednesday 
   5600.75   5002.25   6123.00   3980.25   4820.50   4855.25   4985.00 </pre>
+
+</article></slide><slide class=''><hgroup><h2>Perform Operations By Groups: dplyr</h2></hgroup><article  id="perform-operations-by-groups-dplyr">
+
+<p><code>group_by</code> allows you group the data in a more intuitive way than <code>tapply</code></p>
+
+<p>We will use <code>group_by</code> to group the data by line, then use <code>summarize</code> (or <code>summarise</code>) to get the mean Average ridership:</p>
+
+<pre class = 'prettyprint lang-r'>summarize(group_by(circ, day), max_avg = max(daily, na.rm = TRUE))</pre>
+
+<pre ># A tibble: 7 × 2
+        day max_avg
+      &lt;chr&gt;   &lt;dbl&gt;
+1    Friday 21951.0
+2    Monday 13982.0
+3  Saturday 22074.5
+4    Sunday 15224.5
+5  Thursday 17580.0
+6   Tuesday 14775.5
+7 Wednesday 15672.5</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Summarization/Visualization</h2></hgroup><article  id="data-summarizationvisualization">
 

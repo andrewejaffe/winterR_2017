@@ -2,6 +2,7 @@
 library(knitr)
 opts_chunk$set(comment = "")
 library(dplyr)
+library(readr)
 
 ## ------------------------------------------------------------------------
 head(mtcars)
@@ -24,8 +25,8 @@ mean(x,na.rm=TRUE)
 quantile(x,na.rm=TRUE)
 
 ## ------------------------------------------------------------------------
-circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", 
-            header=TRUE,as.is=TRUE)
+circ = read_csv(
+  "http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv")
 
 ## ---- message=FALSE------------------------------------------------------
 library(dplyr)
@@ -34,7 +35,7 @@ head(circ2, 4)
 
 ## ----colMeans------------------------------------------------------------
 avgs = select(circ2, ends_with("Average"))
-colMeans(avgs,na.rm = TRUE)
+colMeans(avgs, na.rm = TRUE)
 circ2$daily = rowMeans(avgs,na.rm=TRUE)
 head(circ2$daily)
 
@@ -48,6 +49,9 @@ apply(avgs,2,max,na.rm=TRUE) # column maxs
 
 ## ----tapply1-------------------------------------------------------------
 tapply(circ2$daily, circ2$day, max, na.rm = TRUE)
+
+## ------------------------------------------------------------------------
+summarize(group_by(circ, day), max_avg = max(daily, na.rm = TRUE))
 
 ## ----scatter1------------------------------------------------------------
 plot(mtcars$mpg, mtcars$disp)
