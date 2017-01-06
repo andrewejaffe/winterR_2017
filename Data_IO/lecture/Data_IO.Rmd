@@ -2,10 +2,10 @@
 title: "Data Input/Output"
 author: "Introduction to R for Public Health Researchers"
 output:
-  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
     widescreen: yes
+  beamer_presentation: default
 ---
 
 ```{r, echo = FALSE}
@@ -70,7 +70,7 @@ This means if I try your code, and you use absolute paths, it won't work unless 
 
 ## Setting the Working Directory
 
-In RStudio, go to `Session → Set Working Directory → To Source File Location`
+In RStudio, go to `Session --> Set Working Directory --> To Source File Location`
 
 RStudio should put code in the Console, similar to this:
 ```{r, eval = FALSE}
@@ -82,7 +82,7 @@ setwd("~/Lectures/Data_IO/lecture")
 Again, if you open an R file with a new RStudio session, it does this for you.  You may need to make this a default.
 
 1. Make sure RStudio is the default application to open .R files
-    * Mac - right click → Get Info → Open With: RStudio → Change All
+    * Mac - right click --> Get Info --> Open With: RStudio --> Change All
     * Windows - Andrew will show
 2. Close RStudio Double click `day1.R`
 
@@ -119,7 +119,7 @@ help("dir")
 Monuments Dataset: "This data set shows the point location of Baltimore City monuments. However, the completness and currentness of these data are uncertain."
 
 * Download data from http://www.aejaffe.com/winterR_2017/data/Monuments.csv
-    * Safari - if a file loads in your browser, choose File → Save As, select, Format "Page Source" and save
+    * Safari - if a file loads in your browser, choose File --> Save As, select, Format "Page Source" and save
 * Save it (or move it) to the same folder as your `day1.R` script
 * Within RStudio: Session --> Set Working Directory --> To Source File Location
 * (data downloaded from https://data.baltimorecity.gov/Community/Monuments/cpxf-kxp3)
