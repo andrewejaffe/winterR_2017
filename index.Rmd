@@ -26,7 +26,7 @@ Winter R 2017
 
 | Day  | Date  |  Module  | Resources  |  Description |
 |--------|--------|--------|--------|--------|
-| 1  | 2017-01-09  | Homework 1  | [Try R](http://tryr.codeschool.com/)  | Finish all modules  |
+| 0  | 2017-01-09  | Homework 1  | [Try R](http://tryr.codeschool.com/), [Data Camp](https://campus.datacamp.com/courses/free-introduction-to-r)  | Finish all modules  |
 <!-- 
 | 1  | 2016-06-13  | Module 1  | [HTML](Intro/lecture/Intro.html), [PDF](Intro/lecture/Intro.pdf)  | Class Introduction  |
 | 1  | 2016-06-13  | Module 2  | [HTML](RStudio/lecture/RStudio.html), [PDF](RStudio/lecture/RStudio.pdf) | R Studio  |
