@@ -1,12 +1,12 @@
 ---
-title: "Variables"
+title: "Variables: Objects in R"
 author: "Introduction to R for Public Health Researchers"
 output:
   ioslides_presentation:
     css: ../../styles.css
     widescreen: yes
   beamer_presentation: default
-subtitle: Basic R
+subtitle: Basic R Functionality
 ---
 
 ```{r, echo = FALSE}
@@ -14,10 +14,21 @@ library(knitr)
 opts_chunk$set(comment = "")
 ```
 
+## Common new users frustations
+
+1.  **Different versions of software**
+1.  **Data type problems (is that a string or a number?)**
+2.  Working directory problems: trying to read files that R "can't find"
+    - RStudio can help, and so do RStudio Projects
+    - discuss in Data Input/Output lecture
+3.  Typos (R is **case sensitive**, `x` and `X` are different)
+    - RStudio helps with "tab completion"
+    - discussed throughout
+
 ## Getting Started
 
 * You should have the latest version of R installed!
-* Open R Studio
+* Open RStudio
 * Files --> New --> R Script
 * Save the blank R script as "day1.R" in a directory of your choosing
 * Add a comment header

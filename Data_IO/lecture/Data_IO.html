@@ -97,17 +97,42 @@
           </hgroup>
   </slide>
 
-<slide class=''><hgroup><h2>Before we get Started: Working Directories</h2></hgroup><article  id="before-we-get-started-working-directories">
+<slide class=''><hgroup><h2>Common new users mistakes we have seen</h2></hgroup><article  id="common-new-users-mistakes-we-have-seen">
+
+<ol>
+<li>Different versions of software</li>
+<li>Data type problems (is that a string or a number?)</li>
+<li><strong>Working directory problems: trying to read files that R &quot;can&#39;t find&quot;</strong>
 
 <ul>
-<li>R looks for files on your computer relative to the &quot;working&quot; directory</li>
-<li>It&#39;s always safer to set the working directory at the beginning of your script. Note that setting the working directory created the necessary code that you can copy into your script.</li>
-<li>Example of help file</li>
+<li>RStudio can help, and so do RStudio Projects</li>
+<li>discuss in Data Input/Output lecture</li>
+</ul></li>
+<li>Typos (R is <strong>case sensitive</strong>, <code>x</code> and <code>X</code> are different)
+
+<ul>
+<li>RStudio helps with &quot;tab completion&quot;</li>
+<li>discussed throughout</li>
+</ul></li>
+</ol>
+
+</article></slide><slide class=''><hgroup><h2>Before we get Started: Working Directories</h2></hgroup><article  id="before-we-get-started-working-directories">
+
+<ul>
+<li>R &quot;looks&quot; for files on your computer relative to the &quot;working&quot; directory</li>
+<li>Many recommend not setting a directory in the scripts
+
+<ul>
+<li>assume you&#39;re in the directory the script is in</li>
+<li>If you open an R file with a new RStudio session, it does this for you.</li>
+</ul></li>
+<li>If you do set a working directory, do it at the beginning of your script.</li>
+<li>Example of getting and setting the working directory:</li>
 </ul>
 
 <pre class = 'prettyprint lang-r'>## get the working directory
 getwd()
-# setwd(&quot;~/summerR_2016/Lectures&quot;)</pre>
+setwd(&quot;~/Lectures&quot;) </pre>
 
 </article></slide><slide class=''><hgroup><h2>Setting a Working Directory</h2></hgroup><article  id="setting-a-working-directory">
 
@@ -115,15 +140,15 @@ getwd()
 <li>Setting the directory can sometimes be finicky
 
 <ul>
-<li>Windows: Default directory structure involves single backslashes (&quot;&quot;), but R interprets these as &quot;escape&quot; characters. So you must replace the backslash with forward slashed (&quot;/&quot;) or two backslashes (&quot;\&quot;)</li>
-<li>Mac/Linux: Default is forward slashes, so you are okay</li>
+<li><strong>Windows</strong>: Default directory structure involves single backslashes (&quot;&quot;), but R interprets these as &quot;escape&quot; characters. So you must replace the backslash with forward slashes (&quot;/&quot;) or two backslashes (&quot;\&quot;)</li>
+<li><strong>Mac/Linux</strong>: Default is forward slashes, so you are okay</li>
 </ul></li>
-<li>Typical linux/DOS directory structure syntax applies
+<li>Typical directory structure syntax applies
 
 <ul>
-<li>&quot;..&quot; goes up one level</li>
-<li>&quot;./&quot; is the current directory</li>
-<li>&quot;~&quot; is your home directory</li>
+<li>&quot;..&quot; - goes up one level</li>
+<li>&quot;./&quot; - is the current directory</li>
+<li>&quot;~&quot; - is your &quot;home&quot; directory</li>
 </ul></li>
 </ul>
 
@@ -143,11 +168,56 @@ getwd()
 
 <pre >[1] &quot;lab&quot;     &quot;lecture&quot;</pre>
 
-</article></slide><slide class=''><hgroup><h2>Working Directory</h2></hgroup><article  id="working-directory-1">
+</article></slide><slide class=''><hgroup><h2>Relative vs. absolute paths (From Wiki)</h2></hgroup><article  id="relative-vs.-absolute-paths-from-wiki">
+
+<p><em>An <strong>absolute or full path</strong> points to the same location in a file system, regardless of the current working directory. To do that, it must include the root directory.</em></p>
+
+<p>This means if I try your code, and you use absolute paths, it won&#39;t work unless we have the exact same folder structure where R is looking (bad).</p>
+
+<p><em>By contrast, a <strong>relative path starts from some given working directory</strong>, avoiding the need to provide the full absolute path. A filename can be considered as a relative path based at the current working directory. </em></p>
+
+</article></slide><slide class=''><hgroup><h2>Setting the Working Directory</h2></hgroup><article  id="setting-the-working-directory">
+
+<p>In RStudio, go to <code>Session → Set Working Directory → To Source File Location</code></p>
+
+<p>RStudio should put code in the Console, similar to this:</p>
+
+<pre class = 'prettyprint lang-r'>setwd(&quot;~/Lectures/Data_IO/lecture&quot;)</pre>
+
+</article></slide><slide class=''><hgroup><h2>Setting the Working Directory</h2></hgroup><article  id="setting-the-working-directory-1">
+
+<p>Again, if you open an R file with a new RStudio session, it does this for you. You may need to make this a default.</p>
+
+<ol>
+<li>Make sure RStudio is the default application to open .R files
 
 <ul>
-<li>Copy the code to set your working directory from the History tab in RStudio (top right)</li>
-<li>Confirm the directory contains &quot;day1.R&quot; using <code>dir()</code></li>
+<li>Mac - right click → Get Info → Open With: RStudio → Change All</li>
+<li>Windows - Andrew will show</li>
+</ul></li>
+<li>Close RStudio Double click <code>day1.R</code></li>
+</ol>
+
+<ul>
+<li>Confirm the directory contains &quot;day1.R&quot; using <code>dir()</code>:
+
+<ul>
+<li>Type <code>dir()</code> in the R Console (<code>day1.R</code> should be there)</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Help</h2></hgroup><article  id="help">
+
+<p>For any function, you can write <code>?FUNCTION_NAME</code>, or <code>help(&quot;FUNCTION_NAME&quot;)</code> to look at the help file:</p>
+
+<pre class = 'prettyprint lang-r'>?dir
+help(&quot;dir&quot;)</pre>
+
+</article></slide><slide class=''><hgroup><h2>Data Aside</h2></hgroup><article  id="data-aside">
+
+<ul>
+<li>Everything we do in class will be using real publicly available data - there are few &#39;toy&#39; example datasets and &#39;simulated&#39; data</li>
+<li>OpenBaltimore and Data.gov will be sources for the first few days</li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input">
@@ -164,20 +234,17 @@ getwd()
 </ul></li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Data Aside</h2></hgroup><article  id="data-aside">
-
-<ul>
-<li>Everything we do in class will be using real publicly available data - there are few &#39;toy&#39; example datasets and &#39;simulated&#39; data</li>
-<li>OpenBaltimore and Data.gov will be sources for the first few days</li>
-</ul>
-
 </article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-1">
 
 <p>Monuments Dataset: &quot;This data set shows the point location of Baltimore City monuments. However, the completness and currentness of these data are uncertain.&quot;</p>
 
 <ul>
-<li>Download data from <a href='http://www.aejaffe.com/summerR_2016/data/Monuments.csv' title=''>http://www.aejaffe.com/summerR_2016/data/Monuments.csv</a></li>
-<li>Save it (or move it) to the same folder as your day1.R script</li>
+<li>Download data from <a href='http://www.aejaffe.com/winterR_2017/data/Monuments.csv' title=''>http://www.aejaffe.com/winterR_2017/data/Monuments.csv</a>
+
+<ul>
+<li>Safari - if a file loads in your browser, choose File → Save As, select, Format &quot;Page Source&quot; and save</li>
+</ul></li>
+<li>Save it (or move it) to the same folder as your <code>day1.R</code> script</li>
 <li>Within RStudio: Session &#8211;&gt; Set Working Directory &#8211;&gt; To Source File Location</li>
 <li>(data downloaded from <a href='https://data.baltimorecity.gov/Community/Monuments/cpxf-kxp3' title=''>https://data.baltimorecity.gov/Community/Monuments/cpxf-kxp3</a>)</li>
 </ul>
@@ -186,7 +253,7 @@ getwd()
 
 <p>R Studio features some nice &quot;drop down&quot; support, where you can run some tasks by selecting them from the toolbar.</p>
 
-<p>For example, you can easily import text datasets using the &quot;Tools &#8211;&gt; Import Dataset&quot; command. Selecting this will bring up a new screen that lets you specify the formatting of your text file.</p>
+<p>For example, you can easily import text datasets using the &quot;File &#8211;&gt; Import Dataset &#8211;&gt; From CSV&quot; command. Selecting this will bring up a new screen that lets you specify the formatting of your text file.</p>
 
 <p>After importing a datatset, you get the corresponding R commands that you can enter in the console if you want to re-import data.</p>
 
@@ -194,13 +261,14 @@ getwd()
 
 <p>So what is going on &quot;behind the scenes&quot;?</p>
 
-<p><code>read.table()</code>: Reads a file in table format and creates a data frame from it, with cases corresponding to lines and variables to fields in the file.</p>
+<p><code>read.table()</code>: Reads a file in table format and creates a <code>data.frame</code> from it, with cases corresponding to lines and variables to fields in the file.</p>
 
 <pre ># the four ones I&#39;ve put at the top are the important inputs
 read.table( file, # filename
            header = FALSE, # are there column names?
            sep = &quot;&quot;, # what separates columns?
-           as.is = !stringsAsFactors, # do you want character strings as factors or characters?
+           as.is = !stringsAsFactors, # do you want character strings as 
+                  #factors or characters?
            quote = &quot;\&quot;&#39;&quot;,  dec = &quot;.&quot;, row.names, col.names,
            na.strings = &quot;NA&quot;, nrows = -1,
            skip = 0, check.names = TRUE, fill = !blank.lines.skip,
@@ -227,7 +295,7 @@ read.table( file, # filename
     fill = TRUE, comment.char = &quot;&quot;, ...) 
 read.table(file = file, header = header, sep = sep, quote = quote, 
     dec = dec, fill = fill, comment.char = comment.char, ...)
-&lt;bytecode: 0x7f7f845059c0&gt;
+&lt;bytecode: 0x7fedf527d350&gt;
 &lt;environment: namespace:utils&gt;</pre>
 
 <p>Note: the <code>...</code> designates extra/optional arguments that can be passed to <code>read.table()</code> if needed</p>
@@ -238,7 +306,7 @@ read.table(file = file, header = header, sep = sep, quote = quote,
 <li>Here would be reading in the data from the command line, specifying the file path:</li>
 </ul>
 
-<pre class = 'prettyprint lang-r'>mon = read.csv(&quot;../../data/Monuments.csv&quot;,header=TRUE,as.is=TRUE)
+<pre class = 'prettyprint lang-r'>mon = read.csv(&quot;../../data/Monuments.csv&quot;, header = TRUE, as.is = TRUE)
 head(mon)</pre>
 
 <pre >                              name zipCode neighborhood councilDistrict
@@ -256,6 +324,10 @@ head(mon)</pre>
 5        CENTRAL    50 MARKET PL\nBaltimore, MD\n
 6        CENTRAL  100 CALVERT ST\nBaltimore, MD\n</pre>
 
+<pre class = 'prettyprint lang-r'>class(mon)</pre>
+
+<pre >[1] &quot;data.frame&quot;</pre>
+
 </article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-7" class="smaller">
 
 <pre class = 'prettyprint lang-r'>colnames(mon) # column names</pre>
@@ -269,7 +341,7 @@ head(mon)</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-8">
 
-<p>The <code>read.table()</code> function returns a <code>data.frame</code>, which is the primary data format for most data cleaning and analyses</p>
+<p>The <code>read.table()</code> function returns a <code>data.frame</code>, which is the primary data format for most data cleaning and analyses. The <code>str</code> function gives &quot;structure&quot; of data:</p>
 
 <pre class = 'prettyprint lang-r'>str(mon) # structure of an R object</pre>
 
@@ -280,6 +352,31 @@ head(mon)</pre>
  $ councilDistrict: int  11 11 11 11 11 11 11 7 14 14 ...
  $ policeDistrict : chr  &quot;CENTRAL&quot; &quot;CENTRAL&quot; &quot;CENTRAL&quot; &quot;CENTRAL&quot; ...
  $ Location.1     : chr  &quot;408 CHARLES ST\nBaltimore, MD\n&quot; &quot;&quot; &quot;&quot; &quot;100 HOLLIDAY ST\nBaltimore, MD\n&quot; ...</pre>
+
+</article></slide><slide class=''><hgroup><h2>Data Input with <code>tbl_df</code>s</h2></hgroup><article  id="data-input-with-tbl_dfs" class="smaller">
+
+<ul>
+<li>When using the dropdown menu in RStudio, it uses <code>read_csv</code>, which is an improved version of reading in CSVs. It is popular but <code>read.csv</code> is still largely used. It returns a <code>tbl</code> (tibble), that is a <code>data.frame</code> with improved printing and subsetting properties:</li>
+</ul>
+
+<pre class = 'prettyprint lang-r'>library(readr)
+mon_tbl = read_csv(&quot;../../data/Monuments.csv&quot;)
+head(mon_tbl)</pre>
+
+<pre ># A tibble: 6 × 6
+                              name zipCode neighborhood councilDistrict
+                             &lt;chr&gt;   &lt;int&gt;        &lt;chr&gt;           &lt;int&gt;
+1           James Cardinal Gibbons   21201     Downtown              11
+2              The Battle Monument   21202     Downtown              11
+3 Negro Heroes of the U.S Monument   21202     Downtown              11
+4              Star Bangled Banner   21202     Downtown              11
+5  Flame at the Holocaust Monument   21202     Downtown              11
+6                   Calvert Statue   21202     Downtown              11
+# ... with 2 more variables: policeDistrict &lt;chr&gt;, `Location 1` &lt;chr&gt;</pre>
+
+<pre class = 'prettyprint lang-r'>class(mon_tbl)</pre>
+
+<pre >[1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-9">
 
