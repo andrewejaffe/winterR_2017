@@ -1,6 +1,6 @@
 ## ---- echo = FALSE, message=FALSE, error = FALSE-------------------------
 library(knitr)
-opts_chunk$set(comment = "")
+opts_chunk$set(comment = "", message = FALSE)
 library(dplyr)
 library(readr)
 
@@ -21,58 +21,76 @@ t.test(mtcars$wt)
 ## ------------------------------------------------------------------------
 x = c(1,5,7,NA,4,2, 8,10,45,42)
 mean(x)
-mean(x,na.rm=TRUE)
-quantile(x,na.rm=TRUE)
+mean(x, na.rm = TRUE)
+quantile(x, na.rm = TRUE)
 
 ## ------------------------------------------------------------------------
-circ = read_csv(
-  "http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv")
+library(readxl)
+tb <- read_excel("../../data/tb_incidence.xlsx")
+head(tb)
 
-## ---- message=FALSE------------------------------------------------------
+## ------------------------------------------------------------------------
 library(dplyr)
-circ2 = select(circ, date, day, ends_with("Average"))
-head(circ2, 4)
+tb = rename(tb, 
+            country = `TB incidence, all forms (per 100 000 population per year)`)
 
 ## ----colMeans------------------------------------------------------------
-avgs = select(circ2, ends_with("Average"))
+avgs = select(tb, starts_with("1"))
 colMeans(avgs, na.rm = TRUE)
-circ2$daily = rowMeans(avgs,na.rm=TRUE)
-head(circ2$daily)
+tb$before_2000_avg = rowMeans(avgs, na.rm = TRUE)
+head(tb[, c("country", "before_2000_avg")])
 
 ## ----summary1------------------------------------------------------------
-summary(circ2)
+summary(tb)
 
 ## ----apply1--------------------------------------------------------------
 apply(avgs,2,mean,na.rm=TRUE) # column means
 apply(avgs,2,sd,na.rm=TRUE) # columns sds
 apply(avgs,2,max,na.rm=TRUE) # column maxs
 
+## ---- message = FALSE----------------------------------------------------
+library(readr)
+smoke = read_csv(
+  "http://www.aejaffe.com/winterR_2017/data/Youth_Tobacco_Survey_YTS_Data.csv")
+
+## ---- message=FALSE------------------------------------------------------
+library(dplyr)
+sub_smoke = filter(smoke, 
+                   MeasureDesc == "Smoking Status",
+                   Gender == "Overall",
+                   Response == "Current")
+sub_smoke = select(sub_smoke, YEAR, LocationDesc, Data_Value)
+head(sub_smoke, 4)
+
 ## ----tapply1-------------------------------------------------------------
-tapply(circ2$daily, circ2$day, max, na.rm = TRUE)
+tapply(sub_smoke$Data_Value, sub_smoke$YEAR, max, na.rm = TRUE)
 
 ## ------------------------------------------------------------------------
-summarize(group_by(circ, day), max_avg = max(daily, na.rm = TRUE))
+summarize(group_by(sub_smoke, YEAR), year_avg = mean(Data_Value, na.rm = TRUE))
+
+## ------------------------------------------------------------------------
+smoke_avgs = sub_smoke %>% 
+  group_by(YEAR) %>% 
+  summarize(year_avg = mean(Data_Value, na.rm = TRUE))
+head(smoke_avgs)
 
 ## ----scatter1------------------------------------------------------------
 plot(mtcars$mpg, mtcars$disp)
 
 ## ----hist1---------------------------------------------------------------
-hist(circ2$daily)
+hist(tb$before_2000_avg)
 
 ## ----hist_date-----------------------------------------------------------
-library(lubridate)
-circ2$date = mdy(circ2$date)
-plot(circ2$date, circ2$daily, type = "l")
+plot(smoke_avgs$YEAR, smoke_avgs$year_avg, type = "l")
 
 ## ----dens1,fig.width=5,fig.height=5--------------------------------------
-## plot(density(circ2$daily))
-plot(density(circ2$daily,na.rm=TRUE))
+plot(density(sub_smoke$Data_Value))
 
 ## ----box1----------------------------------------------------------------
-boxplot(circ2$daily ~ circ2$day)
+boxplot(sub_smoke$Data_Value ~ sub_smoke$LocationDesc)
 
 ## ----box2----------------------------------------------------------------
-boxplot(daily ~ day, data=circ2)
+boxplot(Data_Value ~ LocationDesc, data = sub_smoke)
 
 ## ----matplot1------------------------------------------------------------
 pairs(avgs)

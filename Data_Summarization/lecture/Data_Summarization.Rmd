@@ -10,7 +10,7 @@ output:
 
 ```{r, echo = FALSE, message=FALSE, error = FALSE}
 library(knitr)
-opts_chunk$set(comment = "")
+opts_chunk$set(comment = "", message = FALSE)
 library(dplyr)
 library(readr)
 ```
@@ -34,6 +34,8 @@ head(mtcars)
 
 
 ## Statistical summarization
+
+Note - the `$` references/selects columns from a `data.frame`/`tibble`:
 
 ```{r}
 mean(mtcars$hp)
@@ -75,41 +77,49 @@ quantile(x, na.rm = TRUE)
     * `colSums(x)`: takes the sum of each column of x
     * `summary(x)`: for data frames, displays the quantile information
 
+## TB Incidence 
 
-## Charm City Circulator data
+Please download the TB incidence data: 
 
-Please download the Charm City Circulator data:
+http://www.aejaffe.com/winterR_2017/data/tb_incidence.xlsx
 
-http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv
+Here we will read in a `data.frame` of values from TB incidence:
 
 ```{r}
-circ = read_csv(
-  "http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv")
+library(readxl)
+tb <- read_excel("../../data/tb_incidence.xlsx")
+head(tb)
 ```
 
-## Subsetting to specific columns
+## Indicator of Mortality
 
-Let's just take columns that represent average ridership:
+We can rename the first column to be the country measured using the `rename` function in `dplyr` (we have to use the \` things because there are spaces in the name):
 
-```{r, message=FALSE}
+```{r}
 library(dplyr)
-circ2 = select(circ, date, day, ends_with("Average"))
-head(circ2, 4)
+tb = rename(tb, 
+            country = `TB incidence, all forms (per 100 000 population per year)`)
 ```
 
-## column and row means
+
+
+## Column and Row means
+
+`colMeans` and `rowMeans` must work on all numeric data.  We will subset years before 2000:
 
 ```{r colMeans}
-avgs = select(circ2, ends_with("Average"))
+avgs = select(tb, starts_with("1"))
 colMeans(avgs, na.rm = TRUE)
-circ2$daily = rowMeans(avgs,na.rm=TRUE)
-head(circ2$daily)
+tb$before_2000_avg = rowMeans(avgs, na.rm = TRUE)
+head(tb[, c("country", "before_2000_avg")])
 ```
 
 ## Summary
 
+Using `summary` can give you rough snapshots of each column, but you would likely use `mean`, `min`, `max`, and `quantile` when necessary:
+
 ```{r summary1}
-summary(circ2)
+summary(tb)
 ```
 
 ## Apply statements
@@ -146,6 +156,32 @@ apply(avgs,2,max,na.rm=TRUE) # column maxs
 See more details here: http://nsaunders.wordpress.com/2010/08/20/a-brief-introduction-to-apply-in-r/
 
 
+
+## Youth Tobacco Survey
+
+Please download the Youth Tobacco Survey data.  You can also read it in directly from the web:
+
+```{r, message = FALSE}
+library(readr)
+smoke = read_csv(
+  "http://www.aejaffe.com/winterR_2017/data/Youth_Tobacco_Survey_YTS_Data.csv")
+```
+
+## Subsetting to specific columns
+
+Let's just take smoking status measures for all genders using `filter`, and the columns that represent the year, state using `select` (covered more in detail later):
+
+```{r, message=FALSE}
+library(dplyr)
+sub_smoke = filter(smoke, 
+                   MeasureDesc == "Smoking Status",
+                   Gender == "Overall",
+                   Response == "Current")
+sub_smoke = select(sub_smoke, YEAR, LocationDesc, Data_Value)
+head(sub_smoke, 4)
+```
+
+
 ## `tapply()`
 
 From the help file: "Apply a function to each cell of a ragged array, that is to each (non-empty) group of values given by a unique combination of the levels of certain factors."
@@ -158,10 +194,10 @@ Simply put, you can apply function `FUN` to `X` within each categorical level of
 
 ## `tapply()`
 
-For example, we can estimate the highest average daily ridership for each day of the week in 1 line in the Circulator dataset. 
+For example, we can estimate the average current smoking statuses over all states for each year: 
 
 ```{r tapply1}
-tapply(circ2$daily, circ2$day, max, na.rm = TRUE)
+tapply(sub_smoke$Data_Value, sub_smoke$YEAR, max, na.rm = TRUE)
 ```
     
 ## Perform Operations By Groups: dplyr
@@ -171,8 +207,20 @@ tapply(circ2$daily, circ2$day, max, na.rm = TRUE)
 We will use `group_by` to group the data by line, then use `summarize` (or `summarise`) to get the mean Average ridership:
 
 ```{r}
-summarize(group_by(circ, day), max_avg = max(daily, na.rm = TRUE))
+summarize(group_by(sub_smoke, YEAR), year_avg = mean(Data_Value, na.rm = TRUE))
 ```    
+
+
+## Using the `pipe` (comes with `dplyr`):
+
+Recently, the pipe `%>%` makes things such as this much more readable.  It reads left side "pipes" into right side.  RStudio `CMD/Ctrl + Shift + M` shortcut. Pipe `sub_smoke` into `group_by`, then pipe that into `summarize`:
+
+```{r}
+smoke_avgs = sub_smoke %>% 
+  group_by(YEAR) %>% 
+  summarize(year_avg = mean(Data_Value, na.rm = TRUE))
+head(smoke_avgs)
+```
 
 ## Data Summarization/Visualization
 
@@ -195,7 +243,7 @@ plot(mtcars$mpg, mtcars$disp)
 ## Histograms
 
 ```{r hist1}
-hist(circ2$daily)
+hist(tb$before_2000_avg)
 ```
 
 ## Plot with a line
@@ -203,30 +251,28 @@ hist(circ2$daily)
 `type = "l"` means a line
 
 ```{r hist_date}
-library(lubridate)
-circ2$date = mdy(circ2$date)
-plot(circ2$date, circ2$daily, type = "l")
+plot(smoke_avgs$YEAR, smoke_avgs$year_avg, type = "l")
 ```
 
 ## Density
 
+Over all years and states, this is the density of smoking status incidence:
+
 ```{r dens1,fig.width=5,fig.height=5}
-## plot(density(circ2$daily))
-plot(density(circ2$daily,na.rm=TRUE))
+plot(density(sub_smoke$Data_Value))
 ```
 
 ## Boxplots
 
-
 ```{r box1}
-boxplot(circ2$daily ~ circ2$day)
+boxplot(sub_smoke$Data_Value ~ sub_smoke$LocationDesc)
 ```
 
 ## Boxplots
 
 
 ```{r box2}
-boxplot(daily ~ day, data=circ2)
+boxplot(Data_Value ~ LocationDesc, data = sub_smoke)
 ```
 
 ## Data Summarization for data.frames
@@ -241,3 +287,11 @@ boxplot(daily ~ day, data=circ2)
 pairs(avgs)
 ```
 
+
+## Conclusion
+
+- Base R has apply statements that perform things repeatedly.
+- `dplyr` has a lot of more intuitive syntax.
+    - `group_by` is very powerful, especilly with `summarise/summarize`
+- Base R has good things for quickly summarizing rows or colummns of all numeric data.
+    - The `matrixStats` package extends this to `colMedians`, `colMaxs`, etc.
