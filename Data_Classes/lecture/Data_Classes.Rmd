@@ -204,12 +204,12 @@ ifelse(test, yes, no)
 
 Please download the Charm City Circulator data:
 
-http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv
+http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv
 
 ```{r}
 # paste/paste0 will be covered later
 circ = read.csv(
-  paste0("http://www.aejaffe.com/summerR_2016/data",
+  paste0("http://www.aejaffe.com/winterR_2017/data",
          "/Charm_City_Circulator_Ridership.csv"), 
             header = TRUE, as.is = TRUE)
 ```
@@ -266,7 +266,7 @@ Now that we know more about factors, `cut()` will make more sense:
 
 ```{r cut1}
 x = 1:100
-cx = cut(x, breaks=c(0,10,25,50,100))
+cx = cut(x, breaks = c(0,10,25,50,100))
 head(cx)  
 table(cx)
 ```
@@ -276,7 +276,7 @@ table(cx)
 We can also leave off the labels
 
 ```{r cut2}
-cx = cut(x, breaks=c(0,10,25,50,100), labels=FALSE)
+cx = cut(x, breaks = c(0,10,25,50,100), labels = FALSE)
 head(cx)  
 table(cx)
 ```
@@ -286,10 +286,10 @@ table(cx)
 Note that you have to specify the endpoints of the data, otherwise some of the categories will not be created
 
 ```{r cut3}
-cx = cut(x, breaks=c(10,25,50), labels=FALSE)
+cx = cut(x, breaks = c(10,25,50), labels = FALSE)
 head(cx)  
 table(cx)
-table(cx,useNA="ifany")
+table(cx, useNA = "ifany")
 ```
 
 ## Date
@@ -374,7 +374,7 @@ class(mat[, 1])
 
 ## Data Frames
 
-To review, the `data.frame` is the other two dimensional variable class. 
+To review, the `data.frame`/`tbl_df` are the other two dimensional variable classes. 
 
 Again, data frames are like matrices, but each column is a vector that can have its own class. So some columns might be `character` and others might be `numeric`, while others maybe a `factor`.
 
@@ -427,3 +427,7 @@ mylist[[2]][1]
 mylist[[3]][1:2,1:2]
 ```
 
+
+## Conclusion
+
+R has many different data classes

@@ -78,7 +78,7 @@ length(bg) == length(bg2)
 ## ------------------------------------------------------------------------
 # paste/paste0 will be covered later
 circ = read.csv(
-  paste0("http://www.aejaffe.com/summerR_2016/data",
+  paste0("http://www.aejaffe.com/winterR_2017/data",
          "/Charm_City_Circulator_Ridership.csv"), 
             header = TRUE, as.is = TRUE)
 
@@ -99,20 +99,20 @@ table(riderLevels)
 
 ## ----cut1----------------------------------------------------------------
 x = 1:100
-cx = cut(x, breaks=c(0,10,25,50,100))
+cx = cut(x, breaks = c(0,10,25,50,100))
 head(cx)  
 table(cx)
 
 ## ----cut2----------------------------------------------------------------
-cx = cut(x, breaks=c(0,10,25,50,100), labels=FALSE)
+cx = cut(x, breaks = c(0,10,25,50,100), labels = FALSE)
 head(cx)  
 table(cx)
 
 ## ----cut3----------------------------------------------------------------
-cx = cut(x, breaks=c(10,25,50), labels=FALSE)
+cx = cut(x, breaks = c(10,25,50), labels = FALSE)
 head(cx)  
 table(cx)
-table(cx,useNA="ifany")
+table(cx, useNA = "ifany")
 
 ## ----date----------------------------------------------------------------
 head(sort(circ$date))
