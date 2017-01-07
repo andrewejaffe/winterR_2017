@@ -1,5 +1,5 @@
 ## ---- echo = FALSE, message=FALSE----------------------------------------
-library(dplyr)
+# library(dplyr)
 suppressPackageStartupMessages(library(dplyr))
 
 ## ----numChar-------------------------------------------------------------
