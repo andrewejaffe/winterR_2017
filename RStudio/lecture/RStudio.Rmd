@@ -81,7 +81,7 @@ More information
 
 If RStudio doesn't look like this (or our RStudio), then do:
 
-RStudio → Preferences → Pane Layout
+RStudio --> Preferences --> Pane Layout
 
 ```{r, out.width = "500px", echo = FALSE}
 knitr::include_graphics("pane_layout.png")

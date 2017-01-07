@@ -97,11 +97,9 @@
           </hgroup>
   </slide>
 
-<slide class=''><hgroup><h2>Common new users mistakes we have seen</h2></hgroup><article  id="common-new-users-mistakes-we-have-seen">
+<slide class=''><hgroup><h2>Common new user mistakes we have seen</h2></hgroup><article  id="common-new-user-mistakes-we-have-seen">
 
 <ol>
-<li>Different versions of software</li>
-<li>Data type problems (is that a string or a number?)</li>
 <li><strong>Working directory problems: trying to read files that R &quot;can&#39;t find&quot;</strong>
 
 <ul>
@@ -114,13 +112,16 @@
 <li>RStudio helps with &quot;tab completion&quot;</li>
 <li>discussed throughout</li>
 </ul></li>
+<li>Data type problems (is that a string or a number?)</li>
+<li>Open ended quotes, parentheses, and brackets<br/></li>
+<li>Different versions of software</li>
 </ol>
 
-</article></slide><slide class=''><hgroup><h2>Before we get Started: Working Directories</h2></hgroup><article  id="before-we-get-started-working-directories">
+</article></slide><slide class=''><hgroup><h2>Working Directories</h2></hgroup><article  id="working-directories">
 
 <ul>
 <li>R &quot;looks&quot; for files on your computer relative to the &quot;working&quot; directory</li>
-<li>Many recommend not setting a directory in the scripts
+<li>Many people recommend not setting a directory in the scripts
 
 <ul>
 <li>assume you&#39;re in the directory the script is in</li>
@@ -295,7 +296,7 @@ read.table( file, # filename
     fill = TRUE, comment.char = &quot;&quot;, ...) 
 read.table(file = file, header = header, sep = sep, quote = quote, 
     dec = dec, fill = fill, comment.char = comment.char, ...)
-&lt;bytecode: 0x000000000a3c96c0&gt;
+&lt;bytecode: 0x0000000009e12f48&gt;
 &lt;environment: namespace:utils&gt;</pre>
 
 <p>Note: the <code>...</code> designates extra/optional arguments that can be passed to <code>read.table()</code> if needed</p>

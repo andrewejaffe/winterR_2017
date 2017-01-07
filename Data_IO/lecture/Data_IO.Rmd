@@ -12,21 +12,22 @@ output:
 library(knitr)
 opts_chunk$set(comment = "")
 ```
-## Common new users mistakes we have seen
+## Common new user mistakes we have seen
 
-1.  Different versions of software
-1.  Data type problems (is that a string or a number?)
-2.  **Working directory problems: trying to read files that R "can't find"**
+1.  **Working directory problems: trying to read files that R "can't find"**
     - RStudio can help, and so do RStudio Projects
     - discuss in Data Input/Output lecture
-3.  Typos (R is **case sensitive**, `x` and `X` are different)
+2.  Typos (R is **case sensitive**, `x` and `X` are different)
     - RStudio helps with "tab completion"
     - discussed throughout
+3.  Data type problems (is that a string or a number?)
+4.  Open ended quotes, parentheses, and brackets     
+5.  Different versions of software
     
-## Before we get Started: Working Directories
+## Working Directories
 
 * R "looks" for files on your computer relative to the "working" directory
-* Many recommend not setting a directory in the scripts 
+* Many people recommend not setting a directory in the scripts 
     - assume you're in the directory the script is in
     - If you open an R file with a new RStudio session, it does this for you.
 * If you do set a working directory, do it at the beginning of your script. 
