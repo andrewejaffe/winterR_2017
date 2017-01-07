@@ -97,6 +97,17 @@
           </hgroup>
   </slide>
 
+<pre >## 
+## Attaching package: &#39;dplyr&#39;</pre>
+
+<pre >## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</pre>
+
+<pre >## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</pre>
+
 <slide class=''><hgroup><h2>Overview</h2></hgroup><article  id="overview">
 
 <p>We showed one way to read data into R using <em>read.csv</em>. In this module, we will show you how to:</p>
@@ -224,7 +235,8 @@ df = data.frame(x = c(1, 2, 4, 10, 10),
                 x2 = rpois(5, 10),
                 y = rnorm(5),
                 z = rpois(5, 6)
-                )</pre>
+                )
+tbl = as.tbl(df)</pre>
 
 </article></slide><slide class='segue dark nobackground level1'><hgroup class = 'auto-fadein'><h2>Renaming Columns</h2></hgroup><article  id="renaming-columns">
 
@@ -265,17 +277,6 @@ head(df)</pre>
 </article></slide><slide class=''><hgroup><h2>Renaming Columns of a <code>data.frame</code>: dplyr</h2></hgroup><article  id="renaming-columns-of-a-data.frame-dplyr">
 
 <pre class = 'prettyprint lang-r'>library(dplyr)</pre>
-
-<pre >
-Attaching package: &#39;dplyr&#39;</pre>
-
-<pre >The following objects are masked from &#39;package:stats&#39;:
-
-    filter, lag</pre>
-
-<pre >The following objects are masked from &#39;package:base&#39;:
-
-    intersect, setdiff, setequal, union</pre>
 
 <p>Note, when loading <code>dplyr</code>, it says objects can be &quot;masked&quot;. That means if you use a function defined in 2 places, it uses the one that is loaded in <strong>last</strong>.</p>
 
@@ -342,6 +343,45 @@ head(df)</pre>
 <pre class = 'prettyprint lang-r'>df[, &quot;x&quot;]</pre>
 
 <pre >[1]  1  2  4 10 10</pre>
+
+</article></slide><slide class=''><hgroup><h2>Biggest difference between <code>tbl</code> and <code>data.frame</code>:</h2></hgroup><article  id="biggest-difference-between-tbl-and-data.frame">
+
+<p>Mostly, <code>tbl</code> (tibbles) are the same as <code>data.frame</code>s, except they don&#39;t print all lines. When subsetting only one column using brackets, a <code>data.frame</code> will return a vector, but a <code>tbl</code> will return a <code>tbl</code></p>
+
+<pre class = 'prettyprint lang-r'>df[, 1]</pre>
+
+<pre >[1]  1  2  4 10 10</pre>
+
+<pre class = 'prettyprint lang-r'>tbl[, 1]</pre>
+
+<pre ># A tibble: 5 × 1
+      x
+  &lt;dbl&gt;
+1     1
+2     2
+3     4
+4    10
+5    10</pre>
+
+<pre class = 'prettyprint lang-r'>tbl[, &quot;x&quot;]</pre>
+
+<pre ># A tibble: 5 × 1
+      x
+  &lt;dbl&gt;
+1     1
+2     2
+3     4
+4    10
+5    10</pre>
+
+<pre class = 'prettyprint lang-r'>df[, 1, drop = FALSE]</pre>
+
+<pre >   x
+1  1
+2  2
+3  4
+4 10
+5 10</pre>
 
 </article></slide><slide class=''><hgroup><h2>Subset columns of a <code>data.frame</code>:</h2></hgroup><article  id="subset-columns-of-a-data.frame-2">
 

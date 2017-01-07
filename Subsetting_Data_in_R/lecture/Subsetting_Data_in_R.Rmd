@@ -11,6 +11,7 @@ output:
 ```{r, echo = FALSE}
 library(knitr)
 opts_chunk$set(comment = "")
+library(dplyr)
 ```
 
 ## Overview
@@ -117,6 +118,7 @@ df = data.frame(x = c(1, 2, 4, 10, 10),
                 y = rnorm(5),
                 z = rpois(5, 6)
                 )
+tbl = as.tbl(df)
 ```
 
 
@@ -205,6 +207,17 @@ For `data.frame`s and matrices (2-dimensional objects), the brackets are `[rows,
 ```{r}
 df[, 1]
 df[, "x"]
+```
+
+## Biggest difference between `tbl` and `data.frame`: 
+
+Mostly, `tbl` (tibbles) are the same as `data.frame`s, except they don't print all lines.  When subsetting only one column using brackets, a `data.frame` will return a vector, but a `tbl` will return a `tbl`
+
+```{r}
+df[, 1]
+tbl[, 1]
+tbl[, "x"]
+df[, 1, drop = FALSE]
 ```
 
 ## Subset columns of a `data.frame`: 
