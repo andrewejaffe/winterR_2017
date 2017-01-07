@@ -213,7 +213,7 @@ summarize(group_by(sub_smoke, YEAR), year_avg = mean(Data_Value, na.rm = TRUE))
 
 ## Using the `pipe` (comes with `dplyr`):
 
-Recently, the pipe `%>%` makes things such as this much more readable.  It reads left side "pipes" into right side.  RStudio `CMD/Ctrl + Shift + M` shortcut. Pipe `sub_smoke` into `group_by`, then pipe that into `summarize`:
+Pipe `sub_smoke` into `group_by`, then pipe that into `summarize`:
 
 ```{r}
 smoke_avgs = sub_smoke %>% 

@@ -16,7 +16,7 @@ library(dplyr)
 
 ## Overview
 
-We showed one way to read data into R using *read.csv*.  In this module, we will show you how to:
+We showed one way to read data into R using *read_csv*.  In this module, we will show you how to:
 
 1. Select specific elements of an object by an index or logical condition
 2. Renaming columns of a `data.frame`
@@ -311,15 +311,15 @@ df2 = filter(df, x > 2 & y < 0)
 df2 = select(df2, y, z)
 ```
 
-## Piping - a new concept
+## Using the `pipe` (comes with `dplyr`):
 
-There is another (newer) way of performing these operations, called "piping".  It is becoming more popular as it's easier to read:
+Recently, the pipe `%>%` makes things such as this much more readable.  It reads left side "pipes" into right side.  RStudio `CMD/Ctrl + Shift + M` shortcut. Pipe `df` into `filter`, then pipe that into `select`:
+
 
 ```{r}
 df %>% filter(x > 2 & y < 0) %>% select(y, z)
 ```
 
-It is read: "take df, then filter the rows and then select `y`, `z`".
 
 # Adding/Removing Columns
 
