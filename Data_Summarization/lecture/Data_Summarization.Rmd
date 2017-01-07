@@ -26,7 +26,7 @@ library(readr)
 
 ## Some examples
 
-We can use the `mtcars` and Charm City Circulator datasets to explore different ways of summarizing data.
+We can use the `mtcars` and Charm City Circulator datasets to explore different ways of summarizing data.  The `head` command displays the first `6` (default) rows of an object:
 
 ```{r}
 head(mtcars)
@@ -49,7 +49,7 @@ quantile(mtcars$wt, probs = 0.6)
 
 ## Statistical summarization
 
-`t.test` will be covered more in detail later, gives a 95\% CI:
+`t.test` will be covered more in detail later, gives a mean and 95\% CI:
 
 ```{r}
 t.test(mtcars$wt) 
@@ -57,13 +57,13 @@ t.test(mtcars$wt)
 
 ## Statistical summarization
 
-Note that many of these functions have additional inputs regarding missing data, typically requiring the `na.rm` argument. 
+Note that many of these functions have additional inputs regarding missing data, typically requiring the `na.rm` argument ("remove NAs"). 
 
 ```{r}
 x = c(1,5,7,NA,4,2, 8,10,45,42)
 mean(x)
-mean(x,na.rm=TRUE)
-quantile(x,na.rm=TRUE)
+mean(x, na.rm = TRUE)
+quantile(x, na.rm = TRUE)
 ```
 
 ## Data Summarization on matrices/data frames
