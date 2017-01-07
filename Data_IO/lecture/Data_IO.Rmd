@@ -10,6 +10,7 @@ output:
 
 ```{r, echo = FALSE}
 library(knitr)
+library(readr)
 opts_chunk$set(comment = "")
 ```
 ## Common new user mistakes we have seen
@@ -117,44 +118,42 @@ help("dir")
 
 ## Data Input
 
-Monuments Dataset: "This data set shows the point location of Baltimore City monuments. However, the completness and currentness of these data are uncertain."
+Youth Tobacco Survey (YTS) Dataset:
 
-* Download data from http://www.aejaffe.com/winterR_2017/data/Monuments.csv
+"The YTS was developed to provide states with comprehensive data on both middle school and high school students regarding tobacco use, exposure to environmental tobacco smoke, smoking cessation, school curriculum, minors' ability to purchase or otherwise obtain tobacco products, knowledge and attitudes about tobacco, and familiarity with pro-tobacco and anti-tobacco media messages."
+
+* Check out the data at: https://catalog.data.gov/dataset/youth-tobacco-survey-yts-data
+
+## Data Input
+
+* Download data from http://www.aejaffe.com/winterR_2017/data/Youth_Tobacco_Survey_YTS_Data.csv
     * Safari - if a file loads in your browser, choose File --> Save As, select, Format "Page Source" and save
 * Save it (or move it) to the same folder as your `day1.R` script
 * Within RStudio: Session --> Set Working Directory --> To Source File Location
-* (data downloaded from https://data.baltimorecity.gov/Community/Monuments/cpxf-kxp3)
 
 ## Data Input
+
 R Studio features some nice "drop down" support, where you can run some tasks by selecting them from the toolbar.
 
 For example, you can easily import text datasets using the "File --> Import Dataset --> From CSV" command. Selecting this will bring up a new screen that lets you specify the formatting of your text file. 
 
 After importing a datatset, you get the corresponding R commands that you can enter in the console if you want to re-import data.
 
-## Data Input {.smaller}
+## Data Input
 
 So what is going on "behind the scenes"?
 
-`read.table()`: Reads a file in table format and creates a `data.frame` from it, with cases corresponding to lines and variables to fields in the file.
+`read_delim()`: Read a delimited file into a data frame.
 
 ```
-# the four ones I've put at the top are the important inputs
-read.table( file, # filename
-           header = FALSE, # are there column names?
-           sep = "", # what separates columns?
-           as.is = !stringsAsFactors, # do you want character strings as 
-                  #factors or characters?
-           quote = "\"'",  dec = ".", row.names, col.names,
-           na.strings = "NA", nrows = -1,
-           skip = 0, check.names = TRUE, fill = !blank.lines.skip,
-           strip.white = FALSE, blank.lines.skip = TRUE, comment.char = "#",
-           stringsAsFactors = default.stringsAsFactors())
+read_delim(file, delim, quote = "\"", escape_backslash = FALSE,
+  escape_double = TRUE, col_names = TRUE, col_types = NULL,
+  locale = default_locale(), na = c("", "NA"), quoted_na = TRUE,
+  comment = "", trim_ws = FALSE, skip = 0, n_max = Inf,
+  guess_max = min(1000, n_max), progress = interactive())
            
-# for example: `read.table("file.txt", header = TRUE, sep="\t", as.is=TRUE)`
+# for example: `read_delim("file.txt",delim="\t")`
 ```
-
-
 
 ## Data Input
 
@@ -165,39 +164,26 @@ read.table( file, # filename
 
 ## Data Input
 
-There is a 'wrapper' function for reading CSV files: 
+There is another convenient function for reading in CSV files, where the delimiter is assumed to be a comma: 
 
 ```{r readCSV}
-read.csv
-```
-
-Note: the `...` designates extra/optional arguments that can be passed to `read.table()` if needed
-
-## Data Input {.smaller}
-
-* Here would be reading in the data from the command line, specifying the file path:
-
-```{r readCSV2}
-mon = read.csv("../../data/Monuments.csv", header = TRUE, as.is = TRUE)
-head(mon)
-class(mon)
-```
-
-
-## Data Input {.smaller}
-
-```{r subset5}
-colnames(mon) # column names
-head(mon$zipCode) # first few rows
+read_csv
 ```
 
 ## Data Input
 
-The `read.table()` function returns a `data.frame`, which is the primary data format for most data cleaning and analyses.  The `str` function gives "structure" of data:
+* Here would be reading in the data from the command line, specifying the file path:
 
-```{r readCSV3}
-str(mon) # structure of an R object
+```{r readCSV2}
+dat = read_csv("../../data/Youth_Tobacco_Survey_YTS_Data.csv")
 ```
+
+The data is now successfully read into your R workspace, just like from using the dropdown menu.
+
+## Data Input
+
+The `read_delim()` and related functions returns a "tibble" is a `data.frame` with special printing, which is the primary data format for most data cleaning and analyses. 
+
 
 ## Data Input with `tbl_df`s {.smaller}
 
@@ -205,9 +191,34 @@ str(mon) # structure of an R object
 
 ```{r readCSV_readr, message=FALSE}
 library(readr)
-mon_tbl = read_csv("../../data/Monuments.csv")
-head(mon_tbl)
-class(mon_tbl)
+head(dat)
+class(dat)
+```
+
+
+## Data Input
+
+```{r, viewTibble}
+dat
+```
+
+## Data Input
+
+There are also data importing functions provided in base R (rather than the `readr` package), like `read.delim` and `read.csv`. 
+
+These functions have slightly different syntax for reading in data, like `header` and `as.is`. 
+
+However, while many online resources use the base R tools, the latest version of RStudio switched to use these new `readr` data import tools, so we will use them in the class for slides. They are also up to two times faster for reading in large datasets, and have a progress bar which is nice. 
+
+But you can use whatever function you feel more comfortable with.
+
+## Data Input
+
+Here is how to read in the same dataset using base R functionality, which returns a `data.frame` directly
+
+```{r, readingCSV}
+dat2 = read.csv("../../data/Youth_Tobacco_Survey_YTS_Data.csv", as.is=TRUE)
+head(dat2)
 ```
 
 
@@ -216,49 +227,45 @@ class(mon_tbl)
 Changing variable names in `data.frame`s works using the `names()` function, which is analagous to `colnames()` for data frames (they can be used interchangeably)
 
 ```{r names1}
-names(mon)[1] = "Name"
-names(mon)
-names(mon)[1] = "name"
-names(mon)
+names(dat)[1] = "year"
+names(dat)
 ```
 
 
-## Data Output {.smaller}
+## Data Output
 
 While its nice to be able to read in a variety of data formats, it's equally important to be able to output data somewhere.
 
-`write.table()`: prints its required argument `x` (after converting it to a `data.frame` if it is not one nor a `matrix`) to a file or connection.
+There are also data exporting functions in the `readr` package, which have the pattern `write_*` like `write_csv` and `write_delim`
 
 ```
-write.table(x,file = "", append = FALSE, quote = TRUE, sep = " ",
-            eol = "\n", na = "NA", dec = ".", row.names = TRUE,
-            col.names = TRUE, qmethod = c("escape", "double"),
-            fileEncoding = "")
+write_delim(x, path, delim = " ", na = "NA", append = FALSE,
+  col_names = !append)
 ```
 
 ## Data Output
 
 `x`: the R `data.frame` or `matrix` you want to write
 
-`file`: the file name where you want to R object written. It can be an absolute path, or a filename (which writes the file to your working directory)
+`path`: the file name where you want to R object written. It can be an absolute path, or a filename (which writes the file to your working directory)
 
-`sep`: what character separates the columns? 
+`delim`: what character separates the columns? 
 
-* "," = .csv - Note there is also a `write.csv()` function
+* "," = .csv - Note there is also a `write_csv()` function
 * "\t" = tab delimited
 
-`row.names`: I like setting this to FALSE because I email these to collaborators who open them in Excel
+## Data Output
 
-## Data Output {.smaller}
+There are similar packages in base R, like `write.table` and `write.csv` which have the general arguments, but are called different things. Note these functions do  write out row names, which you can set to `FALSE`. I do this a lot since I often email these to collaborators who open them in Excel
 
-For example, we can write back out the Monuments dataset with the new column name:
+## Data Output
 
-```{r writecsv}
-names(mon)[6] = "Location"
-write.csv(mon, file="monuments_newNames.csv", row.names=FALSE)
+For example, we can write back out the Youth Tobacco dataset with the new column name:
+
+```{r writecsv,eval=FALSE}
+names(dat)[1] = "Year"
+write_csv(dat, path="YouthTobacco_newNames.csv")
 ```
-
-Note that `row.names=TRUE` would make the first column contain the row names, here just the numbers `1:nrow(mon)`, which is not very useful for Excel. Note that row names can be useful/informative in R if they contain information (but then they would just be a separate column). 
 
 ## Data Input - Excel
 
@@ -269,11 +276,9 @@ Many data analysts collaborate with researchers who use Excel to enter and curat
 
 For single worksheet .xlsx files, I often just save the spreadsheet as a .csv file (because I often have to strip off additional summary data from the columns)
 
-For an .xlsx file with multiple well-formated worksheets, I use the `xlsx`, `readxl`, or `openxlsx` package for reading in the data.
-
+For an .xlsx file with multiple well-formated worksheets, I use the `readxl` package for reading in the data. 
 
 ## Data Input - Other Software
-
 
 * **haven** package (https://cran.r-project.org/web/packages/haven/index.html) reads in SAS, SPSS, Stata formats
 * **readxl** package - the `read_excel` function can read Excel sheets easily
@@ -281,4 +286,4 @@ For an .xlsx file with multiple well-formated worksheets, I use the `xlsx`, `rea
 * **sas7bdat** reads .sas7bdat files
 * **foreign** package - can read all the formats as **haven**.  Around longer (aka more testing), but not as maintained (bad for future).
 
-
+Some of these are now available in the RStudio dropdown list

@@ -161,9 +161,7 @@ setwd(&quot;~/Lectures&quot;) </pre>
 
 <pre class = 'prettyprint lang-r'>dir(&quot;./&quot;) # shows directory contents</pre>
 
-<pre >[1] &quot;Data_IO.html&quot;           &quot;Data_IO.pdf&quot;           
-[3] &quot;Data_IO.R&quot;              &quot;Data_IO.Rmd&quot;           
-[5] &quot;monuments_newNames.csv&quot;</pre>
+<pre >[1] &quot;Data_IO.html&quot; &quot;Data_IO.pdf&quot;  &quot;Data_IO.R&quot;    &quot;Data_IO.Rmd&quot; </pre>
 
 <pre class = 'prettyprint lang-r'>dir(&quot;..&quot;)</pre>
 
@@ -237,20 +235,27 @@ help(&quot;dir&quot;)</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-1">
 
-<p>Monuments Dataset: &quot;This data set shows the point location of Baltimore City monuments. However, the completness and currentness of these data are uncertain.&quot;</p>
+<p>Youth Tobacco Survey (YTS) Dataset:</p>
+
+<p>&quot;The YTS was developed to provide states with comprehensive data on both middle school and high school students regarding tobacco use, exposure to environmental tobacco smoke, smoking cessation, school curriculum, minors&#39; ability to purchase or otherwise obtain tobacco products, knowledge and attitudes about tobacco, and familiarity with pro-tobacco and anti-tobacco media messages.&quot;</p>
 
 <ul>
-<li>Download data from <a href='http://www.aejaffe.com/winterR_2017/data/Monuments.csv' title=''>http://www.aejaffe.com/winterR_2017/data/Monuments.csv</a>
+<li>Check out the data at: <a href='https://catalog.data.gov/dataset/youth-tobacco-survey-yts-data' title=''>https://catalog.data.gov/dataset/youth-tobacco-survey-yts-data</a></li>
+</ul>
+
+</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-2">
+
+<ul>
+<li>Download data from <a href='http://www.aejaffe.com/winterR_2017/data/Youth_Tobacco_Survey_YTS_Data.csv' title=''>http://www.aejaffe.com/winterR_2017/data/Youth_Tobacco_Survey_YTS_Data.csv</a>
 
 <ul>
 <li>Safari - if a file loads in your browser, choose File &#8211;&gt; Save As, select, Format &quot;Page Source&quot; and save</li>
 </ul></li>
 <li>Save it (or move it) to the same folder as your <code>day1.R</code> script</li>
 <li>Within RStudio: Session &#8211;&gt; Set Working Directory &#8211;&gt; To Source File Location</li>
-<li>(data downloaded from <a href='https://data.baltimorecity.gov/Community/Monuments/cpxf-kxp3' title=''>https://data.baltimorecity.gov/Community/Monuments/cpxf-kxp3</a>)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-2">
+</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-3">
 
 <p>R Studio features some nice &quot;drop down&quot; support, where you can run some tasks by selecting them from the toolbar.</p>
 
@@ -258,27 +263,21 @@ help(&quot;dir&quot;)</pre>
 
 <p>After importing a datatset, you get the corresponding R commands that you can enter in the console if you want to re-import data.</p>
 
-</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-3" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-4">
 
 <p>So what is going on &quot;behind the scenes&quot;?</p>
 
-<p><code>read.table()</code>: Reads a file in table format and creates a <code>data.frame</code> from it, with cases corresponding to lines and variables to fields in the file.</p>
+<p><code>read_delim()</code>: Read a delimited file into a data frame.</p>
 
-<pre ># the four ones I&#39;ve put at the top are the important inputs
-read.table( file, # filename
-           header = FALSE, # are there column names?
-           sep = &quot;&quot;, # what separates columns?
-           as.is = !stringsAsFactors, # do you want character strings as 
-                  #factors or characters?
-           quote = &quot;\&quot;&#39;&quot;,  dec = &quot;.&quot;, row.names, col.names,
-           na.strings = &quot;NA&quot;, nrows = -1,
-           skip = 0, check.names = TRUE, fill = !blank.lines.skip,
-           strip.white = FALSE, blank.lines.skip = TRUE, comment.char = &quot;#&quot;,
-           stringsAsFactors = default.stringsAsFactors())
+<pre >read_delim(file, delim, quote = &quot;\&quot;&quot;, escape_backslash = FALSE,
+  escape_double = TRUE, col_names = TRUE, col_types = NULL,
+  locale = default_locale(), na = c(&quot;&quot;, &quot;NA&quot;), quoted_na = TRUE,
+  comment = &quot;&quot;, trim_ws = FALSE, skip = 0, n_max = Inf,
+  guess_max = min(1000, n_max), progress = interactive())
            
-# for example: `read.table(&quot;file.txt&quot;, header = TRUE, sep=&quot;\t&quot;, as.is=TRUE)`</pre>
+# for example: `read_delim(&quot;file.txt&quot;,delim=&quot;\t&quot;)`</pre>
 
-</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-4">
+</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-5">
 
 <ul>
 <li>The filename is the path to your file, in quotes</li>
@@ -286,73 +285,51 @@ read.table( file, # filename
 <li>Note that the filename can also be a path to a file on a website (e.g. &#39;www.someurl.com/table1.txt&#39;)</li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-5">
+</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-6">
 
-<p>There is a &#39;wrapper&#39; function for reading CSV files:</p>
+<p>There is another convenient function for reading in CSV files, where the delimiter is assumed to be a comma:</p>
 
-<pre class = 'prettyprint lang-r'>read.csv</pre>
+<pre class = 'prettyprint lang-r'>read_csv</pre>
 
-<pre >function (file, header = TRUE, sep = &quot;,&quot;, quote = &quot;\&quot;&quot;, dec = &quot;.&quot;, 
-    fill = TRUE, comment.char = &quot;&quot;, ...) 
-read.table(file = file, header = header, sep = sep, quote = quote, 
-    dec = dec, fill = fill, comment.char = comment.char, ...)
-&lt;bytecode: 0x0000000009e12f48&gt;
-&lt;environment: namespace:utils&gt;</pre>
+<pre >function (file, col_names = TRUE, col_types = NULL, locale = default_locale(), 
+    na = c(&quot;&quot;, &quot;NA&quot;), quoted_na = TRUE, comment = &quot;&quot;, trim_ws = TRUE, 
+    skip = 0, n_max = Inf, guess_max = min(1000, n_max), progress = interactive()) 
+{
+    tokenizer &lt;- tokenizer_csv(na = na, quoted_na = TRUE, comment = comment, 
+        trim_ws = trim_ws)
+    read_delimited(file, tokenizer, col_names = col_names, col_types = col_types, 
+        locale = locale, skip = skip, comment = comment, n_max = n_max, 
+        guess_max = guess_max, progress = progress)
+}
+&lt;environment: namespace:readr&gt;</pre>
 
-<p>Note: the <code>...</code> designates extra/optional arguments that can be passed to <code>read.table()</code> if needed</p>
-
-</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-6" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-7">
 
 <ul>
 <li>Here would be reading in the data from the command line, specifying the file path:</li>
 </ul>
 
-<pre class = 'prettyprint lang-r'>mon = read.csv(&quot;../../data/Monuments.csv&quot;, header = TRUE, as.is = TRUE)
-head(mon)</pre>
+<pre class = 'prettyprint lang-r'>dat = read_csv(&quot;../../data/Youth_Tobacco_Survey_YTS_Data.csv&quot;)</pre>
 
-<pre >                              name zipCode neighborhood councilDistrict
-1           James Cardinal Gibbons   21201     Downtown              11
-2              The Battle Monument   21202     Downtown              11
-3 Negro Heroes of the U.S Monument   21202     Downtown              11
-4              Star Bangled Banner   21202     Downtown              11
-5  Flame at the Holocaust Monument   21202     Downtown              11
-6                   Calvert Statue   21202     Downtown              11
-  policeDistrict                       Location.1
-1        CENTRAL  408 CHARLES ST\nBaltimore, MD\n
-2        CENTRAL                                 
-3        CENTRAL                                 
-4        CENTRAL 100 HOLLIDAY ST\nBaltimore, MD\n
-5        CENTRAL    50 MARKET PL\nBaltimore, MD\n
-6        CENTRAL  100 CALVERT ST\nBaltimore, MD\n</pre>
+<pre >Parsed with column specification:
+cols(
+  .default = col_character(),
+  YEAR = col_integer(),
+  Data_Value = col_double(),
+  Data_Value_Std_Err = col_double(),
+  Low_Confidence_Limit = col_double(),
+  High_Confidence_Limit = col_double(),
+  Sample_Size = col_integer(),
+  DisplayOrder = col_integer()
+)</pre>
 
-<pre class = 'prettyprint lang-r'>class(mon)</pre>
+<pre >See spec(...) for full column specifications.</pre>
 
-<pre >[1] &quot;data.frame&quot;</pre>
-
-</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-7" class="smaller">
-
-<pre class = 'prettyprint lang-r'>colnames(mon) # column names</pre>
-
-<pre >[1] &quot;name&quot;            &quot;zipCode&quot;         &quot;neighborhood&quot;    &quot;councilDistrict&quot;
-[5] &quot;policeDistrict&quot;  &quot;Location.1&quot;     </pre>
-
-<pre class = 'prettyprint lang-r'>head(mon$zipCode) # first few rows</pre>
-
-<pre >[1] 21201 21202 21202 21202 21202 21202</pre>
+<p>The data is now successfully read into your R workspace, just like from using the dropdown menu.</p>
 
 </article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-8">
 
-<p>The <code>read.table()</code> function returns a <code>data.frame</code>, which is the primary data format for most data cleaning and analyses. The <code>str</code> function gives &quot;structure&quot; of data:</p>
-
-<pre class = 'prettyprint lang-r'>str(mon) # structure of an R object</pre>
-
-<pre >&#39;data.frame&#39;:   84 obs. of  6 variables:
- $ name           : chr  &quot;James Cardinal Gibbons&quot; &quot;The Battle Monument&quot; &quot;Negro Heroes of the U.S Monument&quot; &quot;Star Bangled Banner&quot; ...
- $ zipCode        : int  21201 21202 21202 21202 21202 21202 21202 21211 21213 21211 ...
- $ neighborhood   : chr  &quot;Downtown&quot; &quot;Downtown&quot; &quot;Downtown&quot; &quot;Downtown&quot; ...
- $ councilDistrict: int  11 11 11 11 11 11 11 7 14 14 ...
- $ policeDistrict : chr  &quot;CENTRAL&quot; &quot;CENTRAL&quot; &quot;CENTRAL&quot; &quot;CENTRAL&quot; ...
- $ Location.1     : chr  &quot;408 CHARLES ST\nBaltimore, MD\n&quot; &quot;&quot; &quot;&quot; &quot;100 HOLLIDAY ST\nBaltimore, MD\n&quot; ...</pre>
+<p>The <code>read_delim()</code> and related functions returns a &quot;tibble&quot; is a <code>data.frame</code> with special printing, which is the primary data format for most data cleaning and analyses.</p>
 
 </article></slide><slide class=''><hgroup><h2>Data Input with <code>tbl_df</code>s</h2></hgroup><article  id="data-input-with-tbl_dfs" class="smaller">
 
@@ -361,74 +338,213 @@ head(mon)</pre>
 </ul>
 
 <pre class = 'prettyprint lang-r'>library(readr)
-mon_tbl = read_csv(&quot;../../data/Monuments.csv&quot;)
-head(mon_tbl)</pre>
+head(dat)</pre>
 
-<pre ># A tibble: 6 × 6
-                              name zipCode neighborhood councilDistrict
-                             &lt;chr&gt;   &lt;int&gt;        &lt;chr&gt;           &lt;int&gt;
-1           James Cardinal Gibbons   21201     Downtown              11
-2              The Battle Monument   21202     Downtown              11
-3 Negro Heroes of the U.S Monument   21202     Downtown              11
-4              Star Bangled Banner   21202     Downtown              11
-5  Flame at the Holocaust Monument   21202     Downtown              11
-6                   Calvert Statue   21202     Downtown              11
-# ... with 2 more variables: policeDistrict &lt;chr&gt;, `Location 1` &lt;chr&gt;</pre>
+<pre ># A tibble: 6 × 31
+   YEAR LocationAbbr LocationDesc                 TopicType
+  &lt;int&gt;        &lt;chr&gt;        &lt;chr&gt;                     &lt;chr&gt;
+1  2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+2  2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+3  2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+4  2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+5  2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+6  2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+# ... with 27 more variables: TopicDesc &lt;chr&gt;, MeasureDesc &lt;chr&gt;,
+#   DataSource &lt;chr&gt;, Response &lt;chr&gt;, Data_Value_Unit &lt;chr&gt;,
+#   Data_Value_Type &lt;chr&gt;, Data_Value &lt;dbl&gt;,
+#   Data_Value_Footnote_Symbol &lt;chr&gt;, Data_Value_Footnote &lt;chr&gt;,
+#   Data_Value_Std_Err &lt;dbl&gt;, Low_Confidence_Limit &lt;dbl&gt;,
+#   High_Confidence_Limit &lt;dbl&gt;, Sample_Size &lt;int&gt;, Gender &lt;chr&gt;,
+#   Race &lt;chr&gt;, Age &lt;chr&gt;, Education &lt;chr&gt;, GeoLocation &lt;chr&gt;,
+#   TopicTypeId &lt;chr&gt;, TopicId &lt;chr&gt;, MeasureId &lt;chr&gt;,
+#   StratificationID1 &lt;chr&gt;, StratificationID2 &lt;chr&gt;,
+#   StratificationID3 &lt;chr&gt;, StratificationID4 &lt;chr&gt;, SubMeasureID &lt;chr&gt;,
+#   DisplayOrder &lt;int&gt;</pre>
 
-<pre class = 'prettyprint lang-r'>class(mon_tbl)</pre>
+<pre class = 'prettyprint lang-r'>class(dat)</pre>
 
 <pre >[1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-9">
 
+<pre class = 'prettyprint lang-r'>dat</pre>
+
+<pre ># A tibble: 9,794 × 31
+    YEAR LocationAbbr LocationDesc                 TopicType
+   &lt;int&gt;        &lt;chr&gt;        &lt;chr&gt;                     &lt;chr&gt;
+1   2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+2   2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+3   2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+4   2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+5   2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+6   2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+7   2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+8   2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+9   2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+10  2015           AZ      Arizona Tobacco Use &lt;U+0096&gt; Survey Data
+# ... with 9,784 more rows, and 27 more variables: TopicDesc &lt;chr&gt;,
+#   MeasureDesc &lt;chr&gt;, DataSource &lt;chr&gt;, Response &lt;chr&gt;,
+#   Data_Value_Unit &lt;chr&gt;, Data_Value_Type &lt;chr&gt;, Data_Value &lt;dbl&gt;,
+#   Data_Value_Footnote_Symbol &lt;chr&gt;, Data_Value_Footnote &lt;chr&gt;,
+#   Data_Value_Std_Err &lt;dbl&gt;, Low_Confidence_Limit &lt;dbl&gt;,
+#   High_Confidence_Limit &lt;dbl&gt;, Sample_Size &lt;int&gt;, Gender &lt;chr&gt;,
+#   Race &lt;chr&gt;, Age &lt;chr&gt;, Education &lt;chr&gt;, GeoLocation &lt;chr&gt;,
+#   TopicTypeId &lt;chr&gt;, TopicId &lt;chr&gt;, MeasureId &lt;chr&gt;,
+#   StratificationID1 &lt;chr&gt;, StratificationID2 &lt;chr&gt;,
+#   StratificationID3 &lt;chr&gt;, StratificationID4 &lt;chr&gt;, SubMeasureID &lt;chr&gt;,
+#   DisplayOrder &lt;int&gt;</pre>
+
+</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-10">
+
+<p>There are also data importing functions provided in base R (rather than the <code>readr</code> package), like <code>read.delim</code> and <code>read.csv</code>.</p>
+
+<p>These functions have slightly different syntax for reading in data, like <code>header</code> and <code>as.is</code>.</p>
+
+<p>However, while many online resources use the base R tools, the latest version of RStudio switched to use these new <code>readr</code> data import tools, so we will use them in the class for slides. They are also up to two times faster for reading in large datasets, and have a progress bar which is nice.</p>
+
+<p>But you can use whatever function you feel more comfortable with.</p>
+
+</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-11">
+
+<p>Here is how to read in the same dataset using base R functionality, which returns a <code>data.frame</code> directly</p>
+
+<pre class = 'prettyprint lang-r'>dat2 = read.csv(&quot;../../data/Youth_Tobacco_Survey_YTS_Data.csv&quot;, as.is=TRUE)
+head(dat2)</pre>
+
+<pre >  YEAR LocationAbbr LocationDesc                   TopicType
+1 2015           AZ      Arizona Tobacco Use â&lt;U+0080&gt;&lt;U+0093&gt; Survey Data
+2 2015           AZ      Arizona Tobacco Use â&lt;U+0080&gt;&lt;U+0093&gt; Survey Data
+3 2015           AZ      Arizona Tobacco Use â&lt;U+0080&gt;&lt;U+0093&gt; Survey Data
+4 2015           AZ      Arizona Tobacco Use â&lt;U+0080&gt;&lt;U+0093&gt; Survey Data
+5 2015           AZ      Arizona Tobacco Use â&lt;U+0080&gt;&lt;U+0093&gt; Survey Data
+6 2015           AZ      Arizona Tobacco Use â&lt;U+0080&gt;&lt;U+0093&gt; Survey Data
+          TopicDesc
+1 Cessation (Youth)
+2 Cessation (Youth)
+3 Cessation (Youth)
+4 Cessation (Youth)
+5 Cessation (Youth)
+6 Cessation (Youth)
+                                                MeasureDesc DataSource
+1               Percent of Current Smokers Who Want to Quit        YTS
+2               Percent of Current Smokers Who Want to Quit        YTS
+3               Percent of Current Smokers Who Want to Quit        YTS
+4 Quit Attempt in Past Year Among Current Cigarette Smokers        YTS
+5 Quit Attempt in Past Year Among Current Cigarette Smokers        YTS
+6 Quit Attempt in Past Year Among Current Cigarette Smokers        YTS
+  Response Data_Value_Unit Data_Value_Type Data_Value
+1                        %      Percentage         NA
+2                        %      Percentage         NA
+3                        %      Percentage         NA
+4                        %      Percentage         NA
+5                        %      Percentage         NA
+6                        %      Percentage         NA
+  Data_Value_Footnote_Symbol
+1                          *
+2                          *
+3                          *
+4                          *
+5                          *
+6                          *
+                                                      Data_Value_Footnote
+1 Data in these cells have been suppressed because of a small sample size
+2 Data in these cells have been suppressed because of a small sample size
+3 Data in these cells have been suppressed because of a small sample size
+4 Data in these cells have been suppressed because of a small sample size
+5 Data in these cells have been suppressed because of a small sample size
+6 Data in these cells have been suppressed because of a small sample size
+  Data_Value_Std_Err Low_Confidence_Limit High_Confidence_Limit
+1                 NA                   NA                    NA
+2                 NA                   NA                    NA
+3                 NA                   NA                    NA
+4                 NA                   NA                    NA
+5                 NA                   NA                    NA
+6                 NA                   NA                    NA
+  Sample_Size  Gender      Race      Age     Education
+1          NA Overall All Races All Ages Middle School
+2          NA    Male All Races All Ages Middle School
+3          NA  Female All Races All Ages Middle School
+4          NA Overall All Races All Ages Middle School
+5          NA    Male All Races All Ages Middle School
+6          NA  Female All Races All Ages Middle School
+                                GeoLocation TopicTypeId TopicId MeasureId
+1 (34.865970280000454, -111.76381127699972)         BEH  105BEH    170CES
+2 (34.865970280000454, -111.76381127699972)         BEH  105BEH    170CES
+3 (34.865970280000454, -111.76381127699972)         BEH  105BEH    170CES
+4 (34.865970280000454, -111.76381127699972)         BEH  105BEH    169QUA
+5 (34.865970280000454, -111.76381127699972)         BEH  105BEH    169QUA
+6 (34.865970280000454, -111.76381127699972)         BEH  105BEH    169QUA
+  StratificationID1 StratificationID2 StratificationID3 StratificationID4
+1              1GEN              8AGE              6RAC              1EDU
+2              2GEN              8AGE              6RAC              1EDU
+3              3GEN              8AGE              6RAC              1EDU
+4              1GEN              8AGE              6RAC              1EDU
+5              2GEN              8AGE              6RAC              1EDU
+6              3GEN              8AGE              6RAC              1EDU
+  SubMeasureID DisplayOrder
+1        YTS01            1
+2        YTS02            2
+3        YTS03            3
+4        YTS04            4
+5        YTS05            5
+6        YTS06            6</pre>
+
+</article></slide><slide class=''><hgroup><h2>Data Input</h2></hgroup><article  id="data-input-12">
+
 <p>Changing variable names in <code>data.frame</code>s works using the <code>names()</code> function, which is analagous to <code>colnames()</code> for data frames (they can be used interchangeably)</p>
 
-<pre class = 'prettyprint lang-r'>names(mon)[1] = &quot;Name&quot;
-names(mon)</pre>
+<pre class = 'prettyprint lang-r'>names(dat)[1] = &quot;year&quot;
+names(dat)</pre>
 
-<pre >[1] &quot;Name&quot;            &quot;zipCode&quot;         &quot;neighborhood&quot;    &quot;councilDistrict&quot;
-[5] &quot;policeDistrict&quot;  &quot;Location.1&quot;     </pre>
+<pre > [1] &quot;year&quot;                       &quot;LocationAbbr&quot;              
+ [3] &quot;LocationDesc&quot;               &quot;TopicType&quot;                 
+ [5] &quot;TopicDesc&quot;                  &quot;MeasureDesc&quot;               
+ [7] &quot;DataSource&quot;                 &quot;Response&quot;                  
+ [9] &quot;Data_Value_Unit&quot;            &quot;Data_Value_Type&quot;           
+[11] &quot;Data_Value&quot;                 &quot;Data_Value_Footnote_Symbol&quot;
+[13] &quot;Data_Value_Footnote&quot;        &quot;Data_Value_Std_Err&quot;        
+[15] &quot;Low_Confidence_Limit&quot;       &quot;High_Confidence_Limit&quot;     
+[17] &quot;Sample_Size&quot;                &quot;Gender&quot;                    
+[19] &quot;Race&quot;                       &quot;Age&quot;                       
+[21] &quot;Education&quot;                  &quot;GeoLocation&quot;               
+[23] &quot;TopicTypeId&quot;                &quot;TopicId&quot;                   
+[25] &quot;MeasureId&quot;                  &quot;StratificationID1&quot;         
+[27] &quot;StratificationID2&quot;          &quot;StratificationID3&quot;         
+[29] &quot;StratificationID4&quot;          &quot;SubMeasureID&quot;              
+[31] &quot;DisplayOrder&quot;              </pre>
 
-<pre class = 'prettyprint lang-r'>names(mon)[1] = &quot;name&quot;
-names(mon)</pre>
-
-<pre >[1] &quot;name&quot;            &quot;zipCode&quot;         &quot;neighborhood&quot;    &quot;councilDistrict&quot;
-[5] &quot;policeDistrict&quot;  &quot;Location.1&quot;     </pre>
-
-</article></slide><slide class=''><hgroup><h2>Data Output</h2></hgroup><article  id="data-output" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Data Output</h2></hgroup><article  id="data-output">
 
 <p>While its nice to be able to read in a variety of data formats, it&#39;s equally important to be able to output data somewhere.</p>
 
-<p><code>write.table()</code>: prints its required argument <code>x</code> (after converting it to a <code>data.frame</code> if it is not one nor a <code>matrix</code>) to a file or connection.</p>
+<p>There are also data exporting functions in the <code>readr</code> package, which have the pattern <code>write_*</code> like <code>write_csv</code> and <code>write_delim</code></p>
 
-<pre >write.table(x,file = &quot;&quot;, append = FALSE, quote = TRUE, sep = &quot; &quot;,
-            eol = &quot;\n&quot;, na = &quot;NA&quot;, dec = &quot;.&quot;, row.names = TRUE,
-            col.names = TRUE, qmethod = c(&quot;escape&quot;, &quot;double&quot;),
-            fileEncoding = &quot;&quot;)</pre>
+<pre >write_delim(x, path, delim = &quot; &quot;, na = &quot;NA&quot;, append = FALSE,
+  col_names = !append)</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Output</h2></hgroup><article  id="data-output-1">
 
 <p><code>x</code>: the R <code>data.frame</code> or <code>matrix</code> you want to write</p>
 
-<p><code>file</code>: the file name where you want to R object written. It can be an absolute path, or a filename (which writes the file to your working directory)</p>
+<p><code>path</code>: the file name where you want to R object written. It can be an absolute path, or a filename (which writes the file to your working directory)</p>
 
-<p><code>sep</code>: what character separates the columns?</p>
+<p><code>delim</code>: what character separates the columns?</p>
 
 <ul>
-<li>&quot;,&quot; = .csv - Note there is also a <code>write.csv()</code> function</li>
+<li>&quot;,&quot; = .csv - Note there is also a <code>write_csv()</code> function</li>
 <li>&quot;&quot; = tab delimited</li>
 </ul>
 
-<p><code>row.names</code>: I like setting this to FALSE because I email these to collaborators who open them in Excel</p>
+</article></slide><slide class=''><hgroup><h2>Data Output</h2></hgroup><article  id="data-output-2">
 
-</article></slide><slide class=''><hgroup><h2>Data Output</h2></hgroup><article  id="data-output-2" class="smaller">
+<p>There are similar packages in base R, like <code>write.table</code> and <code>write.csv</code> which have the general arguments, but are called different things. Note these functions do write out row names, which you can set to <code>FALSE</code>. I do this a lot since I often email these to collaborators who open them in Excel</p>
 
-<p>For example, we can write back out the Monuments dataset with the new column name:</p>
+</article></slide><slide class=''><hgroup><h2>Data Output</h2></hgroup><article  id="data-output-3">
 
-<pre class = 'prettyprint lang-r'>names(mon)[6] = &quot;Location&quot;
-write.csv(mon, file=&quot;monuments_newNames.csv&quot;, row.names=FALSE)</pre>
+<p>For example, we can write back out the Youth Tobacco dataset with the new column name:</p>
 
-<p>Note that <code>row.names=TRUE</code> would make the first column contain the row names, here just the numbers <code>1:nrow(mon)</code>, which is not very useful for Excel. Note that row names can be useful/informative in R if they contain information (but then they would just be a separate column).</p>
+<pre class = 'prettyprint lang-r'>names(dat)[1] = &quot;Year&quot;
+write_csv(dat, path=&quot;YouthTobacco_newNames.csv&quot;)</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Input - Excel</h2></hgroup><article  id="data-input---excel">
 
@@ -441,7 +557,7 @@ write.csv(mon, file=&quot;monuments_newNames.csv&quot;, row.names=FALSE)</pre>
 
 <p>For single worksheet .xlsx files, I often just save the spreadsheet as a .csv file (because I often have to strip off additional summary data from the columns)</p>
 
-<p>For an .xlsx file with multiple well-formated worksheets, I use the <code>xlsx</code>, <code>readxl</code>, or <code>openxlsx</code> package for reading in the data.</p>
+<p>For an .xlsx file with multiple well-formated worksheets, I use the <code>readxl</code> package for reading in the data.</p>
 
 </article></slide><slide class=''><hgroup><h2>Data Input - Other Software</h2></hgroup><article  id="data-input---other-software">
 
@@ -451,7 +567,9 @@ write.csv(mon, file=&quot;monuments_newNames.csv&quot;, row.names=FALSE)</pre>
 <li><strong>readr</strong> package - Has <em>read_csv</em>/<em>write_csv</em> and <em>read_table</em> functions similar to <em>read.csv</em>/<em>write.csv</em> and <em>read.table</em>. Has different defaults, but can read <strong>much faster</strong> for very large data sets</li>
 <li><strong>sas7bdat</strong> reads .sas7bdat files</li>
 <li><strong>foreign</strong> package - can read all the formats as <strong>haven</strong>. Around longer (aka more testing), but not as maintained (bad for future).</li>
-</ul></article></slide>
+</ul>
+
+<p>Some of these are now available in the RStudio dropdown list</p></article></slide>
 
 
   <slide class="backdrop"></slide>
