@@ -80,11 +80,11 @@ quantile(x, na.rm = TRUE)
 
 Please download the Charm City Circulator data:
 
-http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv
+http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv
 
 ```{r}
 circ = read_csv(
-  "http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv")
+  "http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv")
 ```
 
 ## Subsetting to specific columns
