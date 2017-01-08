@@ -11,12 +11,13 @@ output:
 ```{r, echo = FALSE}
 library(knitr)
 opts_chunk$set(comment = "")
+suppressPackageStartupMessages(library(dplyr))
 library(dplyr)
 ```
 
 ## Overview
 
-We showed one way to read data into R using *read_csv*.  In this module, we will show you how to:
+We showed one way to read data into R using `read_csv` and `read_csv`.  In this module, we will show you how to:
 
 1. Select specific elements of an object by an index or logical condition
 2. Renaming columns of a `data.frame`
@@ -28,7 +29,7 @@ We showed one way to read data into R using *read_csv*.  In this module, we will
 
 ## Setup
 
-We will show you how to do each operation in base R then show you how to use the `dplyr` package to do the same operation (if applicable).  
+We will show you how to do each operation in base R then show you how to use the `dplyr` package to do the same operation (if applicable).
 
 Many resources on how to use `dplyr` exist and are straightforward: 
 
@@ -36,6 +37,7 @@ Many resources on how to use `dplyr` exist and are straightforward:
 * https://stat545-ubc.github.io/block009_dplyr-intro.html
 * https://www.datacamp.com/courses/dplyr-data-manipulation-r-tutorial
 
+The `dplyr` package also interfaces well with tibbles.
 
 ## Select specific elements using an index
 
@@ -72,8 +74,6 @@ x[-c(1,2,3)] # drop first 3
 # x[-1:3] # shorthand. R sees as -1 to 3
 x[-(1:3)] # needs parentheses
 ```
-
-
 
 ## Select specific elements using logical operators
 
@@ -244,7 +244,6 @@ select(df, x, x2)
 select(df, starts_with("x"))
 ```
 
-
 # Subsetting Rows
 
 ## Subset rows of a `data.frame` with indices: 
@@ -254,7 +253,6 @@ Let's select **rows** 1 and 3 from `df` using brackets:
 ```{r}
 df[ c(1, 3), ]
 ```
-
 
 ## Subset rows of a `data.frame`: 
 
