@@ -1,6 +1,5 @@
 ############
 ## Data Input/Output Lab
-## 6/13/2016
 ############
 
 # 1. Install and invoke the `readxl` package. 
@@ -16,3 +15,4 @@ mon = read_excel("../../data/Monuments.xlsx")
 
 # 4. Write out the R object as a CSV file 
 write.csv(mon, file = "monuments.csv")
+write_csv(mon, path = "monuments_write_csv.csv")

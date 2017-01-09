@@ -1,6 +1,5 @@
 ####################
 # "Basic R" Module - Lab
-# 6/13/16
 ####################
 
 ## In this lab you can use the interactive console to explore 

@@ -1,6 +1,5 @@
 ####################
 # Subsetting Data in R - Lab
-# 6/14/2016
 ####################
 
 
@@ -35,6 +34,7 @@ length(which(mtcars$mpg > 20))
 # 		per gallon (mpg) of fuel efficiency and have more than 
 #		100 horsepower (hp) - how many are there?
 mtcars %>% filter(mpg < 16 & hp > 100) %>% nrow
+sum(mtcars$mpg < 16 & mtcars$hp > 100)
 
 
 # 6. Create a subset of the data that only contains the columns:
