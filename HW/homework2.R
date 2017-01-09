@@ -1,13 +1,13 @@
 ## 140.886: Intro to R
 ## Homework 2
-## Assigned Date: 6/13/2016
-## Due Date: 8:30am on 6/16/2016
+## Assigned Date: 1/9/2017
+## Due Date: 8:30am on 1/11/2017
 
 ### Please use `knitr` to write up this homework.
 
 # Instructions: 
-# 1)	Get the dataset: http://www.aejaffe.com/summerR_2016/data/kaggleCarAuction.zip
-# 2)	Read the "dictionary": http://www.aejaffe.com/summerR_2016/data/Carvana_Data_Dictionary.txt
+# 1)	Get the dataset: http://www.aejaffe.com/winterR_2017/data/kaggleCarAuction.zip
+# 2)	Read the "dictionary": http://www.aejaffe.com/winterR_2017/data/Carvana_Data_Dictionary.txt
 # This is a dataset from the "Kaggle" website, which hosts competitions for prediction and machine learning. 
 # More details on this dataset are here: 
 # http://www.kaggle.com/c/DontGetKicked/details/Background
