@@ -136,4 +136,3 @@ Materials will be uploaded the night before class
 * R reference card: http://cran.r-project.org/doc/contrib/Short-refcard.pdf
 * Undergrad Guide to R: https://sites.google.com/site/undergraduateguidetor/
 * Quick R: http://statmethods.net/
-* Data Camp: https://www.datacamp.com/ 
