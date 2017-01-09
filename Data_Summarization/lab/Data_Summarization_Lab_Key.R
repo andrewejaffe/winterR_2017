@@ -1,16 +1,14 @@
 ####################
 # Data Summarization - Lab
-# 6/15/2016
 ####################
 
 # Bike Lanes Dataset: BikeBaltimore is the Department of Transportation's bike program. 
 # https://data.baltimorecity.gov/Transportation/Bike-Lanes/xzfj-gyms
-# 	Download as a CSV (like the Monuments dataset) in your current working directory
+# Download as a CSV in your current working directory
 # Note its also available at: 
-#	http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv
+#	http://www.aejaffe.com/winterR_2017/data/Bike_Lanes.csv
 
-bike = read.csv("http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv",
-	as.is=TRUE, na.strings=" ")
+bike = read_csv("http://www.aejaffe.com/winterR_2017/data/Bike_Lanes.csv")
 bike$type[bike$type==" "] = NA # OR do this
 
 # 1. How many bike "lanes" are currently in Baltimore? 
@@ -30,6 +28,10 @@ length(table(bike$type))
 length(unique(bike$type))
 
 tapply(bike$length, bike$type, mean, na.rm=TRUE)
+bike %>% 
+  group_by(type) %>% 
+  summarise(n = n(),
+            mean = mean(length))
 
 # 4. How many different projects do the "bike" lanes fall into? 
 #		Which project category has the longest average bike lane? 

@@ -113,7 +113,7 @@
 
 </article></slide><slide class=''><hgroup><h2>Some examples</h2></hgroup><article  id="some-examples">
 
-<p>We can use the <code>mtcars</code> and Charm City Circulator datasets to explore different ways of summarizing data. The <code>head</code> command displays the first <code>6</code> (default) rows of an object:</p>
+<p>We can use the <code>mtcars</code> to explore different ways of summarizing data. The <code>head</code> command displays the first <code>6</code> (default) rows of an object:</p>
 
 <pre class = 'prettyprint lang-r'>head(mtcars)</pre>
 
@@ -225,7 +225,7 @@ head(tb)</pre>
 #   `1999` &lt;dbl&gt;, `2000` &lt;dbl&gt;, `2001` &lt;dbl&gt;, `2002` &lt;dbl&gt;, `2003` &lt;dbl&gt;,
 #   `2004` &lt;dbl&gt;, `2005` &lt;dbl&gt;, `2006` &lt;dbl&gt;, `2007` &lt;dbl&gt;</pre>
 
-</article></slide><slide class=''><hgroup><h2>Indicator of Mortality</h2></hgroup><article  id="indicator-of-mortality">
+</article></slide><slide class=''><hgroup><h2>Indicator of TB</h2></hgroup><article  id="indicator-of-tb">
 
 <p>We can rename the first column to be the country measured using the <code>rename</code> function in <code>dplyr</code> (we have to use the ` things because there are spaces in the name):</p>
 
@@ -233,9 +233,17 @@ head(tb)</pre>
 tb = rename(tb, 
             country = `TB incidence, all forms (per 100 000 population per year)`)</pre>
 
+<p><code>colnames</code> will show us the column names and sho that country is renamed:s</p>
+
+<pre class = 'prettyprint lang-r'>colnames(tb)</pre>
+
+<pre > [1] &quot;country&quot; &quot;1990&quot;    &quot;1991&quot;    &quot;1992&quot;    &quot;1993&quot;    &quot;1994&quot;    &quot;1995&quot;   
+ [8] &quot;1996&quot;    &quot;1997&quot;    &quot;1998&quot;    &quot;1999&quot;    &quot;2000&quot;    &quot;2001&quot;    &quot;2002&quot;   
+[15] &quot;2003&quot;    &quot;2004&quot;    &quot;2005&quot;    &quot;2006&quot;    &quot;2007&quot;   </pre>
+
 </article></slide><slide class=''><hgroup><h2>Column and Row means</h2></hgroup><article  id="column-and-row-means">
 
-<p><code>colMeans</code> and <code>rowMeans</code> must work on all numeric data. We will subset years before 2000:</p>
+<p><code>colMeans</code> and <code>rowMeans</code> must work on all numeric data. We will subset years before 2000 (starting with 1):</p>
 
 <pre class = 'prettyprint lang-r'>avgs = select(tb, starts_with(&quot;1&quot;))
 colMeans(avgs, na.rm = TRUE)</pre>
@@ -359,11 +367,61 @@ head(tb[, c(&quot;country&quot;, &quot;before_2000_avg&quot;)])</pre>
 
 <pre class = 'prettyprint lang-r'>library(readr)
 smoke = read_csv(
-  &quot;http://www.aejaffe.com/winterR_2017/data/Youth_Tobacco_Survey_YTS_Data.csv&quot;)</pre>
+  &quot;http://www.aejaffe.com/winterR_2017/data/Youth_Tobacco_Survey_YTS_Data.csv&quot;)
+head(smoke)</pre>
+
+<pre ># A tibble: 6 × 31
+   YEAR LocationAbbr LocationDesc                 TopicType
+  &lt;int&gt;        &lt;chr&gt;        &lt;chr&gt;                     &lt;chr&gt;
+1  2015           AZ      Arizona Tobacco Use – Survey Data
+2  2015           AZ      Arizona Tobacco Use – Survey Data
+3  2015           AZ      Arizona Tobacco Use – Survey Data
+4  2015           AZ      Arizona Tobacco Use – Survey Data
+5  2015           AZ      Arizona Tobacco Use – Survey Data
+6  2015           AZ      Arizona Tobacco Use – Survey Data
+# ... with 27 more variables: TopicDesc &lt;chr&gt;, MeasureDesc &lt;chr&gt;,
+#   DataSource &lt;chr&gt;, Response &lt;chr&gt;, Data_Value_Unit &lt;chr&gt;,
+#   Data_Value_Type &lt;chr&gt;, Data_Value &lt;dbl&gt;,
+#   Data_Value_Footnote_Symbol &lt;chr&gt;, Data_Value_Footnote &lt;chr&gt;,
+#   Data_Value_Std_Err &lt;dbl&gt;, Low_Confidence_Limit &lt;dbl&gt;,
+#   High_Confidence_Limit &lt;dbl&gt;, Sample_Size &lt;int&gt;, Gender &lt;chr&gt;,
+#   Race &lt;chr&gt;, Age &lt;chr&gt;, Education &lt;chr&gt;, GeoLocation &lt;chr&gt;,
+#   TopicTypeId &lt;chr&gt;, TopicId &lt;chr&gt;, MeasureId &lt;chr&gt;,
+#   StratificationID1 &lt;chr&gt;, StratificationID2 &lt;chr&gt;,
+#   StratificationID3 &lt;chr&gt;, StratificationID4 &lt;chr&gt;, SubMeasureID &lt;chr&gt;,
+#   DisplayOrder &lt;int&gt;</pre>
+
+</article></slide><slide class=''><hgroup><h2>Length and unique</h2></hgroup><article  id="length-and-unique">
+
+<p><code>unique(x)</code> will return the unique elements of <code>x</code></p>
+
+<pre class = 'prettyprint lang-r'>unique(smoke$LocationDesc)[1:10]</pre>
+
+<pre > [1] &quot;Arizona&quot;                  &quot;Connecticut&quot;             
+ [3] &quot;Georgia&quot;                  &quot;Hawaii&quot;                  
+ [5] &quot;Illinois&quot;                 &quot;Louisiana&quot;               
+ [7] &quot;Mississippi&quot;              &quot;Utah&quot;                    
+ [9] &quot;Missouri&quot;                 &quot;National (States and DC)&quot;</pre>
+
+<p><code>length</code> will tell you the length of a vector. Combined with <code>unique</code>, tells you the number of unique elements:</p>
+
+<pre class = 'prettyprint lang-r'>length(unique(smoke$LocationDesc))</pre>
+
+<pre >[1] 50</pre>
+
+</article></slide><slide class=''><hgroup><h2>Table</h2></hgroup><article  id="table">
+
+<p><code>table(x)</code> will return a frequency table of unique elements of <code>x</code></p>
+
+<pre class = 'prettyprint lang-r'>table(smoke$LocationDesc)[1:5]</pre>
+
+<pre >
+   Alabama    Arizona   Arkansas California   Colorado 
+       378        240        210         96         48 </pre>
 
 </article></slide><slide class=''><hgroup><h2>Subsetting to specific columns</h2></hgroup><article  id="subsetting-to-specific-columns">
 
-<p>Let&#39;s just take smoking status measures for all genders using <code>filter</code>, and the columns that represent the year, state using <code>select</code> (covered more in detail later):</p>
+<p>Let&#39;s just take smoking status measures for all genders using <code>filter</code>, and the columns that represent the year, state using <code>select</code>:</p>
 
 <pre class = 'prettyprint lang-r'>library(dplyr)
 sub_smoke = filter(smoke, 
@@ -393,18 +451,20 @@ head(sub_smoke, 4)</pre>
 
 <p>For example, we can estimate the average current smoking statuses over all states for each year:</p>
 
-<pre class = 'prettyprint lang-r'>tapply(sub_smoke$Data_Value, sub_smoke$YEAR, max, na.rm = TRUE)</pre>
+<pre class = 'prettyprint lang-r'>tapply(sub_smoke$Data_Value, sub_smoke$YEAR, mean, na.rm = TRUE)</pre>
 
-<pre >1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 
-36.4 38.5 27.6 34.2 28.3 27.9 27.8 26.8 28.8 26.8 22.9 26.6 23.7 19.3 18.6 
-2014 2015 
-17.7 16.2 </pre>
+<pre >     1999      2000      2001      2002      2003      2004      2005 
+20.493333 19.878431 15.661111 16.802326 13.176190 13.926923 14.128571 
+     2006      2007      2008      2009      2010      2011      2012 
+14.113636 13.013636 12.159091 11.663333 12.290000 11.773913  9.954545 
+     2013      2014      2015 
+ 7.782759  7.157143  6.579167 </pre>
 
 </article></slide><slide class=''><hgroup><h2>Perform Operations By Groups: dplyr</h2></hgroup><article  id="perform-operations-by-groups-dplyr">
 
 <p><code>group_by</code> allows you group the data in a more intuitive way than <code>tapply</code></p>
 
-<p>We will use <code>group_by</code> to group the data by line, then use <code>summarize</code> (or <code>summarise</code>) to get the mean Average ridership:</p>
+<p>We will use <code>group_by</code> to group the data by line, then use <code>summarize</code> (or <code>summarise</code>) to get the mean percentage of current smokers:</p>
 
 <pre class = 'prettyprint lang-r'>summarize(group_by(sub_smoke, YEAR), year_avg = mean(Data_Value, na.rm = TRUE))</pre>
 
@@ -447,6 +507,40 @@ head(smoke_avgs)</pre>
 4  2002 16.80233
 5  2003 13.17619
 6  2004 13.92692</pre>
+
+</article></slide><slide class=''><hgroup><h2>Counting</h2></hgroup><article  id="counting">
+
+<p>Standard statistics can be calculated. There are other functions, such as <code>n()</code> count the number of observations, <code>tally()</code> to count as a wrapper:</p>
+
+<pre class = 'prettyprint lang-r'>sub_smoke %&gt;% 
+  group_by(YEAR) %&gt;% 
+  summarize(n = n()) %&gt;% 
+  head</pre>
+
+<pre ># A tibble: 6 × 2
+   YEAR     n
+  &lt;int&gt; &lt;int&gt;
+1  1999    15
+2  2000    51
+3  2001    18
+4  2002    43
+5  2003    21
+6  2004    26</pre>
+
+<pre class = 'prettyprint lang-r'>sub_smoke %&gt;% 
+  group_by(YEAR) %&gt;% 
+  tally() %&gt;% 
+  head</pre>
+
+<pre ># A tibble: 6 × 2
+   YEAR     n
+  &lt;int&gt; &lt;int&gt;
+1  1999    15
+2  2000    51
+3  2001    18
+4  2002    43
+5  2003    21
+6  2004    26</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Summarization/Visualization</h2></hgroup><article  id="data-summarizationvisualization">
 

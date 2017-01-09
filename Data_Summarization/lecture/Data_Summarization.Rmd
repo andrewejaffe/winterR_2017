@@ -26,7 +26,7 @@ library(readr)
 
 ## Some examples
 
-We can use the `mtcars` and Charm City Circulator datasets to explore different ways of summarizing data.  The `head` command displays the first `6` (default) rows of an object:
+We can use the `mtcars` to explore different ways of summarizing data.  The `head` command displays the first `6` (default) rows of an object:
 
 ```{r}
 head(mtcars)
@@ -91,7 +91,7 @@ tb <- read_excel("../../data/tb_incidence.xlsx")
 head(tb)
 ```
 
-## Indicator of Mortality
+## Indicator of TB
 
 We can rename the first column to be the country measured using the `rename` function in `dplyr` (we have to use the \` things because there are spaces in the name):
 
@@ -101,11 +101,16 @@ tb = rename(tb,
             country = `TB incidence, all forms (per 100 000 population per year)`)
 ```
 
+`colnames` will show us the column names and sho that country is renamed:s
+```{r}
+colnames(tb)
+```
+
 
 
 ## Column and Row means
 
-`colMeans` and `rowMeans` must work on all numeric data.  We will subset years before 2000:
+`colMeans` and `rowMeans` must work on all numeric data.  We will subset years before 2000 (starting with 1):
 
 ```{r colMeans}
 avgs = select(tb, starts_with("1"))
@@ -165,11 +170,31 @@ Please download the Youth Tobacco Survey data.  You can also read it in directly
 library(readr)
 smoke = read_csv(
   "http://www.aejaffe.com/winterR_2017/data/Youth_Tobacco_Survey_YTS_Data.csv")
+head(smoke)
 ```
+
+## Length and unique
+`unique(x)` will return the unique elements of `x`
+
+```{r, message = FALSE}
+unique(smoke$LocationDesc)[1:10]
+```
+`length` will tell you the length of a vector. Combined with `unique`, tells you the number of unique elements:
+```{r}
+length(unique(smoke$LocationDesc))
+```
+
+## Table
+`table(x)` will return a frequency table of unique elements of `x`
+
+```{r, message = FALSE}
+table(smoke$LocationDesc)[1:5]
+```
+
 
 ## Subsetting to specific columns
 
-Let's just take smoking status measures for all genders using `filter`, and the columns that represent the year, state using `select` (covered more in detail later):
+Let's just take smoking status measures for all genders using `filter`, and the columns that represent the year, state using `select`:
 
 ```{r, message=FALSE}
 library(dplyr)
@@ -197,14 +222,14 @@ Simply put, you can apply function `FUN` to `X` within each categorical level of
 For example, we can estimate the average current smoking statuses over all states for each year: 
 
 ```{r tapply1}
-tapply(sub_smoke$Data_Value, sub_smoke$YEAR, max, na.rm = TRUE)
+tapply(sub_smoke$Data_Value, sub_smoke$YEAR, mean, na.rm = TRUE)
 ```
     
 ## Perform Operations By Groups: dplyr
 
 `group_by` allows you group the data in a more intuitive way than `tapply`
 
-We will use `group_by` to group the data by line, then use `summarize` (or `summarise`) to get the mean Average ridership:
+We will use `group_by` to group the data by line, then use `summarize` (or `summarise`) to get the mean percentage of current smokers:
 
 ```{r}
 summarize(group_by(sub_smoke, YEAR), year_avg = mean(Data_Value, na.rm = TRUE))
@@ -220,6 +245,21 @@ smoke_avgs = sub_smoke %>%
   group_by(YEAR) %>% 
   summarize(year_avg = mean(Data_Value, na.rm = TRUE))
 head(smoke_avgs)
+```
+
+## Counting
+
+Standard statistics can be calculated.  There are other functions, such as `n()` count the number of observations, `tally()` to count as a wrapper:
+
+```{r}
+sub_smoke %>% 
+  group_by(YEAR) %>% 
+  summarize(n = n()) %>% 
+  head
+sub_smoke %>% 
+  group_by(YEAR) %>% 
+  tally() %>% 
+  head
 ```
 
 ## Data Summarization/Visualization

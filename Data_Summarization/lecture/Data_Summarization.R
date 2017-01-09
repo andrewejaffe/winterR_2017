@@ -34,6 +34,9 @@ library(dplyr)
 tb = rename(tb, 
             country = `TB incidence, all forms (per 100 000 population per year)`)
 
+## ------------------------------------------------------------------------
+colnames(tb)
+
 ## ----colMeans------------------------------------------------------------
 avgs = select(tb, starts_with("1"))
 colMeans(avgs, na.rm = TRUE)
@@ -52,6 +55,16 @@ apply(avgs,2,max,na.rm=TRUE) # column maxs
 library(readr)
 smoke = read_csv(
   "http://www.aejaffe.com/winterR_2017/data/Youth_Tobacco_Survey_YTS_Data.csv")
+head(smoke)
+
+## ---- message = FALSE----------------------------------------------------
+unique(smoke$LocationDesc)[1:10]
+
+## ------------------------------------------------------------------------
+length(unique(smoke$LocationDesc))
+
+## ---- message = FALSE----------------------------------------------------
+table(smoke$LocationDesc)[1:5]
 
 ## ---- message=FALSE------------------------------------------------------
 library(dplyr)
@@ -63,7 +76,7 @@ sub_smoke = select(sub_smoke, YEAR, LocationDesc, Data_Value)
 head(sub_smoke, 4)
 
 ## ----tapply1-------------------------------------------------------------
-tapply(sub_smoke$Data_Value, sub_smoke$YEAR, max, na.rm = TRUE)
+tapply(sub_smoke$Data_Value, sub_smoke$YEAR, mean, na.rm = TRUE)
 
 ## ------------------------------------------------------------------------
 summarize(group_by(sub_smoke, YEAR), year_avg = mean(Data_Value, na.rm = TRUE))
@@ -73,6 +86,16 @@ smoke_avgs = sub_smoke %>%
   group_by(YEAR) %>% 
   summarize(year_avg = mean(Data_Value, na.rm = TRUE))
 head(smoke_avgs)
+
+## ------------------------------------------------------------------------
+sub_smoke %>% 
+  group_by(YEAR) %>% 
+  summarize(n = n()) %>% 
+  head
+sub_smoke %>% 
+  group_by(YEAR) %>% 
+  tally() %>% 
+  head
 
 ## ----scatter1------------------------------------------------------------
 plot(mtcars$mpg, mtcars$disp)
