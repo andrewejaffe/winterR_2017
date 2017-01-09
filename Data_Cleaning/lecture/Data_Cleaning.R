@@ -58,8 +58,9 @@ prop.table(tab)
 prop.table(tab,1)
 
 ## ----readSal-------------------------------------------------------------
-Sal = read.csv("http://www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv",
+Sal = read.csv("http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv",
                as.is = TRUE)
+colnames(Sal)[1] = "Name"
 
 ## ----isna----------------------------------------------------------------
 head(Sal,2)

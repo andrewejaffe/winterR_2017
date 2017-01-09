@@ -1,21 +1,36 @@
 all: \
 	index.html \
 	Statistics/lecture/Statistics.html \
+	Statistics/lecture/Statistics.pdf \
 	Data_Visualization/lecture/Data_Visualization.html \
+	Data_Visualization/lecture/Data_Visualization.pdf \
 	Knitr/lecture/Knitr.html \
+	Knitr/lecture/Knitr.pdf \
 	Data_Summarization/lecture/Data_Summarization.html \
+	Data_Summarization/lecture/Data_Summarization.pdf \
 	RStudio/lecture/RStudio.html \
+	RStudio/lecture/RStudio.pdf \
 	Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.html \
+	Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.pdf \
 	Data_Cleaning/lecture/Data_Cleaning.html \
+	Data_Cleaning/lecture/Data_Cleaning.pdf \
 	Data_IO/lecture/Data_IO.html \
+	Data_IO/lecture/Data_IO.pdf \
 	Data_Classes/lecture/Data_Classes.html \
+	Data_Classes/lecture/Data_Classes.pdf \
 	Simple_Knitr/lecture/Simple_Knitr.html \
+	Simple_Knitr/lecture/Simple_Knitr.pdf \
 	Basic_R/lecture/Basic_R.html \
+	Basic_R/lecture/Basic_R.pdf \
 	Functions/lecture/Functions.html \
+	Functions/lecture/Functions.pdf \
 	Knitr/lab/knitr_lab_key.html \
 	Arrays_Split/lecture/Arrays_Split.html \
+	Arrays_Split/lecture/Arrays_Split.pdf \
 	Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.html \
-	Intro/lecture/Intro.html
+	Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.pdf \
+	Intro/lecture/Intro.html \
+	Intro/lecture/Intro.pdf
 	
 Statistics/lecture/Statistics.html: Statistics/lecture/Statistics.Rmd
 	Rscript -e "source('renderFile.R'); renderFile('Statistics/lecture/Statistics.Rmd')"
