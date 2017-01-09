@@ -23,6 +23,13 @@ library(readr)
     * `median(x)`: takes the median of x
     * `quantile(x)`: displays sample quantities of x. Default is min, IQR, max
     * `range(x)`: displays the range. Same as c(min(x), max(x))
+    * `sum(x)`: sum of x
+* Transformations
+    * `log` - log (base `e`) transformation
+    * `log2` - log base 2 transform
+    * `log10` - log base 10 transform
+    * `sqrt` - square root
+    
 
 ## Some examples
 
