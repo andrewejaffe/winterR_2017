@@ -1,12 +1,12 @@
 ############
 ## Data Input/Output Lab
-## 6/13/2016
+## 1/9/2017
 ############
 
 # 1. Install and invoke the `readxl` package. 
 
 # 2. Download an Excel version of the Monuments dataset:
-#		http://www.aejaffe.com/summerR_2016/data/Monuments.xlsx
+#		http://www.aejaffe.com/winterR_2017/data/Monuments.xlsx
 
 # 3. Use the `read_excel()` function in the `readxl` package to 
 #		read in the dataset
