@@ -13,14 +13,14 @@
 
 # 3. What is the total city and state tax paid?
 
-# 4. What is the 75th percentile of city and state tax paid by residence code?
+# 4. Using `tapply()` and/or `table()`
+#	a. how many observations/properties are in each ward?
 
-# 5. Using `tapply()` and `table()`
-#	a. how many observations are in each residence code?
+#	b. what is the mean state tax per ward?
 
-#	b. what is the mean state tax per residence code?
+#	c. what is the maximum amount still due in each ward?
 
-#	c. what is the maximum amount still due?
+# 	d. What is the 75th percentile of city and state tax paid by Ward?
 
 # 6. Make boxplots using base graphics showing cityTax 
 #	 	by whether the property	is a principal residence or not.
@@ -43,7 +43,7 @@
 ################################
 ## Read in the Salary FY2015 dataset
 
-# www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2015.csv
+# www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv
 
 # 10. Make an object called health.sal using the salaries data set, 
 #		with only agencies of those with "fire" (or any forms), if any, in the name

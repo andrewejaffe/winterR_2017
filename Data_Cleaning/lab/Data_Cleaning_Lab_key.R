@@ -1,7 +1,7 @@
 #################
 # Data Cleaning and Plotting
 ##############
-# 6/15/2016
+# 1/12/2017
 
 ## Download the "Real Property Taxes" Data from my website (via OpenBaltimore):
 # www.aejaffe.com/summerR_2016/data/real_property_tax.csv.gz
@@ -9,103 +9,97 @@
 rm( list = ls() ) # clear the workspace
 library(stringr)
 library(dplyr)
+library(readr)
 
 # 1. Read the Property Tax data into R and call it the variable `tax`
-tax = read.csv( "~/GitHub/summerR_2016/data/real_property_tax.csv.gz", 
-               stringsAsFactors = FALSE)
-# write.csv(tax, file=gzfile("file.csv.gz"))
+tax = read_csv( "~/GitHub/winterR_2017/data/Real_Property_Taxes.csv.gz")
 
 # 2. How many addresses pay property taxes? 
 nrow(tax)
 dim(tax)
 
 # 3. What is the total city and state tax paid?
-head(tax$cityTax)
-cityTax = tax$cityTax %>% 
+head(tax$CityTax)
+CityTax = tax$CityTax %>% 
   str_replace(fixed("$"), "") %>%
   as.numeric
-stateTax = tax$stateTax %>% 
+StateTax = tax$StateTax %>% 
   str_replace(fixed("$"), "") %>%
   as.numeric
-head(cityTax)
+head(CityTax)
 
-head(tax$cityTax[ is.na(cityTax) ])
-table(tax$cityTax[ is.na(cityTax) ])
+tax$CityTax = CityTax
+tax$StateTax = StateTax
 
-head(tax$stateTax[ is.na(stateTax) ])
-table(tax$stateTax[ is.na(stateTax) ])
+sum(tax$CityTax, na.rm = TRUE)
+sum(tax$CityTax, na.rm = TRUE)/1e6
 
-tax$cityTax = cityTax
-tax$stateTax = stateTax
+sum(tax$StateTax, na.rm = TRUE)
+sum(tax$StateTax, na.rm = TRUE)/1e6
 
-sum(tax$cityTax, na.rm = TRUE)
-sum(tax$cityTax, na.rm = TRUE)/1e6
 
-sum(tax$stateTax, na.rm = TRUE)
-sum(tax$stateTax, na.rm = TRUE)/1e6
-
-# 4. What is the 75th percentile of city and state tax paid by address type?
-head(tax$propertyAddress)
-tax$propertyAddress = str_trim(tax$propertyAddress)
-head(tax$propertyAddress)
-
-tax$street = str_detect(tax$propertyAddress, "ST$")
-tax$street = str_detect(tax$propertyAddress, "STREET$") | tax$street
-
-ss = str_split(tax$propertyAddress," ")
-tab = table(sapply(ss, last))
-
-# 5. Split the data by ward into a list: 
-### tax_list = split(tax, tax$street)
-
-# Using `tapply()` and `table()`
-#	a. how many observations are in each address type?
+# Using `tapply()` and/or `table()`
+#	a. how many observations are in each ward?
 ### sapply(tax_list, nrow)
-sum(tax$street)
-table(tax$street)
-tapply(tax$propertyAddress, 
-        tax$street, length)
 
-#	b. what is the mean state tax per address type?
+table(tax$Ward)
+
+
+#	b. what is the mean state tax per ward?
 tax %>% 
-  group_by(street) %>% 
-  summarize(mean_state = mean(stateTax, na.rm = TRUE))
+  group_by(Ward) %>% 
+  summarize(mean_state = mean(StateTax, na.rm = TRUE))
 
-tapply(tax$stateTax, tax$street, mean, na.rm=TRUE)
+tapply(tax$StateTax, tax$Ward, mean, na.rm=TRUE)
+
+#	c. what is the maximum amount still due in each ward?
+tax$AmountDue = tax$AmountDue %>% 
+  str_replace(fixed("$"), "") %>%
+  as.numeric
+
+tax %>% 
+  group_by(Ward) %>% 
+  summarize(maxDue = max(AmountDue, na.rm = TRUE))
 
 ## 75th percentile
-tapply(tax$stateTax, tax$street,
+tax %>%   group_by(Ward) %>% 
+  summarize(Percentile = quantile(StateTax, prob = 0.75,na.rm = TRUE))
+
+tapply(tax$StateTax, tax$Ward,
        quantile, prob = 0.75, na.rm=TRUE)
-tapply(tax$stateTax, tax$street,
+tapply(tax$StateTax, tax$Ward,
        quantile, na.rm=TRUE)
 
-# 6. Make boxplots using base graphics showing cityTax 
+# 6. Make boxplots using base graphics showing CityTax 
 #	 	by whether the property	is a principal residence or not.
-tax$resCode = str_trim(tax$resCode)
-boxplot(log(cityTax+1) ~ resCode, data = tax)
+tax$ResCode = str_trim(tax$ResCode)
+boxplot(log(CityTax+1) ~ ResCode, data = tax)
+
 # 7. Subset the data to only retain those houses that are principal residences. 
-pres = tax %>% filter( resCode %in% "PRINCIPAL RESIDENCE")
-pres = tax %>% filter( resCode == "PRINCIPAL RESIDENCE")
+pres = tax %>% filter( ResCode %in% "PRINCIPAL RESIDENCE")
+pres = tax %>% filter( ResCode == "PRINCIPAL RESIDENCE")
+
 #	a) How many such houses are there?
 dim(pres)
-#	b) Describe the distribution of property taxes on these residences.
-hist(log2(pres$cityTax+1))
 
-# 8. Convert the 'lotSize' variable to a numeric square feet variable. 
+#	b) Describe the distribution of property taxes on these residences.
+hist(log2(pres$CityTax+1))
+
+# 8. Convert the 'LotSize' variable to a numeric square feet variable. 
 #	Tips: - 1 acre = 43560 square feet
 #		    - The hyphens represent inches (not decimals)
 # 		  - Don't spend more than 5-10 minutes on this; stop and move on
 
-tax$lotSize = str_trim(tax$lotSize) # trim to be safe
-lot = tax$lotSize # for checking later
+tax$LotSize = str_trim(tax$LotSize) # trim to be safe
+lot = tax$LotSize # for checking later
 
 # first lets take care of acres
-aIndex= c(grep("ACRE.*", tax$lotSize),
-            grep(" %", tax$lotSize, fixed=TRUE))
+aIndex= c(grep("ACRE.*", tax$LotSize),
+            grep(" %", tax$LotSize, fixed=TRUE))
 head(aIndex)
 head(lot[aIndex])
 
-acre = tax$lotSize[aIndex] # temporary variable
+acre = tax$LotSize[aIndex] # temporary variable
 ## find and replace character strings
 acre = gsub(" ACRE.*","",acre)
 acre = gsub(" %","",acre)
@@ -134,8 +128,8 @@ sum(is.na(acre2)) # all but one
 
 #######################
 ## now square feet:
-fIndex = grep("X", tax$lotSize)
-ft = tax$lotSize[fIndex]
+fIndex = grep("X", tax$LotSize)
+ft = tax$LotSize[fIndex]
 
 ft = gsub("&", "-", ft, fixed=TRUE)
 ft = gsub("IMP ONLY ", "", ft, fixed=TRUE)
@@ -172,9 +166,9 @@ tax$sqft[fIndex] = sqrtFt
 mean(!is.na(tax$sqft))
 
 # already in square feet, easy!!
-sIndex=c(grep("FT", tax$lotSize), 
-         grep("S.*F.", tax$lotSize))
-sf = tax$lotSize[sIndex] # subset temporary variable
+sIndex=c(grep("FT", tax$LotSize), 
+         grep("S.*F.", tax$LotSize))
+sf = tax$LotSize[sIndex] # subset temporary variable
 
 sqft2 = sapply(str_split(sf,"( |SQ|SF)"),first)
 sqft2 = as.numeric(gsub(",", "", sqft2)) # remove , and convert
