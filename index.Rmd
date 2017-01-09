@@ -29,8 +29,8 @@ Winter R 2017
 | 0  | 2017-01-09  | Homework 1  | [Try R](http://tryr.codeschool.com/), [Data Camp](https://campus.datacamp.com/courses/free-introduction-to-r)  | Finish all modules  |
 | 1  | 2017-01-09  | Module 1  | [HTML](Intro/lecture/Intro.html), [PDF](Intro/lecture/Intro.pdf)  | Class Introduction  |
 | 1  | 2017-01-09  | Module 2  | [HTML](RStudio/lecture/RStudio.html), [PDF](RStudio/lecture/RStudio.pdf) | R Studio  |
-| 1  | 2017-01-09  | Module 3  | [HTML](Basic_R/lecture/Basic_R.html), [PDF](Basic_R/lecture/Basic_R.pdf), [Code](Basic_R/lecture/Basic_R.R), [Lab](Basic_R/lab/Basic_R_Lab.R)<!--,[Key](Basic_R/lab/Basic_R_Lab_Key.R)-->| Basic R|
-| 1  | 2017-01-09  | Module 4  | [HTML](Data_IO/lecture/Data_IO.html), [PDF](Data_IO/lecture/Data_IO.pdf), [Code](Data_IO/lecture/Data_IO.R), [Lab](Data_IO/lab/Data_IO_Lab.R)<!--, [Key](Data_IO/lab/Data_IO_Lab_Key.R)-->| Data Import/Output  |
+| 1  | 2017-01-09  | Module 3  | [HTML](Basic_R/lecture/Basic_R.html), [PDF](Basic_R/lecture/Basic_R.pdf), [Code](Basic_R/lecture/Basic_R.R), [Lab](Basic_R/lab/Basic_R_Lab.R),[Key](Basic_R/lab/Basic_R_Lab_Key.R)| Basic R|
+| 1  | 2017-01-09  | Module 4  | [HTML](Data_IO/lecture/Data_IO.html), [PDF](Data_IO/lecture/Data_IO.pdf), [Code](Data_IO/lecture/Data_IO.R), [Lab](Data_IO/lab/Data_IO_Lab.R), [Key](Data_IO/lab/Data_IO_Lab_Key.R)| Data Import/Output  |
 | 1  | 2017-01-09  | Homework 2  | [HW ](HW/homework2.R)  |   |
 <!-- 
 | 2  | 2017-01-10 | Module 5  | [HTML](Data_Classes/lecture/Data_Classes.html), [PDF](Data_Classes/lecture/Data_Classes.pdf), [Code](Data_Classes/lecture/Data_Classes.R) | Data Classes
