@@ -21,6 +21,7 @@
 #		Which project category has the longest average bike lane? 
 
 # 5. What was the average bike lane length per year that they were installed?
+# Set bike$dateInstalled to NA if it is equal to zero.
 
 # 6. (a) Numerically [hint: `quantile()`] and 
 #		(b) graphically [hint: `hist()` or `plot(density())`]

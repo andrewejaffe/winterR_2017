@@ -37,11 +37,19 @@ bike %>%
 #		Which project category has the longest average bike lane? 
 length(unique(bike$project))
 tapply(bike$length,bike$project, mean,na.rm=TRUE)
+bike %>% 
+  group_by(project) %>% 
+  summarise(n = n(),
+            mean = mean(length))
 			  
-# 5. What was the average bike lane length per year that they were installed?
+# 5. What was the average bike lane length per year that they were installed? 
+# Set bike$dateInstalled to NA if it is equal to zero.
 bike$dateInstalled[bike$dateInstalled == "0"] = NA
 tapply(bike$length,bike$dateInstalled, mean,na.rm=TRUE)
-
+bike %>% 
+  group_by(dateInstalled) %>% 
+  summarise(n = n(),
+            mean = mean(length))
 # 6. (a) Numerically [hint: `quantile()`] and 
 #		(b) graphically [hint: `hist()` or `plot(density())`]
 #		 describe the distribution of bike "lane" lengths.
