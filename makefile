@@ -12,6 +12,7 @@ all: \
 	Simple_Knitr/lecture/Simple_Knitr.html \
 	Basic_R/lecture/Basic_R.html \
 	Functions/lecture/Functions.html \
+	Knitr/lab/knitr_lab_key.html \
 	Arrays_Split/lecture/Arrays_Split.html \
 	Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.html \
 	Intro/lecture/Intro.html
@@ -57,6 +58,10 @@ Arrays_Split/lecture/Arrays_Split.html: Arrays_Split/lecture/Arrays_Split.Rmd
 
 Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.html: Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.Rmd
 	Rscript -e "source('renderFile.R'); renderFile('Subsetting_Data_in_R/lecture/Subsetting_Data_in_R.Rmd')"
+
+Knitr/lab/knitr_lab_key.html: Knitr/lab/knitr_lab_key.Rmd
+	Rscript -e "source('renderFile.R'); renderFile('Knitr/lab/knitr_lab_key.Rmd')"
+
 
 Intro/lecture/Intro.html: Intro/lecture/Intro.Rmd
 	Rscript -e "source('renderFile.R'); renderFile('Intro/lecture/Intro.Rmd')"	

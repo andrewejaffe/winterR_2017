@@ -28,8 +28,9 @@ I'm reading in the bike lanes here.
 library(stringr)
 library(dplyr)
 library(tidyr)
-fname <- "http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv"
-bike = read.csv(fname, as.is = TRUE)
+library(readr)
+fname <- "http://www.aejaffe.com/winterR_2017/data/Bike_Lanes.csv"
+bike = read_csv(fname)
 ```
 
 You can write your introduction here.
@@ -50,6 +51,7 @@ We can turn off R code output by using `echo = FALSE` on the knitr code chunks.
 ```{r, echo = FALSE}
 no.missyear <- bike %>% filter(dateInstalled != 0)
 plot(no.missyear$dateInstalled, no.missyear$length)
+boxplot(length ~ dateInstalled, data = no.missyear)
 ```
 
 ```{r, echo = TRUE}

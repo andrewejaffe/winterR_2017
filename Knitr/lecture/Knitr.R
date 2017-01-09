@@ -8,12 +8,14 @@
 library(stringr)
 library(dplyr)
 library(tidyr)
-fname <- "http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv"
-bike = read.csv(fname, as.is = TRUE)
+library(readr)
+fname <- "http://www.aejaffe.com/winterR_2017/data/Bike_Lanes.csv"
+bike = read_csv(fname)
 
 ## ---- echo = FALSE-------------------------------------------------------
 no.missyear <- bike %>% filter(dateInstalled != 0)
 plot(no.missyear$dateInstalled, no.missyear$length)
+boxplot(length ~ dateInstalled, data = no.missyear)
 
 ## ---- echo = TRUE--------------------------------------------------------
 no.missyear = no.missyear %>%  mutate(dateInstalled = factor(dateInstalled)) 
