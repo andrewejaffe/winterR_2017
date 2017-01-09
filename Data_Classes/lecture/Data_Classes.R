@@ -45,6 +45,8 @@ class(x)
 cc = factor(c("case","case","case",
         "control","control","control"))
 cc
+
+## ------------------------------------------------------------------------
 levels(cc) = c("control","case")
 cc
 

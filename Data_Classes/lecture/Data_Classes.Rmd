@@ -117,7 +117,7 @@ Note that levels are, by default, in alphanumerical order.
 
 Factors are used to represent categorical data, and can also be used for ordinal data (ie categories have an intrinsic ordering)
 
-Note that R reads in character strings as factors by default in functions like `read.table()`
+Note that R reads in character strings as factors by default in functions like `read.csv()` (but not `read_csv`)
 
 'The function factor is used to encode a vector as a factor (the terms 'category' and 'enumerated type' are also used for factors). If argument ordered is TRUE, the factor levels are assumed to be ordered.'
 
@@ -134,6 +134,9 @@ Suppose we have a vector of case-control status
 cc = factor(c("case","case","case",
         "control","control","control"))
 cc
+```
+We can reset the levels using the `levels` function, but this is **bad** and can cause problems.  You should do this using the `levels` argument in the `factor()`
+```{r}
 levels(cc) = c("control","case")
 cc
 ```
@@ -428,6 +431,3 @@ mylist[[3]][1:2,1:2]
 ```
 
 
-## Conclusion
-
-R has many different data classes

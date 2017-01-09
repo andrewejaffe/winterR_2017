@@ -231,7 +231,7 @@ x </pre>
 
 <p>Factors are used to represent categorical data, and can also be used for ordinal data (ie categories have an intrinsic ordering)</p>
 
-<p>Note that R reads in character strings as factors by default in functions like <code>read.table()</code></p>
+<p>Note that R reads in character strings as factors by default in functions like <code>read.csv()</code> (but not <code>read_csv</code>)</p>
 
 <p>&#39;The function factor is used to encode a vector as a factor (the terms &#39;category&#39; and &#39;enumerated type&#39; are also used for factors). If argument ordered is TRUE, the factor levels are assumed to be ordered.&#39;</p>
 
@@ -248,6 +248,8 @@ cc</pre>
 
 <pre >## [1] case    case    case    control control control
 ## Levels: case control</pre>
+
+<p>We can reset the levels using the <code>levels</code> function, but this is <strong>bad</strong> and can cause problems. You should do this using the <code>levels</code> argument in the <code>factor()</code></p>
 
 <pre class = 'prettyprint lang-r'>levels(cc) = c(&quot;control&quot;,&quot;case&quot;)
 cc</pre>
@@ -498,7 +500,7 @@ head(circ$newDate2)</pre>
 <pre class = 'prettyprint lang-r'>theTime = Sys.time()
 theTime</pre>
 
-<pre >## [1] &quot;2017-01-07 16:54:58 EST&quot;</pre>
+<pre >## [1] &quot;2017-01-08 21:27:13 EST&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>class(theTime)</pre>
 
@@ -506,7 +508,7 @@ theTime</pre>
 
 <pre class = 'prettyprint lang-r'>theTime + as.period(20, unit = &quot;minutes&quot;) # the future</pre>
 
-<pre >## [1] &quot;2017-01-07 17:14:58 EST&quot;</pre>
+<pre >## [1] &quot;2017-01-08 21:47:13 EST&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Classes:</h2></hgroup><article  id="data-classes-1">
 
@@ -667,11 +669,7 @@ $numbers
 
 <pre >     [,1] [,2]
 [1,]    1    6
-[2,]    2    7</pre>
-
-</article></slide><slide class=''><hgroup><h2>Conclusion</h2></hgroup><article  id="conclusion">
-
-<p>R has many different data classes</p></article></slide>
+[2,]    2    7</pre></article></slide>
 
 
   <slide class="backdrop"></slide>
