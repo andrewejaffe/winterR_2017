@@ -1,5 +1,6 @@
 ## ---- echo = FALSE-------------------------------------------------------
 library(knitr)
+library(readr)
 opts_chunk$set(comment = "")
 
 ## ----workingDirectory,eval=FALSE-----------------------------------------
@@ -19,33 +20,28 @@ dir("..")
 ## help("dir")
 
 ## ----readCSV-------------------------------------------------------------
-read.csv
+read_csv
 
 ## ----readCSV2------------------------------------------------------------
-mon = read.csv("../../data/Monuments.csv", header = TRUE, as.is = TRUE)
-head(mon)
-class(mon)
-
-## ----subset5-------------------------------------------------------------
-colnames(mon) # column names
-head(mon$zipCode) # first few rows
-
-## ----readCSV3------------------------------------------------------------
-str(mon) # structure of an R object
+dat = read_csv("../../data/Youth_Tobacco_Survey_YTS_Data.csv")
 
 ## ----readCSV_readr, message=FALSE----------------------------------------
 library(readr)
-mon_tbl = read_csv("../../data/Monuments.csv")
-head(mon_tbl)
-class(mon_tbl)
+head(dat)
+class(dat)
+
+## ---- viewTibble---------------------------------------------------------
+dat
+
+## ---- readingCSV---------------------------------------------------------
+dat2 = read.csv("../../data/Youth_Tobacco_Survey_YTS_Data.csv", as.is=TRUE)
+head(dat2)
 
 ## ----names1--------------------------------------------------------------
-names(mon)[1] = "Name"
-names(mon)
-names(mon)[1] = "name"
-names(mon)
+names(dat)[1] = "year"
+names(dat)
 
-## ----writecsv------------------------------------------------------------
-names(mon)[6] = "Location"
-write.csv(mon, file="monuments_newNames.csv", row.names=FALSE)
+## ----writecsv,eval=FALSE-------------------------------------------------
+## names(dat)[1] = "Year"
+## write_csv(dat, path="YouthTobacco_newNames.csv")
 
