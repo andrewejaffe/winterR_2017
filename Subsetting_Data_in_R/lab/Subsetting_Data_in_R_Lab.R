@@ -1,6 +1,6 @@
 ####################
 # Subsetting Data in R - Lab
-# 6/14/2016
+# 1/10/2017
 ####################
 
 ## In this lab you can use the interactive console to explore 
