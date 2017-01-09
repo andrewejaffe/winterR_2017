@@ -97,23 +97,7 @@
           </hgroup>
   </slide>
 
-<slide class=''><hgroup><h2>Data</h2></hgroup><article  id="data">
-
-<ul>
-<li>We will be using multiple data sets in this lecture:
-
-<ul>
-<li>Salary, Monument, Circulator, and Restaurant from OpenBaltimore: <a href='https://data.baltimorecity.gov/browse?limitTo=datasets' title=''>https://data.baltimorecity.gov/browse?limitTo=datasets</a></li>
-<li>Gap Minder - very interesting way of viewing longitudinal data
-
-<ul>
-<li>Data is here - <a href='http://www.gapminder.org/data/' title=''>http://www.gapminder.org/data/</a></li>
-</ul></li>
-<li><a href='http://spreadsheets.google.com/pub?key=rMsQHawTObBb6_U2ESjKXYw&amp;output=xls' title=''>http://spreadsheets.google.com/pub?key=rMsQHawTObBb6_U2ESjKXYw&amp;output=xls</a></li>
-</ul></li>
-</ul>
-
-</article></slide><slide class=''><hgroup><h2>Data Cleaning</h2></hgroup><article  id="data-cleaning">
+<slide class=''><hgroup><h2>Data Cleaning</h2></hgroup><article  id="data-cleaning">
 
 <p>In general, data cleaning is a process of investigating your data for inaccuracies, or recoding it in a way that makes it more manageable.</p>
 
@@ -359,12 +343,13 @@ tab</pre>
 
 </article></slide><slide class=''><hgroup><h2>Download Salary FY2014 Data</h2></hgroup><article  id="download-salary-fy2014-data">
 
-<p>From <a href='https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2014/2j28-xzd7' title=''>https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2014/2j28-xzd7</a> <a href='http://www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv' title=''>http://www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv</a></p>
+<p>From <a href='https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2015/nsfe-bg53' title=''>https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2015/nsfe-bg53</a> <a href='http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv' title=''>http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv</a></p>
 
 <p>Read the CSV into R <code>Sal</code>:</p>
 
-<pre class = 'prettyprint lang-r'>Sal = read.csv(&quot;http://www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv&quot;,
-               as.is = TRUE)</pre>
+<pre class = 'prettyprint lang-r'>Sal = read.csv(&quot;http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv&quot;,
+               as.is = TRUE)
+colnames(Sal)[1] = &quot;Name&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Checking for logical conditions</h2></hgroup><article  id="checking-for-logical-conditions" class="smaller">
 
@@ -376,11 +361,11 @@ tab</pre>
 <pre class = 'prettyprint lang-r'>head(Sal,2)</pre>
 
 <pre >              Name                      JobTitle AgencyID
-1  Aaron,Keontae E                AIDE BLUE CHIP   W02200
-2 Aaron,Patricia G Facilities/Office Services II   A03031
-               Agency   HireDate AnnualSalary  GrossPay
-1      Youth Summer   06/10/2013    $11310.00   $873.63
-2 OED-Employment Dev  10/24/1979    $53428.00 $52868.38</pre>
+1 Aaron,Patricia G Facilities/Office Services II   A03031
+2    Aaron,Petra L    ASSISTANT STATE&#39;S ATTORNEY   A29045
+                         Agency   HireDate AnnualSalary  GrossPay
+1      OED-Employment Dev (031) 10/24/1979    $55314.00 $53626.04
+2 States Attorneys Office (045) 09/25/2006    $74000.00 $73000.08</pre>
 
 <pre class = 'prettyprint lang-r'>any(is.na(Sal$Name)) # are there any NAs?</pre>
 
@@ -658,15 +643,15 @@ y[[2]]</pre>
 
 <pre class = 'prettyprint lang-r'>grep(&quot;Rawlings&quot;,Sal$Name)</pre>
 
-<pre >[1] 13832 13833 13834 13835</pre>
+<pre >[1] 10256 10257 10258</pre>
 
 <pre class = 'prettyprint lang-r'>which(grepl(&quot;Rawlings&quot;, Sal$Name))</pre>
 
-<pre >[1] 13832 13833 13834 13835</pre>
+<pre >[1] 10256 10257 10258</pre>
 
 <pre class = 'prettyprint lang-r'>which(str_detect(Sal$Name, &quot;Rawlings&quot;))</pre>
 
-<pre >[1] 13832 13833 13834 13835</pre>
+<pre >[1] 10256 10257 10258</pre>
 
 </article></slide><slide class=''><hgroup><h2>&#39;Find&#39; functions: Finding Logicals</h2></hgroup><article  id="find-functions-finding-logicals">
 
@@ -684,41 +669,37 @@ y[[2]]</pre>
 
 <pre class = 'prettyprint lang-r'>grep(&quot;Rawlings&quot;,Sal$Name,value=TRUE)</pre>
 
-<pre >[1] &quot;Rawlings,Kellye A&quot;          &quot;Rawlings,MarqWell D&quot;       
-[3] &quot;Rawlings,Paula M&quot;           &quot;Rawlings-Blake,Stephanie C&quot;</pre>
+<pre >[1] &quot;Rawlings,Kellye A&quot;          &quot;Rawlings,Paula M&quot;          
+[3] &quot;Rawlings-Blake,Stephanie C&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>Sal[grep(&quot;Rawlings&quot;,Sal$Name),]</pre>
 
 <pre >                            Name             JobTitle AgencyID
-13832          Rawlings,Kellye A EMERGENCY DISPATCHER   A40302
-13833        Rawlings,MarqWell D       AIDE BLUE CHIP   W02384
-13834           Rawlings,Paula M       COMMUNITY AIDE   A04015
-13835 Rawlings-Blake,Stephanie C                MAYOR   A01001
-                    Agency   HireDate AnnualSalary   GrossPay
-13832 M-R Info Technology  01/06/2003    $47980.00  $68426.73
-13833       Youth Summer   06/15/2012    $11310.00    $507.50
-13834      R&amp;P-Recreation  12/10/2007    $19802.00   $8195.79
-13835       Mayors Office  12/07/1995   $163365.00 $161219.24</pre>
+10256          Rawlings,Kellye A EMERGENCY DISPATCHER   A40302
+10257           Rawlings,Paula M       COMMUNITY AIDE   A04015
+10258 Rawlings-Blake,Stephanie C                MAYOR   A01001
+                         Agency   HireDate AnnualSalary   GrossPay
+10256 M-R Info Technology (302) 01/06/2003    $48940.00  $73356.42
+10257      R&amp;P-Recreation (015) 12/10/2007    $19802.00  $10443.70
+10258       Mayors Office (001) 12/07/1995   $167449.00 $165249.86</pre>
 
 </article></slide><slide class=''><hgroup><h2>&#39;Find&#39; functions: finding values, <code>stringr</code> and <code class="smaller">dplyr</code></h2></hgroup><article  id="find-functions-finding-values-stringr-and-dplyr">
 
 <pre class = 'prettyprint lang-r'>str_subset(Sal$Name, &quot;Rawlings&quot;)</pre>
 
-<pre >[1] &quot;Rawlings,Kellye A&quot;          &quot;Rawlings,MarqWell D&quot;       
-[3] &quot;Rawlings,Paula M&quot;           &quot;Rawlings-Blake,Stephanie C&quot;</pre>
+<pre >[1] &quot;Rawlings,Kellye A&quot;          &quot;Rawlings,Paula M&quot;          
+[3] &quot;Rawlings-Blake,Stephanie C&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>Sal %&gt;% filter(str_detect(Name, &quot;Rawlings&quot;))</pre>
 
 <pre >                        Name             JobTitle AgencyID
 1          Rawlings,Kellye A EMERGENCY DISPATCHER   A40302
-2        Rawlings,MarqWell D       AIDE BLUE CHIP   W02384
-3           Rawlings,Paula M       COMMUNITY AIDE   A04015
-4 Rawlings-Blake,Stephanie C                MAYOR   A01001
-                Agency   HireDate AnnualSalary   GrossPay
-1 M-R Info Technology  01/06/2003    $47980.00  $68426.73
-2       Youth Summer   06/15/2012    $11310.00    $507.50
-3      R&amp;P-Recreation  12/10/2007    $19802.00   $8195.79
-4       Mayors Office  12/07/1995   $163365.00 $161219.24</pre>
+2           Rawlings,Paula M       COMMUNITY AIDE   A04015
+3 Rawlings-Blake,Stephanie C                MAYOR   A01001
+                     Agency   HireDate AnnualSalary   GrossPay
+1 M-R Info Technology (302) 01/06/2003    $48940.00  $73356.42
+2      R&amp;P-Recreation (015) 12/10/2007    $19802.00  $10443.70
+3       Mayors Office (001) 12/07/1995   $167449.00 $165249.86</pre>
 
 </article></slide><slide class=''><hgroup><h2>Showing differnce in <code>str_extract</code></h2></hgroup><article  id="showing-differnce-in-str_extract">
 
@@ -731,7 +712,7 @@ head(ss)</pre>
 
 <pre class = 'prettyprint lang-r'>ss[ !is.na(ss)]</pre>
 
-<pre >[1] &quot;Rawling&quot; &quot;Rawling&quot; &quot;Rawling&quot; &quot;Rawling&quot;</pre>
+<pre >[1] &quot;Rawling&quot; &quot;Rawling&quot; &quot;Rawling&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Showing differnce in <code>str_extract</code> and <code>str_extract_all</code></h2></hgroup><article  id="showing-differnce-in-str_extract-and-str_extract_all">
 
@@ -739,15 +720,15 @@ head(ss)</pre>
 
 <pre class = 'prettyprint lang-r'>head(str_extract(Sal$AgencyID, &quot;\\d&quot;))</pre>
 
-<pre >[1] &quot;0&quot; &quot;0&quot; &quot;2&quot; &quot;6&quot; &quot;9&quot; &quot;4&quot;</pre>
+<pre >[1] &quot;0&quot; &quot;2&quot; &quot;6&quot; &quot;9&quot; &quot;4&quot; &quot;9&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>head(str_extract_all(Sal$AgencyID, &quot;\\d&quot;), 2)</pre>
 
 <pre >[[1]]
-[1] &quot;0&quot; &quot;2&quot; &quot;2&quot; &quot;0&quot; &quot;0&quot;
+[1] &quot;0&quot; &quot;3&quot; &quot;0&quot; &quot;3&quot; &quot;1&quot;
 
 [[2]]
-[1] &quot;0&quot; &quot;3&quot; &quot;0&quot; &quot;3&quot; &quot;1&quot;</pre>
+[1] &quot;2&quot; &quot;9&quot; &quot;0&quot; &quot;4&quot; &quot;5&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Using Regular Expressions</h2></hgroup><article  id="using-regular-expressions">
 
@@ -763,8 +744,8 @@ head(ss)</pre>
 
 <pre class = 'prettyprint lang-r'>head(grep(&quot;^Payne.*&quot;, x = Sal$Name, value = TRUE), 3)</pre>
 
-<pre >[1] &quot;Payne El,Jackie&quot;         &quot;Payne Johnson,Nickole A&quot;
-[3] &quot;Payne,Chanel&quot;           </pre>
+<pre >[1] &quot;Payne El,Boaz L&quot;         &quot;Payne El,Jackie&quot;        
+[3] &quot;Payne Johnson,Nickole A&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>head(grep(&quot;Leonard.?S&quot;, x = Sal$Name, value = TRUE))</pre>
 
@@ -772,15 +753,14 @@ head(ss)</pre>
 
 <pre class = 'prettyprint lang-r'>head(grep(&quot;Spence.*C.*&quot;, x = Sal$Name, value = TRUE))</pre>
 
-<pre >[1] &quot;Greene,Spencer C&quot;    &quot;Spencer,Charles A&quot;   &quot;Spencer,Christian O&quot;
-[4] &quot;Spencer,Clarence W&quot;  &quot;Spencer,Michael C&quot;  </pre>
+<pre >[1] &quot;Spencer,Charles A&quot;  &quot;Spencer,Clarence W&quot; &quot;Spencer,Michael C&quot; </pre>
 
 </article></slide><slide class=''><hgroup><h2>Using Regular Expressions: <code>stringr</code></h2></hgroup><article  id="using-regular-expressions-stringr">
 
 <pre class = 'prettyprint lang-r'>head(str_subset( Sal$Name, &quot;^Payne.*&quot;), 3)</pre>
 
-<pre >[1] &quot;Payne El,Jackie&quot;         &quot;Payne Johnson,Nickole A&quot;
-[3] &quot;Payne,Chanel&quot;           </pre>
+<pre >[1] &quot;Payne El,Boaz L&quot;         &quot;Payne El,Jackie&quot;        
+[3] &quot;Payne Johnson,Nickole A&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>head(str_subset( Sal$Name, &quot;Leonard.?S&quot;))</pre>
 
@@ -788,8 +768,7 @@ head(ss)</pre>
 
 <pre class = 'prettyprint lang-r'>head(str_subset( Sal$Name, &quot;Spence.*C.*&quot;))</pre>
 
-<pre >[1] &quot;Greene,Spencer C&quot;    &quot;Spencer,Charles A&quot;   &quot;Spencer,Christian O&quot;
-[4] &quot;Spencer,Clarence W&quot;  &quot;Spencer,Michael C&quot;  </pre>
+<pre >[1] &quot;Spencer,Charles A&quot;  &quot;Spencer,Clarence W&quot; &quot;Spencer,Michael C&quot; </pre>
 
 </article></slide><slide class=''><hgroup><h2>Replace</h2></hgroup><article  id="replace">
 
@@ -813,7 +792,7 @@ head(ss)</pre>
 
 <pre class = 'prettyprint lang-r'>head(Sal$AnnualSalary, 4)</pre>
 
-<pre >[1] &quot;$11310.00&quot; &quot;$53428.00&quot; &quot;$68300.00&quot; &quot;$62000.00&quot;</pre>
+<pre >[1] &quot;$55314.00&quot; &quot;$74000.00&quot; &quot;$64500.00&quot; &quot;$46309.00&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>head(as.numeric(Sal$AnnualSalary), 4)</pre>
 
@@ -835,12 +814,12 @@ coercion</pre>
 Sal &lt;- Sal[order(Sal$AnnualSalary, decreasing=TRUE), ] 
 Sal[1:5, c(&quot;Name&quot;, &quot;AnnualSalary&quot;, &quot;JobTitle&quot;)]</pre>
 
-<pre >                   Name AnnualSalary              JobTitle
-1222  Bernstein,Gregg L       238772      STATE&#39;S ATTORNEY
-3175   Charles,Ronnie E       200000   EXECUTIVE LEVEL III
-985     Batts,Anthony W       193800   EXECUTIVE LEVEL III
-1343      Black,Harry E       190000   EXECUTIVE LEVEL III
-16352     Swift,Michael       187200 CONTRACT SERV SPEC II</pre>
+<pre >                 Name AnnualSalary               JobTitle
+8983  Mosby,Marilyn J       238772       STATE&#39;S ATTORNEY
+732   Batts,Anthony W       211785    Police Commissioner
+13223       Wen,Leana       200000 Executive Director III
+10274 Raymond,Henry J       192500 Executive Director III
+12118   Swift,Michael       187200  CONTRACT SERV SPEC II</pre>
 
 </article></slide><slide class=''><hgroup><h2>Replacing and subbing: <code class="smaller">stringr</code></h2></hgroup><article  id="replacing-and-subbing-stringr">
 

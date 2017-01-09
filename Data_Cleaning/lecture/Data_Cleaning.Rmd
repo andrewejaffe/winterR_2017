@@ -14,15 +14,6 @@ library(knitr)
 opts_chunk$set(comment = "")
 ```
 
-## Data
-
-* We will be using multiple data sets in this lecture:
-    * Salary, Monument, Circulator, and Restaurant from OpenBaltimore: 
-    https://data.baltimorecity.gov/browse?limitTo=datasets
-    * Gap Minder - very interesting way of viewing longitudinal data
-        * Data is here - http://www.gapminder.org/data/
-    * [http://spreadsheets.google.com/pub?key=rMsQHawTObBb6_U2ESjKXYw&output=xls](http://spreadsheets.google.com/pub?key=rMsQHawTObBb6_U2ESjKXYw&output=xls)
-
 ## Data Cleaning
 
 In general, data cleaning is a process of investigating your data for inaccuracies, or recoding it in a way that makes it more manageable.
@@ -204,14 +195,15 @@ prop.table(tab,1)
 
 ## Download Salary FY2014 Data
 
-From https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2014/2j28-xzd7
-http://www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv
+From https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2015/nsfe-bg53
+http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv
 
 Read the CSV into R `Sal`:
 
 ```{r readSal}
-Sal = read.csv("http://www.aejaffe.com/summerR_2016/data/Baltimore_City_Employee_Salaries_FY2014.csv",
+Sal = read.csv("http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv",
                as.is = TRUE)
+colnames(Sal)[1] = "Name"
 ```
 
 ## Checking for logical conditions {.smaller}
