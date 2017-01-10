@@ -201,8 +201,7 @@ http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015
 Read the CSV into R `Sal`:
 
 ```{r readSal}
-Sal = read.csv("http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv",
-               as.is = TRUE)
+Sal = read.csv("http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv", as.is = TRUE)
 colnames(Sal)[1] = "Name"
 ```
 
