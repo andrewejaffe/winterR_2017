@@ -344,11 +344,29 @@ head(bg2)</pre>
 
 <p><a href='http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv' title=''>http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv</a></p>
 
-<pre class = 'prettyprint lang-r'># paste/paste0 will be covered later
-circ = read.csv(
+<pre class = 'prettyprint lang-r'># paste/paste0 combines strings/character
+circ = read_csv(
   paste0(&quot;http://www.aejaffe.com/winterR_2017/data&quot;,
-         &quot;/Charm_City_Circulator_Ridership.csv&quot;), 
-            header = TRUE, as.is = TRUE)</pre>
+         &quot;/Charm_City_Circulator_Ridership.csv&quot;))</pre>
+
+<pre >## Parsed with column specification:
+## cols(
+##   day = col_character(),
+##   date = col_character(),
+##   orangeBoardings = col_integer(),
+##   orangeAlightings = col_integer(),
+##   orangeAverage = col_double(),
+##   purpleBoardings = col_integer(),
+##   purpleAlightings = col_integer(),
+##   purpleAverage = col_double(),
+##   greenBoardings = col_integer(),
+##   greenAlightings = col_integer(),
+##   greenAverage = col_double(),
+##   bannerBoardings = col_integer(),
+##   bannerAlightings = col_integer(),
+##   bannerAverage = col_double(),
+##   daily = col_double()
+## )</pre>
 
 </article></slide><slide class=''><hgroup><h2>Creating categorical variables</h2></hgroup><article  id="creating-categorical-variables-2">
 
@@ -404,6 +422,29 @@ head(riderLevels)</pre>
 <p><code>breaks</code>: either a numeric vector of two or more unique cut points or a single number (greater than or equal to 2) giving the number of intervals into which x is to be cut.</p>
 
 <p><code>labels</code>: labels for the levels of the resulting category. By default, labels are constructed using &quot;(a,b]&quot; interval notation. If <code>labels = FALSE</code>, simple integer codes are returned instead of a factor.</p>
+
+</article></slide><slide class=''><hgroup><h2>Creating categorical variables</h2></hgroup><article  id="creating-categorical-variables-6">
+
+<pre class = 'prettyprint lang-r'>riderLevels2 = cut(
+  circ$daily, 
+  breaks = c(min(circ$daily, na.rm = TRUE),
+             10000, 
+             20000,
+             max(circ$daily, na.rm = TRUE)),
+  labels = c(&quot;low&quot;, &quot;med&quot;, &quot;high&quot;), # one less than breaks
+  include.lowest = TRUE)
+head(riderLevels2)</pre>
+
+<pre >## [1] low low low low low low
+## Levels: low med high</pre>
+
+<pre class = 'prettyprint lang-r'>table(riderLevels2, riderLevels)</pre>
+
+<pre >##             riderLevels
+## riderLevels2 low med high
+##         low  740   0    0
+##         med    0 280    0
+##         high   0   0    2</pre>
 
 </article></slide><slide class=''><hgroup><h2>Cut</h2></hgroup><article  id="cut">
 
@@ -500,7 +541,7 @@ head(circ$newDate2)</pre>
 <pre class = 'prettyprint lang-r'>theTime = Sys.time()
 theTime</pre>
 
-<pre >## [1] &quot;2017-01-09 11:08:04 EST&quot;</pre>
+<pre >## [1] &quot;2017-01-09 23:10:50 EST&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>class(theTime)</pre>
 
@@ -508,7 +549,27 @@ theTime</pre>
 
 <pre class = 'prettyprint lang-r'>theTime + as.period(20, unit = &quot;minutes&quot;) # the future</pre>
 
-<pre >## [1] &quot;2017-01-09 11:28:04 EST&quot;</pre>
+<pre >## [1] &quot;2017-01-09 23:30:50 EST&quot;</pre>
+
+</article></slide><slide class=''><hgroup><h2>Date</h2></hgroup><article  id="date-2">
+
+<p>However, the <code>lubridate</code> package is much easier for generating explicit dates:</p>
+
+<pre class = 'prettyprint lang-r'>circ = circ %&gt;% 
+  group_by(day) %&gt;% 
+  mutate(first_date = first(newDate2),
+         diff_from_first = difftime( # time1 - time2
+           time1 = newDate2, time2 = first_date)) 
+head(circ$diff_from_first, 10)</pre>
+
+<pre >## Time differences in secs
+##  [1]      0      0      0      0      0      0      0 604800 604800 604800</pre>
+
+<pre class = 'prettyprint lang-r'>units(circ$diff_from_first) = &quot;days&quot;
+head(circ$diff_from_first, 10)</pre>
+
+<pre >## Time differences in days
+##  [1] 0 0 0 0 0 0 0 7 7 7</pre>
 
 </article></slide><slide class=''><hgroup><h2>Data Classes:</h2></hgroup><article  id="data-classes-1">
 

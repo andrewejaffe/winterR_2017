@@ -1,6 +1,7 @@
 ## ---- echo = FALSE, message=FALSE----------------------------------------
 # library(dplyr)
 suppressPackageStartupMessages(library(dplyr))
+library(readr)
 
 ## ----numChar-------------------------------------------------------------
 class(c("Andrew", "Jaffe"))
@@ -78,11 +79,10 @@ head(bg2)
 length(bg) == length(bg2)
 
 ## ------------------------------------------------------------------------
-# paste/paste0 will be covered later
-circ = read.csv(
+# paste/paste0 combines strings/character
+circ = read_csv(
   paste0("http://www.aejaffe.com/winterR_2017/data",
-         "/Charm_City_Circulator_Ridership.csv"), 
-            header = TRUE, as.is = TRUE)
+         "/Charm_City_Circulator_Ridership.csv"))
 
 ## ----ifelse1-------------------------------------------------------------
 hi_rider = ifelse(circ$daily > 10000, "high", "low")
@@ -98,6 +98,18 @@ riderLevels = factor(riderLevels,
               levels = c("low","med","high"))
 head(riderLevels)
 table(riderLevels)
+
+## ----show_cut------------------------------------------------------------
+riderLevels2 = cut(
+  circ$daily, 
+  breaks = c(min(circ$daily, na.rm = TRUE),
+             10000, 
+             20000,
+             max(circ$daily, na.rm = TRUE)),
+  labels = c("low", "med", "high"), # one less than breaks
+  include.lowest = TRUE)
+head(riderLevels2)
+table(riderLevels2, riderLevels)
 
 ## ----cut1----------------------------------------------------------------
 x = 1:100
@@ -134,6 +146,16 @@ theTime = Sys.time()
 theTime
 class(theTime)
 theTime + as.period(20, unit = "minutes") # the future
+
+## ---- message=FALSE------------------------------------------------------
+circ = circ %>% 
+  group_by(day) %>% 
+  mutate(first_date = first(newDate2),
+         diff_from_first = difftime( # time1 - time2
+           time1 = newDate2, time2 = first_date)) 
+head(circ$diff_from_first, 10)
+units(circ$diff_from_first) = "days"
+head(circ$diff_from_first, 10)
 
 ## ----matrix--------------------------------------------------------------
 n = 1:9 
