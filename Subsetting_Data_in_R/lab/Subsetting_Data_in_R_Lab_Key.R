@@ -15,6 +15,9 @@ head(mtcars)
 
 # 2. What class is `mtcars`?
 class(mtcars)
+tbl = as.tbl(mtcars)
+tbl$car = rownames(tbl)
+tbl = select(tbl, car, everything())
 
 # 3. How many observations (rows) and variables (columns) are in the `mtcars` dataset?
 dim(mtcars)
@@ -34,6 +37,7 @@ length(which(mtcars$mpg > 20))
 # 		per gallon (mpg) of fuel efficiency and have more than 
 #		100 horsepower (hp) - how many are there?
 mtcars %>% filter(mpg < 16 & hp > 100) %>% nrow
+mtcars %>% filter(mpg < 16,  hp > 100) %>% nrow
 sum(mtcars$mpg < 16 & mtcars$hp > 100)
 
 
@@ -41,18 +45,13 @@ sum(mtcars$mpg < 16 & mtcars$hp > 100)
 #		wt, qsec, and hp for only the cars that have 8 cylinders 
 #		and assign this object to `carsSub` - 
 #		what are the dimensions of this dataset?
-carsSub = mtcars %>% 
+carsSub = tbl %>% 
   filter(cyl == 8) %>% 
-  select(wt, qsec, hp)
-carsSub = mtcars[
-    mtcars$cyl == 8, c("wt", "qsec", "hp")]
+  select(car, wt, qsec, hp)
+carsSub = mtcars[mtcars$cyl == 8, c("wt", "qsec", "hp")]
 
 # 7. Convert the column names of `carsSub` to all upper case
-cn = colnames(carsSub)
-cn = toupper(cn)
-colnames(carsSub) = cn
 colnames(carsSub) = colnames(carsSub) %>% toupper
-
 colnames(carsSub) = toupper(colnames(carsSub))
 
 # 8. Re-order the rows of `carsSub` by weight in increasing order
@@ -66,4 +65,4 @@ cars = mtcars
 cars = rename(cars, MPG = mpg)
 
 # 10. Subset the columns from mtcars that end in "p" and call it pvars
-pvars = select(carsSub, ends_with("p"))
+pvars = select(tbl, car, ends_with("p"))
