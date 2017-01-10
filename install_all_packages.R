@@ -1,7 +1,7 @@
 ### find and install all packages
-ss = function(x,pattern,slot=1,...) sapply(strsplit(x = x, split = pattern, ...), "[", slot)
-
 rm(list = ls())
+
+ss = function(x,pattern,slot=1,...) sapply(strsplit(x = x, split = pattern, ...), "[", slot)
 
 ## find RMDs
 files <- dir(pattern = '[.]Rmd$', recursive = TRUE)
