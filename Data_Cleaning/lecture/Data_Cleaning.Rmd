@@ -2,10 +2,10 @@
 title: "Data Cleaning"
 author: "Introduction to R for Public Health Researchers"
 output:
+  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
     widescreen: yes
-  beamer_presentation: default
 ---
 
 
@@ -196,12 +196,12 @@ prop.table(tab,1)
 ## Download Salary FY2014 Data
 
 From https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2015/nsfe-bg53
-http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv
+https://data.baltimorecity.gov/api/views/nsfe-bg53/rows.csv
 
 Read the CSV into R `Sal`:
 
 ```{r readSal}
-Sal = read.csv("http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv", as.is = TRUE)
+Sal = read.csv("https://data.baltimorecity.gov/api/views/nsfe-bg53/rows.csv", as.is = TRUE)
 colnames(Sal)[1] = "Name"
 ```
 

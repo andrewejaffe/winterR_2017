@@ -343,11 +343,11 @@ tab</pre>
 
 </article></slide><slide class=''><hgroup><h2>Download Salary FY2014 Data</h2></hgroup><article  id="download-salary-fy2014-data">
 
-<p>From <a href='https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2015/nsfe-bg53' title=''>https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2015/nsfe-bg53</a> <a href='http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv' title=''>http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv</a></p>
+<p>From <a href='https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2015/nsfe-bg53' title=''>https://data.baltimorecity.gov/City-Government/Baltimore-City-Employee-Salaries-FY2015/nsfe-bg53</a> <a href='https://data.baltimorecity.gov/api/views/nsfe-bg53/rows.csv' title=''>https://data.baltimorecity.gov/api/views/nsfe-bg53/rows.csv</a></p>
 
 <p>Read the CSV into R <code>Sal</code>:</p>
 
-<pre class = 'prettyprint lang-r'>Sal = read.csv(&quot;http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv&quot;, as.is = TRUE)
+<pre class = 'prettyprint lang-r'>Sal = read.csv(&quot;https://data.baltimorecity.gov/api/views/nsfe-bg53/rows.csv&quot;, as.is = TRUE)
 colnames(Sal)[1] = &quot;Name&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Checking for logical conditions</h2></hgroup><article  id="checking-for-logical-conditions">
@@ -362,9 +362,9 @@ colnames(Sal)[1] = &quot;Name&quot;</pre>
 <pre >              Name                      JobTitle AgencyID
 1 Aaron,Patricia G Facilities/Office Services II   A03031
 2    Aaron,Petra L    ASSISTANT STATE&#39;S ATTORNEY   A29045
-                         Agency   HireDate AnnualSalary   GrossPay
-1      OED-Employment Dev (031) 10/24/1979   $55,314.00 $53,626.04
-2 States Attorneys Office (045)  9/25/2006   $74,000.00 $73,000.08</pre>
+                         Agency   HireDate AnnualSalary  GrossPay
+1      OED-Employment Dev (031) 10/24/1979    $55314.00 $53626.04
+2 States Attorneys Office (045) 09/25/2006    $74000.00 $73000.08</pre>
 
 <pre class = 'prettyprint lang-r'>any(is.na(Sal$Name)) # are there any NAs?</pre>
 
@@ -677,10 +677,10 @@ y[[2]]</pre>
 10256          Rawlings,Kellye A EMERGENCY DISPATCHER   A40302
 10257           Rawlings,Paula M       COMMUNITY AIDE   A04015
 10258 Rawlings-Blake,Stephanie C                MAYOR   A01001
-                         Agency   HireDate AnnualSalary    GrossPay
-10256 M-R Info Technology (302)   1/6/2003   $48,940.00  $73,356.42
-10257      R&amp;P-Recreation (015) 12/10/2007   $19,802.00  $10,443.70
-10258       Mayors Office (001)  12/7/1995  $167,449.00 $165,249.86</pre>
+                         Agency   HireDate AnnualSalary   GrossPay
+10256 M-R Info Technology (302) 01/06/2003    $48940.00  $73356.42
+10257      R&amp;P-Recreation (015) 12/10/2007    $19802.00  $10443.70
+10258       Mayors Office (001) 12/07/1995   $167449.00 $165249.86</pre>
 
 </article></slide><slide class=''><hgroup><h2>&#39;Find&#39; functions: finding values, <code>stringr</code> and <code>dplyr</code></h2></hgroup><article  id="find-functions-finding-values-stringr-and-dplyr">
 
@@ -695,10 +695,10 @@ y[[2]]</pre>
 1          Rawlings,Kellye A EMERGENCY DISPATCHER   A40302
 2           Rawlings,Paula M       COMMUNITY AIDE   A04015
 3 Rawlings-Blake,Stephanie C                MAYOR   A01001
-                     Agency   HireDate AnnualSalary    GrossPay
-1 M-R Info Technology (302)   1/6/2003   $48,940.00  $73,356.42
-2      R&amp;P-Recreation (015) 12/10/2007   $19,802.00  $10,443.70
-3       Mayors Office (001)  12/7/1995  $167,449.00 $165,249.86</pre>
+                     Agency   HireDate AnnualSalary   GrossPay
+1 M-R Info Technology (302) 01/06/2003    $48940.00  $73356.42
+2      R&amp;P-Recreation (015) 12/10/2007    $19802.00  $10443.70
+3       Mayors Office (001) 12/07/1995   $167449.00 $165249.86</pre>
 
 </article></slide><slide class=''><hgroup><h2>Showing differnce in <code>str_extract</code></h2></hgroup><article  id="showing-differnce-in-str_extract">
 
@@ -791,7 +791,7 @@ head(ss)</pre>
 
 <pre class = 'prettyprint lang-r'>head(Sal$AnnualSalary, 4)</pre>
 
-<pre >[1] &quot;$55,314.00&quot; &quot;$74,000.00&quot; &quot;$64,500.00&quot; &quot;$46,309.00&quot;</pre>
+<pre >[1] &quot;$55314.00&quot; &quot;$74000.00&quot; &quot;$64500.00&quot; &quot;$46309.00&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>head(as.numeric(Sal$AnnualSalary), 4)</pre>
 
@@ -809,19 +809,16 @@ coercion</pre>
 <p>Now we can replace the <code>$</code> with nothing (used <code>fixed=TRUE</code> because <code>$</code> means ending):</p>
 
 <pre class = 'prettyprint lang-r'>Sal$AnnualSalary &lt;- as.numeric(gsub(pattern = &quot;$&quot;, replacement=&quot;&quot;, 
-                              Sal$AnnualSalary, fixed=TRUE))</pre>
-
-<pre >Warning: NAs introduced by coercion</pre>
-
-<pre class = 'prettyprint lang-r'>Sal &lt;- Sal[order(Sal$AnnualSalary, decreasing=TRUE), ] 
+                              Sal$AnnualSalary, fixed=TRUE))
+Sal &lt;- Sal[order(Sal$AnnualSalary, decreasing=TRUE), ] 
 Sal[1:5, c(&quot;Name&quot;, &quot;AnnualSalary&quot;, &quot;JobTitle&quot;)]</pre>
 
-<pre >                    Name AnnualSalary                      JobTitle
-13992    Zenitz,Sylvia E          900                 JUDGE&#39;S WIDOW
-1       Aaron,Patricia G           NA Facilities/Office Services II
-2          Aaron,Petra L           NA    ASSISTANT STATE&#39;S ATTORNEY
-3     Abaineh,Yohannes T           NA                EPIDEMIOLOGIST
-4       Abbene,Anthony M           NA                POLICE OFFICER</pre>
+<pre >                 Name AnnualSalary               JobTitle
+8983  Mosby,Marilyn J       238772       STATE&#39;S ATTORNEY
+732   Batts,Anthony W       211785    Police Commissioner
+13223       Wen,Leana       200000 Executive Director III
+10274 Raymond,Henry J       192500 Executive Director III
+12118   Swift,Michael       187200  CONTRACT SERV SPEC II</pre>
 
 </article></slide><slide class=''><hgroup><h2>Replacing and subbing: <code>stringr</code></h2></hgroup><article  id="replacing-and-subbing-stringr">
 
