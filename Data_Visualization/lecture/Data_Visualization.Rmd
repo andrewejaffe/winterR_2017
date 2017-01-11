@@ -30,25 +30,28 @@ set.seed(3)
 ## Read in Data
 
 ```{r plotEx,  fig.align='center',cache=FALSE}
-death = read.csv("http://www.aejaffe.com/summerR_2016/data/indicatordeadkids35.csv",
-                 as.is=TRUE,header=TRUE, row.names=1)
+library(readr)
+death = read_csv(
+  "http://www.aejaffe.com/winterR_2017/data/indicatordeadkids35.csv")
 death[1:2, 1:5]
 ```
 
-We see that the column names were years, and R doesn't necessarily like to read in a column name that starts with a number and puts an X there.  
-We'll just take off that X and get the years.  
 
 ```{r}
-library(stringr)
-year = names(death) %>% str_replace("X","") %>% as.integer
-head(year)
+colnames(death)[1] = "country"
+head(death)
 ```
 
 
 ## Basic Plots
 
-```{r plot1, comment="",prompt=TRUE,  fig.align='center',cache=TRUE}
-plot(as.numeric(death["Sweden",]) ~ year)
+```{r plot1, comment="",prompt=TRUE,  fig.align='center',cache = FALSE}
+library(dplyr)
+sweden = death %>% 
+  filter(country == "Sweden") %>% 
+  select(-country)
+year = as.numeric(colnames(sweden))
+plot(as.numeric(sweden) ~ year)
 ```
 
 
@@ -56,16 +59,16 @@ plot(as.numeric(death["Sweden",]) ~ year)
 
 The y-axis label isn't informative, and we can change the label of the y-axis using `ylab` (`xlab` for x), and `main` for the main title/label.
 
-```{r plotEx2, comment="",prompt=TRUE,  fig.align='center',cache=TRUE}
-plot(as.numeric(death["Sweden",]) ~ year,
-      ylab = "# of deaths per family", main = "Sweden")
+```{r plotEx2, comment="",prompt=TRUE,  fig.align='center',cache = FALSE}
+plot(as.numeric(sweden) ~ year,
+      ylab = "# of deaths per family", main = "Sweden", type = "l")
 ```
 
 
 ## Basic Plots
 Let's drop any of the projections and keep it to year 2012, and change the points to blue. 
-```{r plotEx3, fig.align='center', cache=TRUE}
-plot(as.numeric(death["Sweden",])~year,
+```{r plotEx3, fig.align='center', cache = FALSE}
+plot(as.numeric(sweden) ~ year,
       ylab = "# of deaths per family", main = "Sweden",
      xlim = c(1760,2012), pch = 19, cex=1.2,col="blue")
 ```
@@ -74,55 +77,143 @@ plot(as.numeric(death["Sweden",])~year,
 ## Basic Plots
 You can also use the `subset` argument in the `plot()` function, only when using formula notation:
 
-```{r plotEx_sub, fig.align='center', cache=TRUE}
-plot(as.numeric(death["Sweden",])~year,
+```{r plotEx_sub, fig.align='center', cache = FALSE}
+plot(as.numeric(sweden) ~ year,
       ylab = "# of deaths per family", main = "Sweden",
      subset = year < 2015, pch = 19, cex=1.2,col="blue")
 ```
 
+## Reshape the data
 
-## Basic Plots
-Using `scatter.smooth` plots the points and runs a loess smoother through the data. 
-```{r plotEx4, comment="",prompt=TRUE, fig.align='center', cache=TRUE}
-scatter.smooth(as.numeric(death["Sweden",])~year,span=0.2,
-      ylab="# of deaths per family", main = "Sweden",lwd=3,
-     subset = year < 2015, pch = 19, cex=0.9,col="grey")
+After reshaping the data to long, we can plot the data with one `data.frame`:
+
+```{r makelong_swede, fig.align='center', cache = FALSE}
+library(tidyr)
+long = gather(death, key = year, value = deaths, -country)
+long = long %>% filter(!is.na(deaths))
+head(long)
+class(long$year)
+long$year = as.numeric(long$year)
+```
+
+## Plot the long data
+
+```{r plot_long_swede, fig.align='center'}
+swede_long = long %>% filter(country == "Sweden")
+plot(deaths ~ year, data = swede_long)
+```
+
+## ggplot2
+
+`ggplot2` is a package of plotting that is very popular and powerful (using the **g**rammar of **g**raphics). `qplot` is a short hand for "quick plot", which can usually be similar to `plot`
+
+
+```{r}
+library(ggplot2)
+qplot(x = year, y = deaths, data = swede_long)
 ```
 
 
-## Basic Plots {.smaller}
-`par(mfrow=c(1,2))` tells R that we want to set a parameter (`par` function) named `mfrow` (number of plots - 1 row, 2 columns) so we can have 2 plots side by side (Sweden and the UK)
+## ggplot2
 
-```{r plotEx5, comment="",prompt=TRUE, fig.width=8,fig.height=4,fig.align='center', cache=TRUE}
-par(mfrow=c(1,2))
-scatter.smooth(as.numeric(death["Sweden",])~year,span=0.2,
-      ylab="# of deaths per family", main = "Sweden",lwd=3,
-     xlim = c(1760,2012), pch = 19, cex=0.9,col="grey")
-scatter.smooth(as.numeric(death["United Kingdom",])~year,span=0.2,
-      ylab="# of deaths per family", main = "United Kingdom",lwd=3,
-     xlim = c(1760,2012), pch = 19, cex=0.9,col="grey")
+The generic plotting function is `ggplot`, which uses **aes**thetics:
+
+```
+ggplot(data, aes(args))
 ```
 
-## Basic Plots {.smaller}
-We can set the y-axis to be the same.  
-```{r plotEx6, fig.width=8,fig.height=4,fig.align='center', cache=TRUE}
-par(mfrow=c(1,2))
-yl = range(death[c("Sweden","United Kingdom"),])
-scatter.smooth(as.numeric(death["Sweden",])~year,span=0.2,ylim=yl,
-      ylab="# of deaths per family", main = "Sweden",lwd=3,
-     xlim = c(1760,2012), pch = 19, cex=0.9,col="grey")
-scatter.smooth(as.numeric(death["United Kingdom",])~year,span=0.2,
-      ylab="", main = "United Kingdom",lwd=3,ylim=yl,
-     xlim = c(1760,2012), pch = 19, cex=0.9,col="grey")
+```{r generic_gg, comment="", prompt=TRUE, fig.align='center', cache=FALSE}
+g = ggplot(data = swede_long, aes(x = year, y = deaths))
+```
+
+`g` is an object, which you can adapt into multiple plots!
+
+
+## ggplot2
+
+Common aesthetics:
+
+- **x**
+- **y**
+- **colour/color**
+- **size**
+- **fill** 
+- *shape**
+
+
+If you set these in `aes`, you set them to a variable.  If you want to set them for all values, set them in a `geom`.
+
+
+## ggplot2: what's a `geom`?
+
+`g` on it's own can't be plotted, we have to add `layers`, usually with `geom_` commands:
+
+- `geom_point` - add points
+- `geom_line` - add lines
+- `geom_density` - add a density plot
+- `geom_histogram` - add a histogram
+- `geom_smooth` - add a smoother
+- `geom_boxplot` - add a boxplots
+- `geom_tile` - rectangles/heatmaps
+
+
+## ggplot2: adding a geom and assigning
+
+You "add" things to a plot with a `+` sign (not pipe!).  If you assign a plot to an object, you must call `print` to print it.  
+
+```{r gprint_point}
+gpoints = g + geom_point()
+print(gpoints)
+```
+
+## ggplot2: adding a geom
+
+Otherwise it prints by default
+
+```{r geom_line}
+g + geom_line()
+```
+
+## ggplot2: adding a geom
+
+You can add multiple geoms:
+
+```{r geom_line_point}
+g + geom_line() + geom_point()
+```
+
+## ggplot2: grouping - using colour
+
+If we want a plot with new data, we have to call `ggplot` again.  Let's group plots by `country` using `colour`:
+
+```{r geom_all}
+g = ggplot(long, aes(x = year, y = deaths, 
+  colour = country))
+g + geom_line()
+```
+
+## ggplot2: grouping - using colour
+
+Let's remove the legend using the `guide` command:
+
+```{r geom_noguide}
+g + geom_line() + guides(colour = FALSE)
+```
+
+## ggplot2: boxplot
+
+```{r geom_box}
+g + geom_boxplot()
 ```
 
 
 ## Bar Plots
 * Stacked Bar Charts are sometimes wanted to show distributions of data
 
-```{r barplot2, fig.align='center', cache=TRUE}
+```{r barplot2, fig.align='center', cache = FALSE}
 ## Stacked Bar Charts
-cars = read.csv("http://www.aejaffe.com/summerR_2016/data/kaggleCarAuction.csv",as.is=TRUE)
+cars = read_csv(
+  "http://www.aejaffe.com/winterR_2017/data/kaggleCarAuction.csv")
 counts <- table(cars$IsBadBuy, cars$VehicleAge)
 barplot(counts, main="Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
@@ -132,7 +223,7 @@ barplot(counts, main="Car Distribution by Age and Bad Buy Status",
 ## Bar Plots
 `prop.table` allows you to convert a table to proportions (depends on margin - either row percent or column percent)
 
-```{r barplot2a, fig.align='center', cache=TRUE}
+```{r barplot2a, fig.align='center', cache = FALSE}
 ## Use percentages (column percentages)
 barplot(prop.table(counts, 2), main="Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
@@ -142,7 +233,7 @@ barplot(prop.table(counts, 2), main="Car Distribution by Age and Bad Buy Status"
 ## Bar Plots
 
 Using the `beside` argument in `barplot`, you can get side-by-side barplots.
-```{r barplot3, fig.align='center', cache=TRUE}
+```{r barplot3, fig.align='center', cache = FALSE}
 # Stacked Bar Plot with Colors and Legend    
 barplot(counts, main="Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
@@ -205,7 +296,7 @@ boxplot(weight ~ Diet, data=ChickWeight, outline=FALSE)
 
 R relies on color 'palettes'.
 
-```{r pal, fig.align='center', cache=TRUE}
+```{r pal, fig.align='center', cache = FALSE}
 palette("default")
 plot(1:8, 1:8, type="n")
 text(1:8, 1:8, lab = palette(), col = 1:8)
@@ -216,7 +307,7 @@ text(1:8, 1:8, lab = palette(), col = 1:8)
 
 The default color palette is pretty bad, so you can try to make your own. 
 
-```{r pal2, fig.align='center', cache=TRUE}
+```{r pal2, fig.align='center', cache = FALSE}
 palette(c("darkred","orange","blue"))
 plot(1:3,1:3,col=1:3,pch =19,cex=2)
 ```
@@ -290,8 +381,7 @@ legend("topleft", paste("Diet",levels(ChickWeight$Diet)),
 ## Coloring by variable
 
 ```{r circ, comment="",prompt=TRUE, fig.align='center', cache=FALSE}
-circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", 
-            header=TRUE,as.is=TRUE)
+circ = read_csv("http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv")
 palette(brewer.pal(7,"Dark2"))
 dd = factor(circ$day)
 plot(orangeAverage ~ greenAverage, data=circ, 
@@ -334,7 +424,7 @@ g + geom_boxplot()
 
 We can do the same plot, by just saying we want a boxplot and points (and jitter the points)
 
-```{r geoboxpoint, comment="",prompt=TRUE, fig.align='center', cache=TRUE}
+```{r geoboxpoint, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 qplot( factor(Diet), y = weight, data = ChickWeight, 
        geom = c("boxplot", "jitter"))
 ```
@@ -367,7 +457,7 @@ hist(ChickWeight$weight, breaks = 20)
 
 ## Multiple Histograms
 
-```{r ghist, comment="",prompt=TRUE, fig.align='center', cache=TRUE}
+```{r ghist, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 qplot(x = weight, 
       fill = factor(Diet),
       data = ChickWeight, 
@@ -377,7 +467,7 @@ qplot(x = weight,
 ## Multiple Histograms
 
 Alpha refers tot he opacity of the color, less is 
-```{r ghist_alpha, comment="",prompt=TRUE, fig.align='center', cache=TRUE}
+```{r ghist_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 qplot(x = weight, fill = Diet, data = ChickWeight, 
       geom = c("histogram"), alpha=I(.7))
 ```
@@ -385,7 +475,7 @@ qplot(x = weight, fill = Diet, data = ChickWeight,
 ## Multiple Densities
 
 We cold also do densities
-```{r gdens, comment="",prompt=TRUE, fig.align='center', cache=TRUE}
+```{r gdens, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 qplot(x= weight, fill = Diet, data = ChickWeight, 
       geom = c("density"), alpha=I(.7))
 ```
@@ -393,7 +483,7 @@ qplot(x= weight, fill = Diet, data = ChickWeight,
 
 ## Multiple Densities
 
-```{r gdens_alpha, comment="",prompt=TRUE, fig.align='center', cache=TRUE}
+```{r gdens_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 qplot(x= weight, colour = Diet, data = ChickWeight, 
       geom = c("density"), alpha=I(.7))
 ```
@@ -401,7 +491,7 @@ qplot(x= weight, colour = Diet, data = ChickWeight,
 
 ## Multiple Densities
 
-```{r gdens_alpha_gg, comment="",prompt=TRUE, fig.align='center', cache=TRUE}
+```{r gdens_alpha_gg, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 ggplot(aes(x= weight, colour = Diet), 
   data = ChickWeight) + geom_density(alpha=I(.7))
 ```
@@ -409,7 +499,7 @@ ggplot(aes(x= weight, colour = Diet),
 ## Multiple Densities
 
 You can take off the lines of the bottom like this
-```{r gdens_line_alpha, comment="",prompt=TRUE, fig.align='center', cache=TRUE}
+```{r gdens_line_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 ggplot(aes(x = weight, colour = Diet), data = ChickWeight) + 
   geom_line(stat = "density")
 ```
@@ -478,7 +568,7 @@ long = long %>% filter(!is.na(deaths))
 
 ## ggplot2
 
-```{r geom_line, comment="",prompt=TRUE, fig.align='center', cache=FALSE}
+```{r geom_line_qplot, comment="",prompt=TRUE, fig.align='center', cache=FALSE}
 qplot(x = year, y = deaths, colour = state, 
     data = long, geom = "line") + guides(colour = FALSE)
 ```

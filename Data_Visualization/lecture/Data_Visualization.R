@@ -11,71 +11,93 @@ opts_chunk$set(echo = TRUE,
 set.seed(3) 
 
 ## ----plotEx,  fig.align='center',cache=FALSE-----------------------------
-death = read.csv("http://www.aejaffe.com/summerR_2016/data/indicatordeadkids35.csv",
-                 as.is=TRUE,header=TRUE, row.names=1)
+library(readr)
+death = read_csv(
+  "http://www.aejaffe.com/winterR_2017/data/indicatordeadkids35.csv")
 death[1:2, 1:5]
 
 ## ------------------------------------------------------------------------
-library(stringr)
-year = names(death) %>% str_replace("X","") %>% as.integer
-head(year)
+colnames(death)[1] = "country"
+head(death)
 
-## ----plot1, comment="",prompt=TRUE,  fig.align='center',cache=TRUE-------
-plot(as.numeric(death["Sweden",]) ~ year)
+## ----plot1, comment="",prompt=TRUE,  fig.align='center',cache = FALSE----
+library(dplyr)
+sweden = death %>% 
+  filter(country == "Sweden") %>% 
+  select(-country)
+year = as.numeric(colnames(sweden))
+plot(as.numeric(sweden) ~ year)
 
-## ----plotEx2, comment="",prompt=TRUE,  fig.align='center',cache=TRUE-----
-plot(as.numeric(death["Sweden",]) ~ year,
-      ylab = "# of deaths per family", main = "Sweden")
+## ----plotEx2, comment="",prompt=TRUE,  fig.align='center',cache = FALSE----
+plot(as.numeric(sweden) ~ year,
+      ylab = "# of deaths per family", main = "Sweden", type = "l")
 
-## ----plotEx3, fig.align='center', cache=TRUE-----------------------------
-plot(as.numeric(death["Sweden",])~year,
+## ----plotEx3, fig.align='center', cache = FALSE--------------------------
+plot(as.numeric(sweden) ~ year,
       ylab = "# of deaths per family", main = "Sweden",
      xlim = c(1760,2012), pch = 19, cex=1.2,col="blue")
 
-## ----plotEx_sub, fig.align='center', cache=TRUE--------------------------
-plot(as.numeric(death["Sweden",])~year,
+## ----plotEx_sub, fig.align='center', cache = FALSE-----------------------
+plot(as.numeric(sweden) ~ year,
       ylab = "# of deaths per family", main = "Sweden",
      subset = year < 2015, pch = 19, cex=1.2,col="blue")
 
-## ----plotEx4, comment="",prompt=TRUE, fig.align='center', cache=TRUE-----
-scatter.smooth(as.numeric(death["Sweden",])~year,span=0.2,
-      ylab="# of deaths per family", main = "Sweden",lwd=3,
-     subset = year < 2015, pch = 19, cex=0.9,col="grey")
+## ----makelong_swede, fig.align='center', cache = FALSE-------------------
+library(tidyr)
+long = gather(death, key = year, value = deaths, -country)
+long = long %>% filter(!is.na(deaths))
+head(long)
+class(long$year)
+long$year = as.numeric(long$year)
 
-## ----plotEx5, comment="",prompt=TRUE, fig.width=8,fig.height=4,fig.align='center', cache=TRUE----
-par(mfrow=c(1,2))
-scatter.smooth(as.numeric(death["Sweden",])~year,span=0.2,
-      ylab="# of deaths per family", main = "Sweden",lwd=3,
-     xlim = c(1760,2012), pch = 19, cex=0.9,col="grey")
-scatter.smooth(as.numeric(death["United Kingdom",])~year,span=0.2,
-      ylab="# of deaths per family", main = "United Kingdom",lwd=3,
-     xlim = c(1760,2012), pch = 19, cex=0.9,col="grey")
+## ----plot_long_swede, fig.align='center'---------------------------------
+swede_long = long %>% filter(country == "Sweden")
+plot(deaths ~ year, data = swede_long)
 
-## ----plotEx6, fig.width=8,fig.height=4,fig.align='center', cache=TRUE----
-par(mfrow=c(1,2))
-yl = range(death[c("Sweden","United Kingdom"),])
-scatter.smooth(as.numeric(death["Sweden",])~year,span=0.2,ylim=yl,
-      ylab="# of deaths per family", main = "Sweden",lwd=3,
-     xlim = c(1760,2012), pch = 19, cex=0.9,col="grey")
-scatter.smooth(as.numeric(death["United Kingdom",])~year,span=0.2,
-      ylab="", main = "United Kingdom",lwd=3,ylim=yl,
-     xlim = c(1760,2012), pch = 19, cex=0.9,col="grey")
+## ------------------------------------------------------------------------
+library(ggplot2)
+qplot(x = year, y = deaths, data = swede_long)
 
-## ----barplot2, fig.align='center', cache=TRUE----------------------------
+## ----generic_gg, comment="", prompt=TRUE, fig.align='center', cache=FALSE----
+g = ggplot(data = swede_long, aes(x = year, y = deaths))
+
+## ----gprint_point--------------------------------------------------------
+gpoints = g + geom_point()
+print(gpoints)
+
+## ----geom_line-----------------------------------------------------------
+g + geom_line()
+
+## ----geom_line_point-----------------------------------------------------
+g + geom_line() + geom_point()
+
+## ----geom_all------------------------------------------------------------
+g = ggplot(long, aes(x = year, y = deaths, 
+  colour = country))
+g + geom_line()
+
+## ----geom_noguide--------------------------------------------------------
+g + geom_line() + guides(colour = FALSE)
+
+## ----geom_box------------------------------------------------------------
+g + geom_boxplot()
+
+## ----barplot2, fig.align='center', cache = FALSE-------------------------
 ## Stacked Bar Charts
-cars = read.csv("http://www.aejaffe.com/summerR_2016/data/kaggleCarAuction.csv",as.is=TRUE)
+cars = read_csv(
+  "http://www.aejaffe.com/winterR_2017/data/kaggleCarAuction.csv")
 counts <- table(cars$IsBadBuy, cars$VehicleAge)
 barplot(counts, main="Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
     legend = rownames(counts))
 
-## ----barplot2a, fig.align='center', cache=TRUE---------------------------
+## ----barplot2a, fig.align='center', cache = FALSE------------------------
 ## Use percentages (column percentages)
 barplot(prop.table(counts, 2), main="Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
     legend = rownames(counts))
 
-## ----barplot3, fig.align='center', cache=TRUE----------------------------
+## ----barplot3, fig.align='center', cache = FALSE-------------------------
 # Stacked Bar Plot with Colors and Legend    
 barplot(counts, main="Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
@@ -88,12 +110,12 @@ points(ChickWeight$weight ~ jitter(as.numeric(ChickWeight$Diet),0.5))
 ## ----box_ex, eval=FALSE--------------------------------------------------
 ## boxplot(weight ~ Diet, data=ChickWeight, outline=FALSE)
 
-## ----pal, fig.align='center', cache=TRUE---------------------------------
+## ----pal, fig.align='center', cache = FALSE------------------------------
 palette("default")
 plot(1:8, 1:8, type="n")
 text(1:8, 1:8, lab = palette(), col = 1:8)
 
-## ----pal2, fig.align='center', cache=TRUE--------------------------------
+## ----pal2, fig.align='center', cache = FALSE-----------------------------
 palette(c("darkred","orange","blue"))
 plot(1:3,1:3,col=1:3,pch =19,cex=2)
 
@@ -121,8 +143,7 @@ legend("topleft", paste("Diet",levels(ChickWeight$Diet)),
        lwd = 3, ncol = 2)
 
 ## ----circ, comment="",prompt=TRUE, fig.align='center', cache=FALSE-------
-circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", 
-            header=TRUE,as.is=TRUE)
+circ = read_csv("http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv")
 palette(brewer.pal(7,"Dark2"))
 dd = factor(circ$day)
 plot(orangeAverage ~ greenAverage, data=circ, 
@@ -145,7 +166,7 @@ qplot(factor(Diet), y = weight,
 g = ggplot(aes(x = Diet, y = weight), data = ChickWeight)
 g + geom_boxplot()
 
-## ----geoboxpoint, comment="",prompt=TRUE, fig.align='center', cache=TRUE----
+## ----geoboxpoint, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 qplot( factor(Diet), y = weight, data = ChickWeight, 
        geom = c("boxplot", "jitter"))
 
@@ -158,29 +179,29 @@ g + geom_boxplot() + geom_jitter()
 ## ----hist, comment="",prompt=TRUE, fig.align='center', cache=FALSE-------
 hist(ChickWeight$weight, breaks = 20)
 
-## ----ghist, comment="",prompt=TRUE, fig.align='center', cache=TRUE-------
+## ----ghist, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 qplot(x = weight, 
       fill = factor(Diet),
       data = ChickWeight, 
       geom = c("histogram"))
 
-## ----ghist_alpha, comment="",prompt=TRUE, fig.align='center', cache=TRUE----
+## ----ghist_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 qplot(x = weight, fill = Diet, data = ChickWeight, 
       geom = c("histogram"), alpha=I(.7))
 
-## ----gdens, comment="",prompt=TRUE, fig.align='center', cache=TRUE-------
+## ----gdens, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 qplot(x= weight, fill = Diet, data = ChickWeight, 
       geom = c("density"), alpha=I(.7))
 
-## ----gdens_alpha, comment="",prompt=TRUE, fig.align='center', cache=TRUE----
+## ----gdens_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 qplot(x= weight, colour = Diet, data = ChickWeight, 
       geom = c("density"), alpha=I(.7))
 
-## ----gdens_alpha_gg, comment="",prompt=TRUE, fig.align='center', cache=TRUE----
+## ----gdens_alpha_gg, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 ggplot(aes(x= weight, colour = Diet), 
   data = ChickWeight) + geom_density(alpha=I(.7))
 
-## ----gdens_line_alpha, comment="",prompt=TRUE, fig.align='center', cache=TRUE----
+## ----gdens_line_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 ggplot(aes(x = weight, colour = Diet), data = ChickWeight) + 
   geom_line(stat = "density")
 
@@ -215,7 +236,7 @@ library(dplyr)
 long$year = long$year %>% str_replace("^X", "") %>% as.numeric
 long = long %>% filter(!is.na(deaths))
 
-## ----geom_line, comment="",prompt=TRUE, fig.align='center', cache=FALSE----
+## ----geom_line_qplot, comment="",prompt=TRUE, fig.align='center', cache=FALSE----
 qplot(x = year, y = deaths, colour = state, 
     data = long, geom = "line") + guides(colour = FALSE)
 
