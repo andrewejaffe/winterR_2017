@@ -2,15 +2,14 @@
 title: "Manipulating Data in R"
 author: "Introduction to R for Public Health Researchers"
 output:
+  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
     widescreen: yes
-  beamer_presentation: default
 ---
 
 ```{r, echo = FALSE}
 library(knitr)
-library(readr)
 opts_chunk$set(comment = "")
 ```
 
@@ -19,8 +18,8 @@ opts_chunk$set(comment = "")
 
 In this module, we will show you how to:
 
-1. Reshaping data from wide (fat) to long (tall)
-2. Reshaping data from long (tall) to wide (fat)
+1. Reshaping data from long (tall) to wide (fat)
+2. Reshaping data from wide (fat) to long (tall)
 3. Merging Data
 4. Perform operations by a grouping variable
 
@@ -32,10 +31,47 @@ See the "Data Wrangling Cheat Sheet using `dplyr` and `tidyr`":
 
 * https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
 
+## Data used: Charm City Circulator
+
+http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv
+
+```{r}
+circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", as.is = TRUE)
+head(circ, 2)
+```
+
+## Creating a Date class from a character date
+
+```{r, message= FALSE}
+library(lubridate) # great for dates!
+library(dplyr) # mutate/summarise functions
+circ = mutate(circ, date = mdy(date))
+sum( is.na(circ$date) ) # all converted correctly
+head(circ$date)
+class(circ$date)
+```
+
+## Making column names a little more separated
+
+We will use `str_replace` from `stringr` to put periods in the column names.
+```{r}
+library(stringr)
+cn = colnames(circ)
+cn = cn %>% 
+  str_replace("Board", ".Board") %>% 
+  str_replace("Alight", ".Alight") %>% 
+  str_replace("Average", ".Average") 
+colnames(circ) = cn
+cn
+```
 
 
-## What is wide/long data?
+## Removing the daily ridership
 
+We want to look at each ridership, and will remove the `daily` column:
+```{r}
+circ$daily = NULL
+```
 
 ```{r, echo = FALSE}
 ex_wide = data.frame(id = 1:2,
@@ -47,6 +83,8 @@ ex_long = data.frame(id = c(rep(1, 3), rep(2, 2)),
                      visit = c(1:3, 1:2),
                      value = c(10, 4, 3, 5, 6))
 ```
+
+## Reshaping data from wide (fat) to long (tall)
 
 See http://www.cookbook-r.com/Manipulating_data/Converting_data_between_wide_and_long_format/
 
@@ -61,57 +99,13 @@ ex_wide
 ex_long
 ```
 
-## What is wide/long data?
 
-<div style="font-size:40pt">
-More accurately, data is wide or long **with respect** to certain variables.
-</div>
-
-## Data used: Charm City Circulator
-
-http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv
-
-```{r, message = FALSE}
-circ = read_csv(
-  paste0("http://www.aejaffe.com/winterR_2017/",
-         "data/Charm_City_Circulator_Ridership.csv")
-)
-head(circ, 2)
-```
-
-## Creating a Date class from a character date
-
-```{r, message = FALSE}
-library(lubridate) # great for dates!
-library(dplyr) # mutate/summarise functions
-```
-
-## Creating a Date class from a character date
-
-```{r, message= FALSE}
-sum(is.na(circ$date))
-sum( circ$date == "")
-circ = mutate(circ, date = mdy(date))
-sum( is.na(circ$date) ) # all converted correctly
-head(circ$date, 3)
-class(circ$date)
-```
 
 ## Reshaping data from wide (fat) to long (tall): base R
 
 The `reshape` command exists.  It is a **confusing** function.  Don't use it.
 
-## tidyr package
-
-`tidyr` allows you to "tidy" your data.  We will be talking about:
-
-- `gather` - make multiple columns into variables, (wide to long)
-- `spread` - make a variable into multiple columns, (long to wide)
-- `separate` - string into multiple columns
-- `unite` - multiple columns into one string
-
-
-## Reshaping data from wide (fat) to long (tall): tidyr 
+## Reshaping data from wide (fat) to long (tall): tidyr {.smaller}
 
 `tidyr::gather` - puts column data into rows.
 
@@ -119,70 +113,37 @@ We want the column names into "`var`" variable in the output dataset and the val
 ```{r}
 library(tidyr)
 long = gather(circ, key = "var", value = "number", 
-              starts_with("orange"), starts_with("purple"),
-              starts_with("green"), starts_with("banner"))
-head(long, 4)
-```
-
-## Reshaping data from wide (fat) to long (tall): tidyr 
-
-```{r}
-table(long$var)
-```
-
-
-
-
-## Making a separator
-
-We will use `str_replace` from `stringr` to put periods in the names: 
-
-```{r}
-library(stringr)
-long = long %>% mutate(
-  var = var %>% str_replace("Board", ".Board") %>% 
-    str_replace("Alight", ".Alight") %>% 
-    str_replace("Average", ".Average") 
-)
+              starts_with("orange"),
+              starts_with("purple"), 
+              starts_with("green"),
+              starts_with("banner"))
+head(long, 2)
 table(long$var)
 ```
 
 ## Reshaping data from wide (fat) to long (tall): tidyr
 
-Now each `var` is boardings, averages, or alightings.  We want to separate these so we can have these by line. Remember "." is special character:
+Now each `var` is boardings, averages, or alightings.  We want to separate these so we can have these by line.
 
 ```{r}
-long = separate(long, var, into = c("line", "type"), 
+long = separate_(long, "var", 
+                 into = c("line", "type"), 
                  sep = "[.]")
-head(long, 2)
+head(long, 3)
 unique(long$line)
 unique(long$type)
 ```
 
-## Re-uniting all the lines
+## Finding the First (or Last) record
 
-If we had the opposite problem, we could use the `unite` function:
 
 ```{r}
-reunited = long %>% 
-  unite(col = var, line, type, sep = ".")  
-reunited %>% select(day, var) %>% head(3) %>% print
-```
-We could also use `paste`/`paste0`.
-
-
-
-## Making column names a little more separated
-
-Alternative: We could have replaced the column names first **then** reshaped:
-
-```{r, eval = FALSE}
-cn = colnames(circ)
-cn = cn %>% 
-  str_replace("Board", ".Board") %>% 
-  str_replace("Alight", ".Alight") %>% 
-  str_replace("Average", ".Average") 
-colnames(circ) = cn # then reshape using gather!
+long = long %>% filter(!is.na(number) & number > 0)
+first_and_last = long %>% arrange(date) %>% # arrange by date
+  filter(type %in% "Boardings") %>% # keep boardings only
+  group_by(line) %>% # group by line
+  slice( c(1, n())) # select ("slice") first and last (n() command) lines
+first_and_last %>%  head(4)
 ```
 
 ## Reshaping data from long (tall) to wide (fat): tidyr
@@ -205,9 +166,10 @@ We can use `rowSums` to see if any values in the row is `NA` and keep if the row
 # wide = wide %>%
 #     select(Alightings, Average, Boardings) %>%
 #     mutate(good = rowSums(is.na(.)) > 0)
-not_namat = !is.na(select(wide, Alightings, Average, Boardings))
-head(not_namat, 2)
-wide$good = rowSums(not_namat) > 0
+namat = !is.na(select(wide, Alightings, Average, Boardings))
+head(namat)
+wide$good = rowSums(namat) > 0
+head(wide, 3)
 ```
 
 ## Reshaping data from long (tall) to wide (fat): tidyr
@@ -216,19 +178,6 @@ Now we can filter only the good rows and delete the `good` column.
 ```{r}
 wide = filter(wide, good) %>% select(-good)
 head(wide)
-```
-
-
-## Finding the First (or Last) record
-
-
-```{r}
-long = long %>% filter(!is.na(number) & number > 0)
-first_and_last = long %>% arrange(date) %>% # arrange by date
-  filter(type %in% "Boardings") %>% # keep boardings only
-  group_by(line) %>% # group by line
-  slice( c(1, n())) # select ("slice") first and last (n() command) lines
-first_and_last %>%  head(4)
 ```
 
 
@@ -298,6 +247,40 @@ tail(fj)
 ```
 
 
+## Perform Operations By Groups: dplyr
+
+`group_by` is a form of replacement for `tapply` (not a complete replacement). 
+
+
+We will use `group_by` to group the data by line, then use `summarize` (or `summarise`) to get the mean Average ridership:
+```{r}
+gb = group_by(wide, line)
+summarize(gb, mean_avg = mean(Average))
+```
+
+## Perform Operations By Groups: dplyr with piping
+
+Using piping, this is:
+
+```{r}
+wide %>% 
+  group_by(line) %>%
+  summarise(mean_avg = mean(Average))
+```
+
+
+## Perform Operations By Multiple Groups: dplyr 
+
+This can easily be extended using `group_by` with multiple groups.  Let's define the year of riding:
+
+```{r}
+wide = wide %>% mutate(year = year(date),
+                       month = month(date))
+wide %>% 
+  group_by(line, year) %>%
+  summarise(mean_avg = mean(Average))
+```
+
 # Bonus slides - explore after visualization! 
 
 ## Perform Operations By Multiple Groups: dplyr {.smaller}
@@ -306,27 +289,21 @@ We can then easily plot each day over time:
 
 ```{r}
 library(ggplot2)
-ggplot(aes(x = date, y = Average, colour = line), data = wide) + geom_line()
+ggplot(aes(x = date, y = Average, 
+               colour = line), data = wide) + geom_line()
 ```
 
-## ggplot2 with piping
-
-```{r}
-wide %>% 
-  ggplot(aes(x = date, y = Average, colour = line)) + geom_line()
-```
-
-## Perform Operations By Multiple Groups: dplyr
+## Perform Operations By Multiple Groups: dplyr {.smaller}
 
 Let's create the middle of the month (the 15th for example), and name it
 mon.
 
 ```{r}
 mon = wide %>% 
-  mutate(month = month(date), year = year(date)) %>%   
   dplyr::group_by(line, month, year) %>%
   dplyr::summarise(mean_avg = mean(Average))
-mon = mutate(mon, mid_month = dmy(paste0("15-", month, "-", year)))
+mon = mutate(mon, 
+             mid_month = dmy(paste0("15-", month, "-", year)))
 head(mon)
 ```
 
@@ -353,3 +330,39 @@ ggplot(aes(x = date, y = Average, colour = line),
 
 
 
+# Extra `group_by` examples
+
+## `group_by` 
+
+`group_by` is a form of replacement for `tapply` (not a complete replacement).
+
+Example using Bike Lanes:
+http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv
+
+```{r}
+bike = read.csv(
+  "http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv",
+  as.is = TRUE)
+```
+
+## Summarizing data with `group_by` and `summarize`
+
+
+Average bike length BY project:
+
+```{r, message = FALSE}
+bike %>% 
+  group_by(project) %>% 
+  summarise(mean(length)) # get the average length
+```
+
+## Naming columns in output in `summarize`
+
+Using `summarise/summarize(my_new_column_name = output )` allows you to name the column in the output: 
+
+```{r, message = FALSE}
+bike %>% 
+  group_by(project) %>% 
+  summarize(mean_length = mean(length)) %>% 
+  head(4) # head ONLY for slide printing
+```

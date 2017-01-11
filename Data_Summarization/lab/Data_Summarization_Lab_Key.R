@@ -7,6 +7,8 @@
 # Download as a CSV in your current working directory
 # Note its also available at: 
 #	http://www.aejaffe.com/winterR_2017/data/Bike_Lanes.csv
+library(readr)
+library(dplyr)
 
 bike = read_csv("http://www.aejaffe.com/winterR_2017/data/Bike_Lanes.csv")
 bike$type[bike$type==" "] = NA # OR do this
@@ -38,12 +40,26 @@ bike %>%
 length(unique(bike$project))
 tapply(bike$length,bike$project, mean,na.rm=TRUE)
 bike %>% 
-  group_by(project) %>% 
+  group_by(project, type) %>% 
   summarise(n = n(),
-            mean = mean(length))
+            mean = mean(length)) %>% 
+  arrange(desc(mean))
+
+arrange(summarize(group_by(bike, project, type), 
+          n = n(), mean = mean(length)),
+        desc(mean))
+# bike %>% summarize(subType = mean() )
+
 			  
 # 5. What was the average bike lane length per year that they were installed? 
 # Set bike$dateInstalled to NA if it is equal to zero.
+b2 = bike %>% 
+  mutate(dateInstalled = ifelse(dateInstalled == "0", NA, 
+                                dateInstalled))
+# b2 = bike %>% 
+#   mutate(dateInstalled = if_else(dateInstalled == "0", 
+#                                  NA_integer_, 
+#                                 dateInstalled))
 bike$dateInstalled[bike$dateInstalled == "0"] = NA
 tapply(bike$length,bike$dateInstalled, mean,na.rm=TRUE)
 bike %>% 

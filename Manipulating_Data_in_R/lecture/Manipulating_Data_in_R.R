@@ -1,31 +1,7 @@
 ## ---- echo = FALSE-------------------------------------------------------
 library(knitr)
+library(readr)
 opts_chunk$set(comment = "")
-
-## ------------------------------------------------------------------------
-circ = read.csv("http://www.aejaffe.com/summerR_2016/data/Charm_City_Circulator_Ridership.csv", as.is = TRUE)
-head(circ, 2)
-
-## ---- message= FALSE-----------------------------------------------------
-library(lubridate) # great for dates!
-library(dplyr) # mutate/summarise functions
-circ = mutate(circ, date = mdy(date))
-sum( is.na(circ$date) ) # all converted correctly
-head(circ$date)
-class(circ$date)
-
-## ------------------------------------------------------------------------
-library(stringr)
-cn = colnames(circ)
-cn = cn %>% 
-  str_replace("Board", ".Board") %>% 
-  str_replace("Alight", ".Alight") %>% 
-  str_replace("Average", ".Average") 
-colnames(circ) = cn
-cn
-
-## ------------------------------------------------------------------------
-circ$daily = NULL
 
 ## ---- echo = FALSE-------------------------------------------------------
 ex_wide = data.frame(id = 1:2,
@@ -43,31 +19,63 @@ ex_wide
 ## ---- echo = FALSE-------------------------------------------------------
 ex_long
 
+## ---- message = FALSE----------------------------------------------------
+circ = read_csv(
+  paste0("http://www.aejaffe.com/winterR_2017/",
+         "data/Charm_City_Circulator_Ridership.csv")
+)
+head(circ, 2)
+
+## ---- message = FALSE----------------------------------------------------
+library(lubridate) # great for dates!
+library(dplyr) # mutate/summarise functions
+
+## ---- message= FALSE-----------------------------------------------------
+sum(is.na(circ$date))
+sum( circ$date == "")
+circ = mutate(circ, date = mdy(date))
+sum( is.na(circ$date) ) # all converted correctly
+head(circ$date, 3)
+class(circ$date)
+
 ## ------------------------------------------------------------------------
 library(tidyr)
 long = gather(circ, key = "var", value = "number", 
-              starts_with("orange"),
-              starts_with("purple"), 
-              starts_with("green"),
-              starts_with("banner"))
-head(long, 2)
+              starts_with("orange"), starts_with("purple"),
+              starts_with("green"), starts_with("banner"))
+head(long, 4)
+
+## ------------------------------------------------------------------------
 table(long$var)
 
 ## ------------------------------------------------------------------------
-long = separate_(long, "var", 
-                 into = c("line", "type"), 
+library(stringr)
+long = long %>% mutate(
+  var = var %>% str_replace("Board", ".Board") %>% 
+    str_replace("Alight", ".Alight") %>% 
+    str_replace("Average", ".Average") 
+)
+table(long$var)
+
+## ------------------------------------------------------------------------
+long = separate(long, var, into = c("line", "type"), 
                  sep = "[.]")
-head(long, 3)
+head(long, 2)
 unique(long$line)
 unique(long$type)
 
 ## ------------------------------------------------------------------------
-long = long %>% filter(!is.na(number) & number > 0)
-first_and_last = long %>% arrange(date) %>% # arrange by date
-  filter(type %in% "Boardings") %>% # keep boardings only
-  group_by(line) %>% # group by line
-  slice( c(1, n())) # select ("slice") first and last (n() command) lines
-first_and_last %>%  head(4)
+reunited = long %>% 
+  unite(col = var, line, type, sep = ".")  
+reunited %>% select(day, var) %>% head(3) %>% print
+
+## ---- eval = FALSE-------------------------------------------------------
+## cn = colnames(circ)
+## cn = cn %>%
+##   str_replace("Board", ".Board") %>%
+##   str_replace("Alight", ".Alight") %>%
+##   str_replace("Average", ".Average")
+## colnames(circ) = cn # then reshape using gather!
 
 ## ------------------------------------------------------------------------
 # have to remove missing days
@@ -79,14 +87,21 @@ head(wide)
 # wide = wide %>%
 #     select(Alightings, Average, Boardings) %>%
 #     mutate(good = rowSums(is.na(.)) > 0)
-namat = !is.na(select(wide, Alightings, Average, Boardings))
-head(namat)
-wide$good = rowSums(namat) > 0
-head(wide, 3)
+not_namat = !is.na(select(wide, Alightings, Average, Boardings))
+head(not_namat, 2)
+wide$good = rowSums(not_namat) > 0
 
 ## ------------------------------------------------------------------------
 wide = filter(wide, good) %>% select(-good)
 head(wide)
+
+## ------------------------------------------------------------------------
+long = long %>% filter(!is.na(number) & number > 0)
+first_and_last = long %>% arrange(date) %>% # arrange by date
+  filter(type %in% "Boardings") %>% # keep boardings only
+  group_by(line) %>% # group by line
+  slice( c(1, n())) # select ("slice") first and last (n() command) lines
+first_and_last %>%  head(4)
 
 ## ----merging-------------------------------------------------------------
 base <- data.frame(id = 1:10, Age= seq(55,60, length=10))
@@ -121,32 +136,19 @@ dim(fj)
 tail(fj)
 
 ## ------------------------------------------------------------------------
-gb = group_by(wide, line)
-summarize(gb, mean_avg = mean(Average))
-
-## ------------------------------------------------------------------------
-wide %>% 
-  group_by(line) %>%
-  summarise(mean_avg = mean(Average))
-
-## ------------------------------------------------------------------------
-wide = wide %>% mutate(year = year(date),
-                       month = month(date))
-wide %>% 
-  group_by(line, year) %>%
-  summarise(mean_avg = mean(Average))
-
-## ------------------------------------------------------------------------
 library(ggplot2)
-ggplot(aes(x = date, y = Average, 
-               colour = line), data = wide) + geom_line()
+ggplot(aes(x = date, y = Average, colour = line), data = wide) + geom_line()
+
+## ------------------------------------------------------------------------
+wide %>% 
+  ggplot(aes(x = date, y = Average, colour = line)) + geom_line()
 
 ## ------------------------------------------------------------------------
 mon = wide %>% 
+  mutate(month = month(date), year = year(date)) %>%   
   dplyr::group_by(line, month, year) %>%
   dplyr::summarise(mean_avg = mean(Average))
-mon = mutate(mon, 
-             mid_month = dmy(paste0("15-", month, "-", year)))
+mon = mutate(mon, mid_month = dmy(paste0("15-", month, "-", year)))
 head(mon)
 
 ## ------------------------------------------------------------------------
@@ -158,20 +160,4 @@ ggplot(aes(x = mid_month,
 ggplot(aes(x = date, y = Average, colour = line), 
            data = wide) + geom_smooth(se = FALSE) + 
   geom_point(size = .5)
-
-## ------------------------------------------------------------------------
-bike = read.csv(
-  "http://www.aejaffe.com/summerR_2016/data/Bike_Lanes.csv",
-  as.is = TRUE)
-
-## ---- message = FALSE----------------------------------------------------
-bike %>% 
-  group_by(project) %>% 
-  summarise(mean(length)) # get the average length
-
-## ---- message = FALSE----------------------------------------------------
-bike %>% 
-  group_by(project) %>% 
-  summarize(mean_length = mean(length)) %>% 
-  head(4) # head ONLY for slide printing
 
