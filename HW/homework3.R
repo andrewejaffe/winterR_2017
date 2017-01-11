@@ -1,22 +1,15 @@
 ####################
 # 140.886: Intro to R
 # Homework 3
-# Assigned Date: 6/14/2016
-# Due Date: 6/16/2016 by 8:30am
+# Assigned Date: 1/11/2017
+# Due Date: 1/13/2017 by 8:30am
 
 # Instructions: 
 # A)	Use this dataset on infant mortality for the following questions:
-# http://www.aejaffe.com/summerR_2016/data/indicatordeadkids35.csv
+# http://www.aejaffe.com/winterR_2017/data/indicatordeadkids35.csv
 
 # B) Use Knitr to write up this homework. 
 
-kids2 = read.csv(
-  "http://www.aejaffe.com/summerR_2016/data/indicatordeadkids35.csv", 
-                stringsAsFactors=FALSE)
-kids <- read.csv("http://www.aejaffe.com/summerR_2016/data/indicatordeadkids35.csv", 
-                 row.names=1, stringsAsFactors=FALSE)
-
-tkids = t(kids)
 # Questions
 # 1.	Create a integer ‘year’ variable using the column names, 
 #			and print the head() and class() of this new vector
@@ -26,7 +19,7 @@ tkids = t(kids)
 #			Show [1:5,1:5] of this transposed data frame. 
 
 # 3.	Read in this the tab-delim file:
-#		http://www.aejaffe.com/summerR_2016/data/country_pop.txt
+#		http://www.aejaffe.com/winterR_2017/data/country_pop.txt
 #		which contains population information on each country
 
 # 4.	Determine the population of each country in our dataset, 

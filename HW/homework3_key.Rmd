@@ -7,7 +7,7 @@ output: html_document
 Let's first read in the childhood mortality dataset:
 
 ```{r, dataImport}
-death = read.csv("http://www.aejaffe.com/winterR_2016/data/indicatordeadkids35.csv",
+death = read.csv("http://www.aejaffe.com/winterR_2017/data/indicatordeadkids35.csv",
                  as.is=TRUE,header=TRUE, row.names=1)
 ```
 
