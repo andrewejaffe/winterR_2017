@@ -4,7 +4,7 @@
 # 1/12/2017
 
 ## Download the "Real Property Taxes" Data from my website (via OpenBaltimore):
-# www.aejaffe.com/summerR_2016/data/real_property_tax.csv.gz
+# www.aejaffe.com/winterR_2017/data/Real_Property_Taxes.csv.gz
 ## note you don't need to unzip it to read it into R
 rm( list = ls() ) # clear the workspace
 library(stringr)
