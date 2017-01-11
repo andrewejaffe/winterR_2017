@@ -210,7 +210,7 @@ Please download the Charm City Circulator data:
 
 http://www.aejaffe.com/winterR_2017/data/Charm_City_Circulator_Ridership.csv
 
-```{r}
+```{r, message = FALSE}
 # paste/paste0 combines strings/character
 circ = read_csv(
   paste0("http://www.aejaffe.com/winterR_2017/data",

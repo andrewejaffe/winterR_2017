@@ -238,7 +238,7 @@ x &gt; 2</pre>
 <li><code>table(x, y)</code> - will give a cross-tab of <code>x</code> and <code>y</code></li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2>Creating One-way Tables</h2></hgroup><article  id="creating-one-way-tables" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Creating One-way Tables</h2></hgroup><article  id="creating-one-way-tables">
 
 <p>Here we will use <code>table</code> to make tabulations of the data. Look at <code>?table</code> to see options for missing data.</p>
 
@@ -258,7 +258,7 @@ x &gt; 2</pre>
    0    2    3    4 &lt;NA&gt; 
    1    1    1    1    1 </pre>
 
-</article></slide><slide class=''><hgroup><h2>Creating One-way Tables</h2></hgroup><article  id="creating-one-way-tables-1" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Creating One-way Tables</h2></hgroup><article  id="creating-one-way-tables-1">
 
 <p><code>useNA = &quot;ifany&quot;</code> will not have NA in table heading if no <code>NA</code>:</p>
 
@@ -269,7 +269,7 @@ x &gt; 2</pre>
 0 1 2 3 
 1 1 4 4 </pre>
 
-</article></slide><slide class=''><hgroup><h2>Creating One-way Tables</h2></hgroup><article  id="creating-one-way-tables-2" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Creating One-way Tables</h2></hgroup><article  id="creating-one-way-tables-2">
 
 <p>You can set <code>useNA = &quot;always&quot;</code> to have it always have a column for <code>NA</code></p>
 
@@ -280,7 +280,7 @@ x &gt; 2</pre>
    0    1    2    3 &lt;NA&gt; 
    1    1    4    4    0 </pre>
 
-</article></slide><slide class=''><hgroup><h2>Tables with Factors</h2></hgroup><article  id="tables-with-factors" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Tables with Factors</h2></hgroup><article  id="tables-with-factors">
 
 <p>If you use a <code>factor</code>, all levels will be given even if no exist! - (May be wanted or not):</p>
 
@@ -299,7 +299,7 @@ tab</pre>
 1 2 3 
 1 4 4 </pre>
 
-</article></slide><slide class=''><hgroup><h2>Creating Two-way Tables</h2></hgroup><article  id="creating-two-way-tables" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Creating Two-way Tables</h2></hgroup><article  id="creating-two-way-tables">
 
 <p>A two-way table. If you pass in 2 vectors, <code>table</code> creates a 2-dimensional table.</p>
 
@@ -317,7 +317,7 @@ tab</pre>
    0    1    2    3    4 &lt;NA&gt; 
    1    1    2    4    2    0 </pre>
 
-</article></slide><slide class=''><hgroup><h2>Proportion Tables</h2></hgroup><article  id="proportion-tables" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Proportion Tables</h2></hgroup><article  id="proportion-tables">
 
 <p><code>prop.table</code> finds the marginal proportions of the table. Think of it dividing the table by it&#39;s respective marginal totals. If <code>margin</code> not set, divides by overall total.</p>
 
@@ -350,7 +350,7 @@ tab</pre>
 <pre class = 'prettyprint lang-r'>Sal = read.csv(&quot;http://www.aejaffe.com/winterR_2017/data/Baltimore_City_Employee_Salaries_FY2015.csv&quot;, as.is = TRUE)
 colnames(Sal)[1] = &quot;Name&quot;</pre>
 
-</article></slide><slide class=''><hgroup><h2>Checking for logical conditions</h2></hgroup><article  id="checking-for-logical-conditions" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Checking for logical conditions</h2></hgroup><article  id="checking-for-logical-conditions">
 
 <ul>
 <li><code>any()</code> - checks if there are any <code>TRUE</code>s</li>
@@ -664,7 +664,7 @@ y[[2]]</pre>
 
 <pre >[1] FALSE FALSE FALSE FALSE FALSE FALSE</pre>
 
-</article></slide><slide class=''><hgroup><h2>&#39;Find&#39; functions: finding values, base R</h2></hgroup><article  id="find-functions-finding-values-base-r" class="smaller">
+</article></slide><slide class=''><hgroup><h2>&#39;Find&#39; functions: finding values, base R</h2></hgroup><article  id="find-functions-finding-values-base-r">
 
 <pre class = 'prettyprint lang-r'>grep(&quot;Rawlings&quot;,Sal$Name,value=TRUE)</pre>
 
@@ -682,7 +682,7 @@ y[[2]]</pre>
 10257      R&amp;P-Recreation (015) 12/10/2007   $19,802.00  $10,443.70
 10258       Mayors Office (001)  12/7/1995  $167,449.00 $165,249.86</pre>
 
-</article></slide><slide class=''><hgroup><h2>&#39;Find&#39; functions: finding values, <code>stringr</code> and <code class="smaller">dplyr</code></h2></hgroup><article  id="find-functions-finding-values-stringr-and-dplyr">
+</article></slide><slide class=''><hgroup><h2>&#39;Find&#39; functions: finding values, <code>stringr</code> and <code>dplyr</code></h2></hgroup><article  id="find-functions-finding-values-stringr-and-dplyr">
 
 <pre class = 'prettyprint lang-r'>str_subset(Sal$Name, &quot;Rawlings&quot;)</pre>
 
@@ -804,7 +804,7 @@ coercion</pre>
 
 <p><code>sub()</code> and <code>gsub()</code> can do the replacing part in base R.</p>
 
-</article></slide><slide class=''><hgroup><h2>Replacing and subbing</h2></hgroup><article  id="replacing-and-subbing" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Replacing and subbing</h2></hgroup><article  id="replacing-and-subbing">
 
 <p>Now we can replace the <code>$</code> with nothing (used <code>fixed=TRUE</code> because <code>$</code> means ending):</p>
 
@@ -823,7 +823,7 @@ Sal[1:5, c(&quot;Name&quot;, &quot;AnnualSalary&quot;, &quot;JobTitle&quot;)]</p
 3     Abaineh,Yohannes T           NA                EPIDEMIOLOGIST
 4       Abbene,Anthony M           NA                POLICE OFFICER</pre>
 
-</article></slide><slide class=''><hgroup><h2>Replacing and subbing: <code class="smaller">stringr</code></h2></hgroup><article  id="replacing-and-subbing-stringr">
+</article></slide><slide class=''><hgroup><h2>Replacing and subbing: <code>stringr</code></h2></hgroup><article  id="replacing-and-subbing-stringr">
 
 <p>We can do the same thing (with 2 piping operations!) in dplyr</p>
 

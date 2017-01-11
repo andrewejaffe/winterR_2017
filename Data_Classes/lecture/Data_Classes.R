@@ -78,7 +78,7 @@ bg2 = rep(c("boy","girl"),times=50)
 head(bg2)
 length(bg) == length(bg2)
 
-## ------------------------------------------------------------------------
+## ---- message = FALSE----------------------------------------------------
 # paste/paste0 combines strings/character
 circ = read_csv(
   paste0("http://www.aejaffe.com/winterR_2017/data",

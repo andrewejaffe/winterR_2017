@@ -349,25 +349,6 @@ circ = read_csv(
   paste0(&quot;http://www.aejaffe.com/winterR_2017/data&quot;,
          &quot;/Charm_City_Circulator_Ridership.csv&quot;))</pre>
 
-<pre >## Parsed with column specification:
-## cols(
-##   day = col_character(),
-##   date = col_character(),
-##   orangeBoardings = col_integer(),
-##   orangeAlightings = col_integer(),
-##   orangeAverage = col_double(),
-##   purpleBoardings = col_integer(),
-##   purpleAlightings = col_integer(),
-##   purpleAverage = col_double(),
-##   greenBoardings = col_integer(),
-##   greenAlightings = col_integer(),
-##   greenAverage = col_double(),
-##   bannerBoardings = col_integer(),
-##   bannerAlightings = col_integer(),
-##   bannerAverage = col_double(),
-##   daily = col_double()
-## )</pre>
-
 </article></slide><slide class=''><hgroup><h2>Creating categorical variables</h2></hgroup><article  id="creating-categorical-variables-2">
 
 <p>For example, we can create a new variable that records whether daily ridership on the Circulator was above 10,000.</p>
@@ -541,7 +522,7 @@ head(circ$newDate2)</pre>
 <pre class = 'prettyprint lang-r'>theTime = Sys.time()
 theTime</pre>
 
-<pre >## [1] &quot;2017-01-09 23:10:50 EST&quot;</pre>
+<pre >## [1] &quot;2017-01-10 22:01:12 EST&quot;</pre>
 
 <pre class = 'prettyprint lang-r'>class(theTime)</pre>
 
@@ -549,7 +530,7 @@ theTime</pre>
 
 <pre class = 'prettyprint lang-r'>theTime + as.period(20, unit = &quot;minutes&quot;) # the future</pre>
 
-<pre >## [1] &quot;2017-01-09 23:30:50 EST&quot;</pre>
+<pre >## [1] &quot;2017-01-10 22:21:12 EST&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2>Date</h2></hgroup><article  id="date-2">
 
