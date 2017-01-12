@@ -43,8 +43,7 @@ table(tax$Ward)
 
 
 #	b. what is the mean state tax per ward?
-tax %>% 
-  group_by(Ward) %>% 
+tax %>%   group_by(Ward) %>% 
   summarize(mean_state = mean(StateTax, na.rm = TRUE))
 
 tapply(tax$StateTax, tax$Ward, mean, na.rm=TRUE)
@@ -90,7 +89,7 @@ tax$LotSize = str_trim(tax$LotSize) # trim to be safe
 lot = tax$LotSize # for checking later
 
 # first lets take care of acres
-aIndex= c(grep("ACRE.*", tax$LotSize),
+aIndex= c(grep("ACRE.*", tax$LotSize,ignore.case),
             grep(" %", tax$LotSize, fixed=TRUE))
 head(aIndex)
 head(lot[aIndex])
@@ -156,7 +155,7 @@ sqrtFt = totalWidth*totalLength
 ft[is.na(sqrtFt)] # what is left?
 
 ### combine together
-tax$sqft = rep(NA)
+tax$sqft = NA
 tax$sqft[aIndex] = acre2
 tax$sqft[fIndex] = sqrtFt
 mean(!is.na(tax$sqft))
@@ -174,3 +173,4 @@ table(is.na(tax$sqft))
 
 #what remains?
 lot[is.na(tax$sqft)]
+
