@@ -20,17 +20,14 @@ dim(tax)
 
 # 3. What is the total city and state tax paid?
 head(tax$CityTax)
-CityTax = tax$CityTax %>% 
+tax$CityTax = tax$CityTax %>% 
   str_replace(fixed("$"), "") %>%
   as.numeric
-StateTax = tax$StateTax %>% 
+tax$StateTax = tax$StateTax %>% 
   str_replace(fixed("$"), "") %>%
   as.numeric
-head(CityTax)
 
-tax$CityTax = CityTax
-tax$StateTax = StateTax
-
+sum(tax$CityTax)
 sum(tax$CityTax, na.rm = TRUE)
 sum(tax$CityTax, na.rm = TRUE)/1e6
 
@@ -57,12 +54,11 @@ tax$AmountDue = tax$AmountDue %>%
   str_replace(fixed("$"), "") %>%
   as.numeric
 
-tax %>% 
-  group_by(Ward) %>% 
+tax %>% group_by(Ward) %>% 
   summarize(maxDue = max(AmountDue, na.rm = TRUE))
 
 ## 75th percentile
-tax %>%   group_by(Ward) %>% 
+tax %>% group_by(Ward) %>% 
   summarize(Percentile = quantile(StateTax, prob = 0.75,na.rm = TRUE))
 
 tapply(tax$StateTax, tax$Ward,
