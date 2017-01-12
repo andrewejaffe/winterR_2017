@@ -3,8 +3,8 @@ library(knitr)
 opts_chunk$set(echo = TRUE, 
                message = FALSE, 
                warning = FALSE,
-               fig.height = 3.5,
-               fig.width = 3.5, 
+               fig.height = 4,
+               fig.width = 7, 
                comment = "")
 
 ## ----seed, comment="",echo=FALSE,prompt=TRUE-----------------------------
@@ -18,7 +18,7 @@ death[1:2, 1:5]
 
 ## ------------------------------------------------------------------------
 colnames(death)[1] = "country"
-head(death)
+death[1:2, 1:5]
 
 ## ----plot1, comment="",prompt=TRUE,  fig.align='center',cache = FALSE----
 library(dplyr)
@@ -62,8 +62,7 @@ qplot(x = year, y = deaths, data = swede_long)
 g = ggplot(data = swede_long, aes(x = year, y = deaths))
 
 ## ----gprint_point--------------------------------------------------------
-gpoints = g + geom_point()
-print(gpoints)
+gpoints = g + geom_point(); print(gpoints) # one line for slides
 
 ## ----geom_line-----------------------------------------------------------
 g + geom_line()
@@ -71,8 +70,14 @@ g + geom_line()
 ## ----geom_line_point-----------------------------------------------------
 g + geom_line() + geom_point()
 
+## ----line_smooth---------------------------------------------------------
+g + geom_line() + geom_smooth()
+
 ## ----geom_all------------------------------------------------------------
-g = ggplot(long, aes(x = year, y = deaths, 
+sub = long %>% filter(country %in% 
+                        c("United States", "United Kingdom", "Sweden",
+                          "Afghanistan", "Rwanda"))
+g = ggplot(sub, aes(x = year, y = deaths, 
   colour = country))
 g + geom_line()
 
@@ -80,7 +85,107 @@ g + geom_line()
 g + geom_line() + guides(colour = FALSE)
 
 ## ----geom_box------------------------------------------------------------
-g + geom_boxplot()
+ggplot(long, aes(x = year, y = deaths)) + geom_boxplot()
+
+## ----geom_box_fac--------------------------------------------------------
+ggplot(long, aes(x = factor(year), y = deaths)) + geom_boxplot()
+
+## ----geom_box_jitter-----------------------------------------------------
+sub_year = long %>% filter( year > 1995 & year <= 2000)
+ggplot(sub_year, aes(x = factor(year), y = deaths)) + 
+  geom_boxplot(outlier.shape = NA) + # don't show outliers - will below
+  geom_jitter(height = 0)
+
+## ------------------------------------------------------------------------
+sub %>% ggplot(aes(x = year, y = deaths)) + 
+  geom_line() + 
+  facet_wrap(~ country)
+
+## ------------------------------------------------------------------------
+sub %>% ggplot(aes(x = year, y = deaths)) + 
+  geom_line() + 
+  facet_wrap(~ country, ncol = 1)
+
+## ---- eval = FALSE-------------------------------------------------------
+## sub %>% ggplot(aes(x = year, y = deaths)) +
+##   geom_line() +
+##   facet_wrap(~ country + x2 + ... )
+
+## ----labs, eval = TRUE---------------------------------------------------
+q = qplot(x = year, y = deaths, 
+          colour = country, data = sub,
+          geom = "line") + 
+  xlab("Year of Collection") +
+  ylab("Deaths /100,000") +
+  ggtitle("Mortality of Children over the years",
+          subtitle = "not great") 
+q
+
+## ----theme_bw, eval = TRUE-----------------------------------------------
+q + theme_bw()
+
+## ----theme, eval = TRUE--------------------------------------------------
+q + theme(text = element_text(size = 12),
+          title = element_text(size = 20))
+
+## ----theme2, eval = TRUE-------------------------------------------------
+q = q + theme(axis.text = element_text(size = 14),
+          title = element_text(size = 20),
+          axis.title = element_text(size = 16),
+          legend.position = c(0.75, 0.5)) + 
+  guides(colour = guide_legend(title = "Country"))
+q
+
+## ----translegend---------------------------------------------------------
+transparent_legend =  theme(legend.background = element_rect(
+    fill = "transparent"),
+  legend.key = element_rect(fill = "transparent", 
+                            color = "transparent") )
+q + transparent_legend
+
+## ----hist_death, comment="",prompt=TRUE, fig.align='center', cache=FALSE----
+hist(sub$deaths, breaks = 200)
+
+## ----ghist, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
+qplot(x = deaths, 
+      fill = factor(country),
+      data = sub, 
+      geom = c("histogram"))
+
+## ----ghist_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
+qplot(x = deaths, fill = country, data = sub, 
+      geom = c("histogram"), alpha=I(.7))
+
+## ----gdens, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
+qplot(x= deaths, fill = country, data = sub, 
+      geom = c("density"), alpha=I(.7))
+
+## ----gdens_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
+qplot(x = deaths, colour = country, data = sub, 
+      geom = c("density"), alpha=I(.7))
+
+## ----gdens_line_alpha_death, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
+ggplot(aes(x = deaths, colour = country), data = sub) + 
+  geom_line(stat = "density")
+
+## ----geom_line_qplot_nocol, comment="",prompt=TRUE, fig.align='center', cache=FALSE----
+qplot(x = year, y = deaths, colour = country, 
+    data = long, geom = "line") + guides(colour = FALSE)
+
+## ----geom_tile_qtile-----------------------------------------------------
+qtile = qplot(x = year, y = country, fill = deaths, 
+    data = sub, geom = "tile") + 
+  xlim(1990, 2005) + guides(colour = FALSE)
+qtile 
+
+## ----geom_tile_rescale---------------------------------------------------
+qtile + scale_fill_gradient( low = "blue", high = "red")
+
+## ----geom_tile_cut-------------------------------------------------------
+sub$cat = cut(sub$deaths, breaks = c(0, 1, 2, max(sub$deaths)))
+qplot(x = year, y = country, fill = cat, 
+    data = sub, geom = "tile") + 
+  guides(colour = FALSE)
 
 ## ----barplot2, fig.align='center', cache = FALSE-------------------------
 ## Stacked Bar Charts
@@ -93,9 +198,36 @@ barplot(counts, main="Car Distribution by Age and Bad Buy Status",
 
 ## ----barplot2a, fig.align='center', cache = FALSE------------------------
 ## Use percentages (column percentages)
-barplot(prop.table(counts, 2), main="Car Distribution by Age and Bad Buy Status",
+barplot(prop.table(counts, 2), 
+        main = "Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
     legend = rownames(counts))
+
+## ----barplot2_stacked_geom, fig.align='center', cache = FALSE------------
+ggplot(aes(fill = factor(IsBadBuy), x = VehicleAge), 
+       data = cars) + geom_bar()
+
+## ----make_perc_data, fig.align='center', cache = FALSE-------------------
+perc = cars %>% 
+  group_by(IsBadBuy, VehicleAge) %>% 
+  tally() %>% ungroup
+head(perc)
+
+## ----norm_bar_1----------------------------------------------------------
+perc_is_bad = perc %>% 
+  group_by(VehicleAge) %>% mutate(perc = n / sum(n))
+ggplot(aes(fill = factor(IsBadBuy), 
+           x = VehicleAge, 
+           y = perc), 
+       data = perc_is_bad) + geom_bar(stat = "identity")
+
+## ----norm_bad_buy--------------------------------------------------------
+perc_yr = perc %>% 
+  group_by(IsBadBuy) %>% mutate(perc = n / sum(n))
+ggplot(aes(fill = factor(VehicleAge), 
+           x = IsBadBuy, 
+           y = perc), 
+       data = perc_yr) + geom_bar(stat = "identity")
 
 ## ----barplot3, fig.align='center', cache = FALSE-------------------------
 # Stacked Bar Plot with Colors and Legend    
@@ -157,43 +289,24 @@ plot(orangeAverage ~ greenAverage, data=circ,
      pch=19, col = as.numeric(dd))
 legend("bottomright", levels(dd), col=1:length(dd), pch = 19)
 
-## ----geoboxplot, comment="",prompt=TRUE, fig.align='center', cache=FALSE----
-library(ggplot2)
-qplot(factor(Diet), y = weight, 
-      data = ChickWeight, geom = "boxplot")
-
-## ----geoboxplot_g, comment="",prompt=TRUE, fig.align='center', cache=FALSE----
-g = ggplot(aes(x = Diet, y = weight), data = ChickWeight)
-g + geom_boxplot()
-
-## ----geoboxpoint, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
-qplot( factor(Diet), y = weight, data = ChickWeight, 
-       geom = c("boxplot", "jitter"))
-
-## ----geoboxplot_add, comment="",prompt=TRUE, fig.align='center', cache=FALSE----
-g + geom_boxplot() + geom_point(position = "jitter")
-
-## ----geoboxplot_addjitter, fig.align='center', cache=FALSE---------------
-g + geom_boxplot() + geom_jitter()
-
 ## ----hist, comment="",prompt=TRUE, fig.align='center', cache=FALSE-------
 hist(ChickWeight$weight, breaks = 20)
 
-## ----ghist, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
+## ----ghist_chick, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 qplot(x = weight, 
       fill = factor(Diet),
       data = ChickWeight, 
       geom = c("histogram"))
 
-## ----ghist_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
+## ----ghist_chick_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 qplot(x = weight, fill = Diet, data = ChickWeight, 
       geom = c("histogram"), alpha=I(.7))
 
-## ----gdens, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
+## ----gdens_chick, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 qplot(x= weight, fill = Diet, data = ChickWeight, 
       geom = c("density"), alpha=I(.7))
 
-## ----gdens_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
+## ----gdens_chick_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE----
 qplot(x= weight, colour = Diet, data = ChickWeight, 
       geom = c("density"), alpha=I(.7))
 

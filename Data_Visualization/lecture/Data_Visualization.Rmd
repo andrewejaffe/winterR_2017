@@ -13,8 +13,8 @@ library(knitr)
 opts_chunk$set(echo = TRUE, 
                message = FALSE, 
                warning = FALSE,
-               fig.height = 3.5,
-               fig.width = 3.5, 
+               fig.height = 4,
+               fig.width = 7, 
                comment = "")
 ```
 
@@ -39,7 +39,7 @@ death[1:2, 1:5]
 
 ```{r}
 colnames(death)[1] = "country"
-head(death)
+death[1:2, 1:5]
 ```
 
 
@@ -55,6 +55,20 @@ plot(as.numeric(sweden) ~ year)
 ```
 
 
+
+## Base Graphics parameters
+
+Set within most plots in the base 'graphics' package:
+
+* pch = point shape, http://voteview.com/symbols_pch.htm
+* cex = size/scale
+* xlab, ylab = labels for x and y axes
+* main = plot title
+* lwd = line density
+* col = color
+* cex.axis, cex.lab, cex.main = scaling/sizing for axes marks, axes labels, and title
+
+
 ## Basic Plots
 
 The y-axis label isn't informative, and we can change the label of the y-axis using `ylab` (`xlab` for x), and `main` for the main title/label.
@@ -66,6 +80,7 @@ plot(as.numeric(sweden) ~ year,
 
 
 ## Basic Plots
+
 Let's drop any of the projections and keep it to year 2012, and change the points to blue. 
 ```{r plotEx3, fig.align='center', cache = FALSE}
 plot(as.numeric(sweden) ~ year,
@@ -105,7 +120,7 @@ plot(deaths ~ year, data = swede_long)
 
 ## ggplot2
 
-`ggplot2` is a package of plotting that is very popular and powerful (using the **g**rammar of **g**raphics). `qplot` is a short hand for "quick plot", which can usually be similar to `plot`
+`ggplot2` is a package of plotting that is very popular and powerful (using the **g**rammar of **g**raphics). `qplot` ("quick plot"), similar to `plot`
 
 
 ```{r}
@@ -138,7 +153,7 @@ Common aesthetics:
 - **colour/color**
 - **size**
 - **fill** 
-- *shape**
+- **shape**
 
 
 If you set these in `aes`, you set them to a variable.  If you want to set them for all values, set them in a `geom`.
@@ -162,13 +177,12 @@ If you set these in `aes`, you set them to a variable.  If you want to set them 
 You "add" things to a plot with a `+` sign (not pipe!).  If you assign a plot to an object, you must call `print` to print it.  
 
 ```{r gprint_point}
-gpoints = g + geom_point()
-print(gpoints)
+gpoints = g + geom_point(); print(gpoints) # one line for slides
 ```
 
-## ggplot2: adding a geom
+## ggplot2: adding a geom 
 
-Otherwise it prints by default
+Otherwise it prints by default - this time it's a line
 
 ```{r geom_line}
 g + geom_line()
@@ -182,12 +196,23 @@ You can add multiple geoms:
 g + geom_line() + geom_point()
 ```
 
+## ggplot2: adding a smoother
+
+Let's add a smoother through the points:
+
+```{r line_smooth}
+g + geom_line() + geom_smooth()
+```
+
 ## ggplot2: grouping - using colour
 
 If we want a plot with new data, we have to call `ggplot` again.  Let's group plots by `country` using `colour`:
 
 ```{r geom_all}
-g = ggplot(long, aes(x = year, y = deaths, 
+sub = long %>% filter(country %in% 
+                        c("United States", "United Kingdom", "Sweden",
+                          "Afghanistan", "Rwanda"))
+g = ggplot(sub, aes(x = year, y = deaths, 
   colour = country))
 g + geom_line()
 ```
@@ -203,8 +228,215 @@ g + geom_line() + guides(colour = FALSE)
 ## ggplot2: boxplot
 
 ```{r geom_box}
-g + geom_boxplot()
+ggplot(long, aes(x = year, y = deaths)) + geom_boxplot()
 ```
+
+## ggplot2: boxplot
+
+For different plotting per year - you must make it a factor
+```{r geom_box_fac}
+ggplot(long, aes(x = factor(year), y = deaths)) + geom_boxplot()
+```
+
+## ggplot2: boxplot with points
+
+- `geom_jitter` plots points "jittered" with noise so not overlapping
+
+```{r geom_box_jitter}
+sub_year = long %>% filter( year > 1995 & year <= 2000)
+ggplot(sub_year, aes(x = factor(year), y = deaths)) + 
+  geom_boxplot(outlier.shape = NA) + # don't show outliers - will below
+  geom_jitter(height = 0)
+```
+
+## facets: plotting multiple panels
+
+A `facet` will make a plot over variables, keeping axes the same (out can change that):
+
+```{r}
+sub %>% ggplot(aes(x = year, y = deaths)) + 
+  geom_line() + 
+  facet_wrap(~ country)
+```
+
+## facets: plotting multiple panels
+
+
+```{r}
+sub %>% ggplot(aes(x = year, y = deaths)) + 
+  geom_line() + 
+  facet_wrap(~ country, ncol = 1)
+```
+
+## facets: plotting multiple panels
+
+You can also do multiple factors with `+` on the right hand side
+```{r, eval = FALSE}
+sub %>% ggplot(aes(x = year, y = deaths)) + 
+  geom_line() + 
+  facet_wrap(~ country + x2 + ... )
+```
+
+
+## Labels and such
+
+- `xlab`/`ylab` - functions to change the labels
+- `ggtitle` - change the title 
+
+```{r labs, eval = TRUE}
+q = qplot(x = year, y = deaths, 
+          colour = country, data = sub,
+          geom = "line") + 
+  xlab("Year of Collection") +
+  ylab("Deaths /100,000") +
+  ggtitle("Mortality of Children over the years",
+          subtitle = "not great") 
+q
+```
+
+## Themes
+
+- theme - overall set of parameters of the plot
+- see `?theme_bw` - for ggthemes
+
+```{r theme_bw, eval = TRUE}
+q + theme_bw()
+```
+
+## Themes
+
+- `theme` - change the overall theme or specific elements
+- increase size of text 
+
+```{r theme, eval = TRUE}
+q + theme(text = element_text(size = 12),
+          title = element_text(size = 20))
+```
+
+
+## Themes
+
+- `theme` - change the overall theme or specific elements
+- increase size of text 
+
+```{r theme2, eval = TRUE}
+q = q + theme(axis.text = element_text(size = 14),
+          title = element_text(size = 20),
+          axis.title = element_text(size = 16),
+          legend.position = c(0.75, 0.5)) + 
+  guides(colour = guide_legend(title = "Country"))
+q
+```
+
+## Code for a transparent legend
+```{r translegend}
+transparent_legend =  theme(legend.background = element_rect(
+    fill = "transparent"),
+  legend.key = element_rect(fill = "transparent", 
+                            color = "transparent") )
+q + transparent_legend
+```
+
+
+
+## Histograms again
+ 
+We can do histograms again using `hist`.  Let's do histograms of death rates over the years:
+
+```{r hist_death, comment="",prompt=TRUE, fig.align='center', cache=FALSE}
+hist(sub$deaths, breaks = 200)
+```
+
+## Multiple Histograms
+
+```{r ghist, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
+qplot(x = deaths, 
+      fill = factor(country),
+      data = sub, 
+      geom = c("histogram"))
+```
+
+## Multiple Histograms
+
+Alpha refers to the opacity of the color, less is more opaque
+```{r ghist_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
+qplot(x = deaths, fill = country, data = sub, 
+      geom = c("histogram"), alpha=I(.7))
+```
+
+## Multiple Densities
+
+We cold also do densities:
+```{r gdens, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
+qplot(x= deaths, fill = country, data = sub, 
+      geom = c("density"), alpha=I(.7))
+```
+
+
+## Multiple Densities
+
+- using `colour` not `fill`:
+
+```{r gdens_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
+qplot(x = deaths, colour = country, data = sub, 
+      geom = c("density"), alpha=I(.7))
+```
+
+
+
+## Multiple Densities
+
+You can take off the lines of the bottom like this
+```{r gdens_line_alpha_death, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
+ggplot(aes(x = deaths, colour = country), data = sub) + 
+  geom_line(stat = "density")
+```
+
+## ggplot2
+
+```{r geom_line_qplot_nocol, comment="",prompt=TRUE, fig.align='center', cache=FALSE}
+qplot(x = year, y = deaths, colour = country, 
+    data = long, geom = "line") + guides(colour = FALSE)
+```
+
+## ggplot2
+
+Let's try to make it different like base R, a bit.  We use `tile` for the geometric unit:
+
+```{r geom_tile_qtile}
+qtile = qplot(x = year, y = country, fill = deaths, 
+    data = sub, geom = "tile") + 
+  xlim(1990, 2005) + guides(colour = FALSE)
+qtile 
+```
+
+## ggplot2: changing colors
+
+`scale_fill_gradient` let's us change the colors for the fill:
+
+```{r geom_tile_rescale}
+qtile + scale_fill_gradient( low = "blue", high = "red")
+```
+
+## ggplot2
+
+Let's try to make it different like base R, a bit.  We use `tile` for the geometric unit:
+
+```{r geom_tile_cut}
+sub$cat = cut(sub$deaths, breaks = c(0, 1, 2, max(sub$deaths)))
+qplot(x = year, y = country, fill = cat, 
+    data = sub, geom = "tile") + 
+  guides(colour = FALSE)
+```
+
+
+## ggplot2 
+
+Useful links:
+
+* http://docs.ggplot2.org/0.9.3/index.html
+* http://www.cookbook-r.com/Graphs/
+
 
 
 ## Bar Plots
@@ -220,15 +452,63 @@ barplot(counts, main="Car Distribution by Age and Bad Buy Status",
     legend = rownames(counts))
 ```
 
+
 ## Bar Plots
 `prop.table` allows you to convert a table to proportions (depends on margin - either row percent or column percent)
 
 ```{r barplot2a, fig.align='center', cache = FALSE}
 ## Use percentages (column percentages)
-barplot(prop.table(counts, 2), main="Car Distribution by Age and Bad Buy Status",
+barplot(prop.table(counts, 2), 
+        main = "Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
     legend = rownames(counts))
 ```
+
+
+
+## Bar Plots
+
+```{r barplot2_stacked_geom, fig.align='center', cache = FALSE}
+ggplot(aes(fill = factor(IsBadBuy), x = VehicleAge), 
+       data = cars) + geom_bar()
+```
+
+## Normalized Stacked Bar charts
+
+- we must calculate percentages on our own
+
+```{r make_perc_data, fig.align='center', cache = FALSE}
+perc = cars %>% 
+  group_by(IsBadBuy, VehicleAge) %>% 
+  tally() %>% ungroup
+head(perc)
+```
+
+## Each Age adds to 1
+
+```{r norm_bar_1}
+perc_is_bad = perc %>% 
+  group_by(VehicleAge) %>% mutate(perc = n / sum(n))
+ggplot(aes(fill = factor(IsBadBuy), 
+           x = VehicleAge, 
+           y = perc), 
+       data = perc_is_bad) + geom_bar(stat = "identity")
+```
+## Each Bar adds to 1 for bad buy or not
+
+```{r norm_bad_buy}
+perc_yr = perc %>% 
+  group_by(IsBadBuy) %>% mutate(perc = n / sum(n))
+ggplot(aes(fill = factor(VehicleAge), 
+           x = IsBadBuy, 
+           y = perc), 
+       data = perc_yr) + geom_bar(stat = "identity")
+```
+
+
+# Base Graphics - explore on your own
+
+
 
 ## Bar Plots
 
@@ -239,18 +519,6 @@ barplot(counts, main="Car Distribution by Age and Bad Buy Status",
   xlab="Vehicle Age", col=c("darkblue","red"),
     legend = rownames(counts), beside=TRUE)
 ```
-
-## Graphics parameters
-
-Set within most plots in the base 'graphics' package:
-
-* pch = point shape, http://voteview.com/symbols_pch.htm
-* cex = size/scale
-* xlab, ylab = labels for x and y axes
-* main = plot title
-* lwd = line density
-* col = color
-* cex.axis, cex.lab, cex.main = scaling/sizing for axes marks, axes labels, and title
 
 ## Devices
 
@@ -399,54 +667,6 @@ plot(orangeAverage ~ greenAverage, data=circ,
 legend("bottomright", levels(dd), col=1:length(dd), pch = 19)
 ```
 
-## ggplot2
-
-`ggplot2` is a package of plotting that is very popular and powerful. `qplot` is a short hand for "quick plot". We can simply do a boxplot:
-
-```{r geoboxplot, comment="",prompt=TRUE, fig.align='center', cache=FALSE}
-library(ggplot2)
-qplot(factor(Diet), y = weight, 
-      data = ChickWeight, geom = "boxplot")
-```
-
-## ggplot2
-
-The generic plotting function is `ggplot`:
-
-```{r geoboxplot_g, comment="",prompt=TRUE, fig.align='center', cache=FALSE}
-g = ggplot(aes(x = Diet, y = weight), data = ChickWeight)
-g + geom_boxplot()
-```
-
-
-
-## Boxplots revisited again
-
-We can do the same plot, by just saying we want a boxplot and points (and jitter the points)
-
-```{r geoboxpoint, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
-qplot( factor(Diet), y = weight, data = ChickWeight, 
-       geom = c("boxplot", "jitter"))
-```
-
-
-## ggplot2: Adding 2 geoms together
-
-To have multiple geometrics, just "add" them
-
-```{r geoboxplot_add, comment="",prompt=TRUE, fig.align='center', cache=FALSE}
-g + geom_boxplot() + geom_point(position = "jitter")
-```
-
-
-## ggplot2: Adding 2 geoms together
-
-To have multiple geometrics, just "add" them
-
-```{r geoboxplot_addjitter, fig.align='center', cache=FALSE}
-g + geom_boxplot() + geom_jitter()
-```
-
 ## Histograms again
  
 We can do histograms again using `hist`.  Let's do histograms of weight at all time points for the chick's weights.  We reiterate how useful these are to show your data.
@@ -457,7 +677,7 @@ hist(ChickWeight$weight, breaks = 20)
 
 ## Multiple Histograms
 
-```{r ghist, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
+```{r ghist_chick, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 qplot(x = weight, 
       fill = factor(Diet),
       data = ChickWeight, 
@@ -467,7 +687,7 @@ qplot(x = weight,
 ## Multiple Histograms
 
 Alpha refers tot he opacity of the color, less is 
-```{r ghist_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
+```{r ghist_chick_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 qplot(x = weight, fill = Diet, data = ChickWeight, 
       geom = c("histogram"), alpha=I(.7))
 ```
@@ -475,7 +695,7 @@ qplot(x = weight, fill = Diet, data = ChickWeight,
 ## Multiple Densities
 
 We cold also do densities
-```{r gdens, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
+```{r gdens_chick, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 qplot(x= weight, fill = Diet, data = ChickWeight, 
       geom = c("density"), alpha=I(.7))
 ```
@@ -483,7 +703,7 @@ qplot(x= weight, fill = Diet, data = ChickWeight,
 
 ## Multiple Densities
 
-```{r gdens_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
+```{r gdens_chick_alpha, comment="",prompt=TRUE, fig.align='center', cache = FALSE}
 qplot(x= weight, colour = Diet, data = ChickWeight, 
       geom = c("density"), alpha=I(.7))
 ```
@@ -581,11 +801,4 @@ Let's try to make it different like base R, a bit.  We use `tile` for the geomet
 qplot(x = year, y = state, colour = deaths, 
     data = long, geom = "tile") + guides(colour = FALSE)
 ```
-
-## ggplot2 
-
-Useful links:
-
-* http://docs.ggplot2.org/0.9.3/index.html
-* http://www.cookbook-r.com/Graphs/
 
