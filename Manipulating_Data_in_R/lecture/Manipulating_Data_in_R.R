@@ -135,29 +135,3 @@ fj = full_join(base, visits)
 dim(fj)
 tail(fj)
 
-## ------------------------------------------------------------------------
-library(ggplot2)
-ggplot(aes(x = date, y = Average, colour = line), data = wide) + geom_line()
-
-## ------------------------------------------------------------------------
-wide %>% 
-  ggplot(aes(x = date, y = Average, colour = line)) + geom_line()
-
-## ------------------------------------------------------------------------
-mon = wide %>% 
-  mutate(month = month(date), year = year(date)) %>%   
-  dplyr::group_by(line, month, year) %>%
-  dplyr::summarise(mean_avg = mean(Average))
-mon = mutate(mon, mid_month = dmy(paste0("15-", month, "-", year)))
-head(mon)
-
-## ------------------------------------------------------------------------
-ggplot(aes(x = mid_month,
-               y = mean_avg, 
-               colour = line), data = mon) + geom_line()
-
-## ------------------------------------------------------------------------
-ggplot(aes(x = date, y = Average, colour = line), 
-           data = wide) + geom_smooth(se = FALSE) + 
-  geom_point(size = .5)
-
