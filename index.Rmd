@@ -37,17 +37,12 @@ Winter R 2017
 | 3  | 2017-01-11 | Module 7  | [HTML](Data_Classes/lecture/Data_Classes.html), [PDF](Data_Classes/lecture/Data_Classes.pdf), [Code](Data_Classes/lecture/Data_Classes.R) | Data Classes
 | 3  | 2017-01-11 | Module 8  | [HTML](Data_Cleaning/lecture/Data_Cleaning.html),[PDF](Data_Cleaning/lecture/Data_Cleaning.pdf),[Code](Data_Cleaning/lecture/Data_Cleaning.R),[Lab](Data_Cleaning/lab/Data_Cleaning_Lab.R),[Scratch](Data_Cleaning/lecture/scratch.R),[Key](Data_Cleaning/lab/Data_Cleaning_Lab_key.R) | Data Cleaning |
 | 3  | 2017-01-11  | Homework 3  | [HW ](HW/homework3.R)  |   |
-| 4  | 2017-01-12 | Module 9  | [HTML](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.html), [PDF](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.pdf), [Code](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.R),[Lab](Manipulating_Data_in_R/lab/Data_Manipulation_Lab.R),[Scratch](Manipulating_Data_in_R/lecture/scratch.R) <!--,[Key](Manipulating_Data_in_R/lab/Data_Manipulation_Lab_Key.R)--> | Data Manipulation |
-| 4  | 2017-01-12 | Module 10  | [HTML](Data_Visualization/lecture/Data_Visualization.html), [PDF](Data_Visualization/lecture/Data_Visualization.pdf), [Code](Data_Visualization/lecture/Data_Visualization.R), [Lab](Data_Visualization/lab/Data_Visualization_Lab.R),[Video](https://youtu.be/KukM8a-QPGk) <!--,[Key](Data_Visualization/lab/Data_Visualization_Lab_key.R)--> | Data Visualization |
-<!-- 
-| 3  | 2017-01-11 | Module 9  | [HTML](Knitr/lecture/Knitr.html), [PDF](Knitr/lecture/Knitr.pdf), [Code](Knitr/lecture/Knitr.Rmd) | Reproducible Research |
-| 5  | 2016-06-17 | Module 11  | [HTML](Statistics/lecture/Statistics.html), [PDF](Statistics/lecture/Statistics.pdf), [Code](Statistics/lecture/Statistics.R) | Statistics |
-
-| 5  | 2016-01-08 | Module 12  | [HTML](Functions/lecture/Functions.html), [PDF](Functions/lecture/Functions.pdf), [Code](Functions/lecture/Functions.R) | Functions || 5  | 2016-01-08 | Module 13b  | [HTML](Simple_Knitr/lecture/Simple_Knitr.html), [PDF](Simple_Knitr/lecture/Simple_Knitr.pdf), [Code](Simple_Knitr/lecture/Simple_Knitr.Rmd) | Reproducible Research (B)|
-| 5  | 2016-01-08 | HW Review  |  |  |
-|---|---|---|---|---|
--->
-
+| 4  | 2017-01-12 | Module 9  | [HTML](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.html), [PDF](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.pdf), [Code](Manipulating_Data_in_R/lecture/Manipulating_Data_in_R.R),[Lab](Manipulating_Data_in_R/lab/Data_Manipulation_Lab.R),[Scratch](Manipulating_Data_in_R/lecture/scratch.R),[Key](Manipulating_Data_in_R/lab/Data_Manipulation_Lab_Key.R)| Data Manipulation |
+| 4  | 2017-01-12 | Module 10  | [HTML](Data_Visualization/lecture/Data_Visualization.html), [PDF](Data_Visualization/lecture/Data_Visualization.pdf), [Code](Data_Visualization/lecture/Data_Visualization.R), [Lab](Data_Visualization/lab/Data_Visualization_Lab.R),[Video](https://youtu.be/KukM8a-QPGk),[Key](Data_Visualization/lab/Data_Visualization_Lab_key.R)| Data Visualization |
+| 5  | 2017-01-13 | Module 11  | [HTML](Statistics/lecture/Statistics.html), [PDF](Statistics/lecture/Statistics.pdf), [Code](Statistics/lecture/Statistics.R) | Statistics |
+| 5  | 2017-01-13 | Module 12  | [HTML](Functions/lecture/Functions.html), [PDF](Functions/lecture/Functions.pdf), [Code](Functions/lecture/Functions.R) | Functions |
+| 5  | 2017-01-13 | Module 13  | [HTML](Knitr/lecture/Knitr.html), [PDF](Knitr/lecture/Knitr.pdf), [Code](Knitr/lecture/Knitr.Rmd) | Reproducible Research |
+| | | | | |
 
 
 Feel free to submit typos/errors/etc via the github repository associated with the class: 
