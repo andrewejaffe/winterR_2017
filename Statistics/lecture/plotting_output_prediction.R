@@ -26,3 +26,11 @@ g = ggplot(aes(x = age, y = est,
            data = eg) + geom_point() + geom_line()
 g
 g + facet_wrap( ~ var2)
+
+library(multcomp)
+mod = lm(y ~ age * var1, data = df)
+
+ht = multcomp::glht(mod, linfct = "var1 + age:var1 = 0")
+# mm = model.matrix(y ~ age * var1, data = df)
+# lht(mod, c("age:var1" = 1, var1 = 0 , age = 0, 
+#            "(Intercept)" =0))
