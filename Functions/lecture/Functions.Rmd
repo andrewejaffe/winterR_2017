@@ -2,10 +2,11 @@
 title: "Functions"
 author: "Introduction to R for Public Health Researchers"
 output:
+  beamer_presentation: default
   ioslides_presentation:
     css: ../../styles.css
     widescreen: yes
-  beamer_presentation: default
+  slidy_presentation: default
 ---
 
 ## Writing your own functions
@@ -96,29 +97,19 @@ top(my.mat) #note that we are using the default value for n
 
 ## Custom functions in `apply`
 
-You can use any function you want in `apply` statements. For example, from our split Circulator data
-
-```{r top2, comment="",prompt=TRUE}
-circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", 
-            header=TRUE,as.is=TRUE)
-dayList = split(circ, circ$day)
-lapply(dayList, top, n = 2)
-```
-
-## Custom functions in `apply` {.smaller}
-
 You can also designate functions "on the fly"
 ```{r top3, comment="",prompt=TRUE}
-lapply(dayList, function(x) x[1:2,1:2])
+matList = list(x = matrix(1:25,nc=5),y=matrix(26:50,nc=5))
+lapply(matList, function(x) x[1:2,1:2])
 ```
 
-## Simple apply {.smaller}
+## Simple apply 
 
 `sapply()` is a user-friendly version and wrapper of `lapply` by default returning a vector, matrix, or array
 
 ```{r sapply1, comment="", prompt=TRUE}
-sapply(dayList, dim)
-sapply(circ, class)
+sapply(matList, dim)
+sapply(matList, class)
 ```
 
 ---
@@ -133,8 +124,11 @@ sapply(tmp, class)
 
 ---
 
-```{r sapply3, comment="", prompt=TRUE}
-sapply(myList,function(x) x[1])
-sapply(myList,function(x) as.character(x[1]))
-```
+`sapply` can also be applied to columns of data frames
 
+```{r sapplyDf, comment="", prompt=TRUE, message=FALSE}
+library(readr)
+circ = read_csv(paste0("http://www.aejaffe.com/winterR_2017/",
+  "data/Charm_City_Circulator_Ridership.csv"))
+sapply(circ,class)
+```

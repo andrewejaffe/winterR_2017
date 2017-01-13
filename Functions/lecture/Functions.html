@@ -196,109 +196,35 @@ return(value)
 
 </article></slide><slide class=''><hgroup><h2>Custom functions in <code>apply</code></h2></hgroup><article  id="custom-functions-in-apply">
 
-<p>You can use any function you want in <code>apply</code> statements. For example, from our split Circulator data</p>
-
-<pre class = 'prettyprint lang-r'>&gt; circ = read.csv(&quot;http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv&quot;, 
-+             header=TRUE,as.is=TRUE)
-&gt; dayList = split(circ, circ$day)
-&gt; lapply(dayList, top, n = 2)</pre>
-
-<pre >$Friday
-      day       date
-5  Friday 01/15/2010
-12 Friday 01/22/2010
-
-$Monday
-     day       date
-1 Monday 01/11/2010
-8 Monday 01/18/2010
-
-$Saturday
-        day       date
-6  Saturday 01/16/2010
-13 Saturday 01/23/2010
-
-$Sunday
-      day       date
-7  Sunday 01/17/2010
-14 Sunday 01/24/2010
-
-$Thursday
-        day       date
-4  Thursday 01/14/2010
-11 Thursday 01/21/2010
-
-$Tuesday
-      day       date
-2 Tuesday 01/12/2010
-9 Tuesday 01/19/2010
-
-$Wednesday
-         day       date
-3  Wednesday 01/13/2010
-10 Wednesday 01/20/2010</pre>
-
-</article></slide><slide class=''><hgroup><h2>Custom functions in <code class="smaller">apply</code></h2></hgroup><article  id="custom-functions-in-apply-1">
-
 <p>You can also designate functions &quot;on the fly&quot;</p>
 
-<pre class = 'prettyprint lang-r'>&gt; lapply(dayList, function(x) x[1:2,1:2])</pre>
+<pre class = 'prettyprint lang-r'>&gt; matList = list(x = matrix(1:25,nc=5),y=matrix(26:50,nc=5))
+&gt; lapply(matList, function(x) x[1:2,1:2])</pre>
 
-<pre >$Friday
-      day       date
-5  Friday 01/15/2010
-12 Friday 01/22/2010
+<pre >$x
+     [,1] [,2]
+[1,]    1    6
+[2,]    2    7
 
-$Monday
-     day       date
-1 Monday 01/11/2010
-8 Monday 01/18/2010
+$y
+     [,1] [,2]
+[1,]   26   31
+[2,]   27   32</pre>
 
-$Saturday
-        day       date
-6  Saturday 01/16/2010
-13 Saturday 01/23/2010
-
-$Sunday
-      day       date
-7  Sunday 01/17/2010
-14 Sunday 01/24/2010
-
-$Thursday
-        day       date
-4  Thursday 01/14/2010
-11 Thursday 01/21/2010
-
-$Tuesday
-      day       date
-2 Tuesday 01/12/2010
-9 Tuesday 01/19/2010
-
-$Wednesday
-         day       date
-3  Wednesday 01/13/2010
-10 Wednesday 01/20/2010</pre>
-
-</article></slide><slide class=''><hgroup><h2>Simple apply</h2></hgroup><article  id="simple-apply" class="smaller">
+</article></slide><slide class=''><hgroup><h2>Simple apply</h2></hgroup><article  id="simple-apply">
 
 <p><code>sapply()</code> is a user-friendly version and wrapper of <code>lapply</code> by default returning a vector, matrix, or array</p>
 
-<pre class = 'prettyprint lang-r'>&gt; sapply(dayList, dim)</pre>
+<pre class = 'prettyprint lang-r'>&gt; sapply(matList, dim)</pre>
 
-<pre >     Friday Monday Saturday Sunday Thursday Tuesday Wednesday
-[1,]    164    164      163    163      164     164       164
-[2,]     15     15       15     15       15      15        15</pre>
+<pre >     x y
+[1,] 5 5
+[2,] 5 5</pre>
 
-<pre class = 'prettyprint lang-r'>&gt; sapply(circ, class)</pre>
+<pre class = 'prettyprint lang-r'>&gt; sapply(matList, class)</pre>
 
-<pre >             day             date  orangeBoardings orangeAlightings 
-     &quot;character&quot;      &quot;character&quot;        &quot;integer&quot;        &quot;integer&quot; 
-   orangeAverage  purpleBoardings purpleAlightings    purpleAverage 
-       &quot;numeric&quot;        &quot;integer&quot;        &quot;integer&quot;        &quot;numeric&quot; 
-  greenBoardings  greenAlightings     greenAverage  bannerBoardings 
-       &quot;integer&quot;        &quot;integer&quot;        &quot;numeric&quot;        &quot;integer&quot; 
-bannerAlightings    bannerAverage            daily 
-       &quot;integer&quot;        &quot;numeric&quot;        &quot;numeric&quot; </pre>
+<pre >       x        y 
+&quot;matrix&quot; &quot;matrix&quot; </pre>
 
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
@@ -327,15 +253,21 @@ Levels: boy girl</pre>
 
 </article></slide><slide class=''><hgroup><h2></h2></hgroup><article >
 
-<pre class = 'prettyprint lang-r'>&gt; sapply(myList,function(x) x[1])</pre>
+<p><code>sapply</code> can also be applied to columns of data frames</p>
 
-<pre >  a   b   c   d 
-&quot;1&quot; &quot;2&quot; &quot;a&quot; &quot;1&quot; </pre>
+<pre class = 'prettyprint lang-r'>&gt; library(readr)
+&gt; circ = read_csv(paste0(&quot;http://www.aejaffe.com/winterR_2017/&quot;,
++   &quot;data/Charm_City_Circulator_Ridership.csv&quot;))
+&gt; sapply(circ,class)</pre>
 
-<pre class = 'prettyprint lang-r'>&gt; sapply(myList,function(x) as.character(x[1]))</pre>
-
-<pre >    a     b     c     d 
-  &quot;1&quot;   &quot;2&quot;   &quot;a&quot; &quot;boy&quot; </pre></article></slide>
+<pre >             day             date  orangeBoardings orangeAlightings 
+     &quot;character&quot;      &quot;character&quot;        &quot;integer&quot;        &quot;integer&quot; 
+   orangeAverage  purpleBoardings purpleAlightings    purpleAverage 
+       &quot;numeric&quot;        &quot;integer&quot;        &quot;integer&quot;        &quot;numeric&quot; 
+  greenBoardings  greenAlightings     greenAverage  bannerBoardings 
+       &quot;integer&quot;        &quot;integer&quot;        &quot;numeric&quot;        &quot;integer&quot; 
+bannerAlightings    bannerAverage            daily 
+       &quot;integer&quot;        &quot;numeric&quot;        &quot;numeric&quot; </pre></article></slide>
 
 
   <slide class="backdrop"></slide>

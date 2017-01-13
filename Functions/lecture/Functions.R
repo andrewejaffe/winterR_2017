@@ -32,18 +32,13 @@ top = function(mat,n=5) mat[1:n,1:n]
 my.mat = matrix(1:1000,nr=100) 
 top(my.mat) #note that we are using the default value for n 
 
-## ----top2, comment="",prompt=TRUE----------------------------------------
-circ = read.csv("http://www.aejaffe.com/winterR_2016/data/Charm_City_Circulator_Ridership.csv", 
-            header=TRUE,as.is=TRUE)
-dayList = split(circ, circ$day)
-lapply(dayList, top, n = 2)
-
 ## ----top3, comment="",prompt=TRUE----------------------------------------
-lapply(dayList, function(x) x[1:2,1:2])
+matList = list(x = matrix(1:25,nc=5),y=matrix(26:50,nc=5))
+lapply(matList, function(x) x[1:2,1:2])
 
 ## ----sapply1, comment="", prompt=TRUE------------------------------------
-sapply(dayList, dim)
-sapply(circ, class)
+sapply(matList, dim)
+sapply(matList, class)
 
 ## ----sapply2, comment="", prompt=TRUE------------------------------------
 myList = list(a=1:10, b=c(2,4,5), c = c("a","b","c"),
@@ -52,7 +47,9 @@ tmp = lapply(myList,function(x) x[1])
 tmp
 sapply(tmp, class)
 
-## ----sapply3, comment="", prompt=TRUE------------------------------------
-sapply(myList,function(x) x[1])
-sapply(myList,function(x) as.character(x[1]))
+## ----sapplyDf, comment="", prompt=TRUE, message=FALSE--------------------
+library(readr)
+circ = read_csv(paste0("http://www.aejaffe.com/winterR_2017/",
+  "data/Charm_City_Circulator_Ridership.csv"))
+sapply(circ,class)
 
