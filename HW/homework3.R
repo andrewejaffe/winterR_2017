@@ -23,7 +23,7 @@
 #		which contains population information on each country
 
 library(readr)
-res = read_tsv("http://www.aejaffe.com/winterR_2017/data/country_pop.txt")
+res = read.delimtsv("http://www.aejaffe.com/winterR_2017/data/country_pop.txt")
 no_bad_char = read_tsv("http://www.aejaffe.com/winterR_2017/data/country_pop.txt", 
                        locale = locale(encoding = "Latin1"))
 

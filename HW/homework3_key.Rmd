@@ -39,7 +39,7 @@ deathT[1:5,1:5]
 Now let's read in the population data:
 
 ```{r, question3}
-pop = read.delim("http://www.aejaffe.com/winterR_2016/data/country_pop.txt",
+pop = read.delim("http://www.aejaffe.com/winterR_2017/data/country_pop.txt",
   as.is=TRUE)
 colnames(pop)[c(2,5)] = c("Country", "percWorldPop")
 pop$Country = pop$Country  %>% 

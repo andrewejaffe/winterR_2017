@@ -42,6 +42,7 @@ Winter R 2017
 | 5  | 2017-01-13 | Module 11  | [HTML](Statistics/lecture/Statistics.html), [PDF](Statistics/lecture/Statistics.pdf), [Code](Statistics/lecture/Statistics.R) | Statistics |
 | 5  | 2017-01-13 | Module 12  | [HTML](Functions/lecture/Functions.html), [PDF](Functions/lecture/Functions.pdf), [Code](Functions/lecture/Functions.R) | Functions |
 | 5  | 2017-01-13 | Module 13  | [HTML](Knitr/lecture/Knitr.html), [PDF](Knitr/lecture/Knitr.pdf), [Code](Knitr/lecture/Knitr.Rmd) | Reproducible Research |
+| 5  | 2017-01-13 |   | [RMD](ProjectExample/RMarkDown_FinalProject.Rmd), [DOC](ProjectExample/RMarkDown_FinalProject.docx)| Example Projects |
 | | | | | |
 
 
