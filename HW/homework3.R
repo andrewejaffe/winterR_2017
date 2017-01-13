@@ -22,6 +22,14 @@
 #		http://www.aejaffe.com/winterR_2017/data/country_pop.txt
 #		which contains population information on each country
 
+library(readr)
+res = read_tsv("http://www.aejaffe.com/winterR_2017/data/country_pop.txt")
+no_bad_char = read_tsv("http://www.aejaffe.com/winterR_2017/data/country_pop.txt", 
+                       locale = locale(encoding = "Latin1"))
+
+with_base = read.delim("http://www.aejaffe.com/winterR_2017/data/country_pop.txt",
+                       fileEncoding = "Latin1")
+
 # 4.	Determine the population of each country in our dataset, 
 #			and then sort the columns of our dataset by that
 #			population, from smallest to largest. 
