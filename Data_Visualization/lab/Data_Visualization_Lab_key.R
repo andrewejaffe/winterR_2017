@@ -51,6 +51,9 @@ qplot(x = date, y = number, data = avg, colour = line) +
 
 # 3. plot average ridership by date with one panel per route
 qplot(x = date, y = number, data= avg, facets = ~line) 
+qplot(x = date, y = number, data= avg) +
+  facet_wrap( ~ line)
+
 qplot(x = date, y = number, data= avg, facets = ~line,
 	colour = line) +  scale_colour_manual(values=pal)
 	  
@@ -59,8 +62,6 @@ qplot(x = date, y = number, data= avg, facets = ~line,
 qplot(x = date, y = number, data= avg, facets = ~day,
 	colour = line) +  scale_colour_manual(values=pal)
 	  
-# Using base R graphics:
-
 # 5. plot average ridership on the orange route versus date
 #		as a solid line, and add dashed "error" lines based 
 #		on the boardings and alightings. 
@@ -76,6 +77,9 @@ g + scale_linetype_manual(
   values = c(Alightings = "dashed",
              Boardings = "dashed", 
              Average = "solid"))
+
+g + scale_linetype_manual(
+  values = c("dashed", "dashed", "solid"))
 
 
 orange = circ[,c(1:2, grep("orange", colnames(circ)))]
