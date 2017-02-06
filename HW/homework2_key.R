@@ -18,7 +18,7 @@ cars = read.csv("../data/kaggleCarAuction.csv",header=TRUE,as.is=TRUE)
 
 library(stringr)
 library(dplyr)
-key = read.delim("http://www.aejaffe.com/summerR_2016/data/Carvana_Data_Dictionary.txt",
+key = read.delim("http://www.aejaffe.com/winterR_2017/data/Carvana_Data_Dictionary.txt",
 	as.is=TRUE, strip.white=TRUE)
 save(cars,key,file="kaggle.rda")
 
